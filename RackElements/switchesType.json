@@ -1,0 +1,103 @@
+{
+	"eletypes": {
+		"SW24C12B": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 24,
+					"pname": "-eth",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				}
+			],
+			"template": "SW24C12B",
+			"units": 1,
+			"description": "24 rj45 ports switch 1U",
+			"small_header" : [6,2,2,12,4]
+		},
+		"SW24V12B2U": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 24,
+					"pname": "-eth",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				},
+				{
+					"pstart": 1,
+					"pstop": 2,
+					"pname": "-ethUp",
+					"indexStart": 25,
+					"ConnectType": "sfp",
+						"modular": 1
+				}
+			],
+			"template": "SW24V12B2U",
+			"units": 1,
+			"description": "24+2 rj45+sfp ports switch 1U",
+			"small_header" : [6,2,2,12,4]
+		},
+		"SW48C16B": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 48,
+					"pname": "-eth",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				}	
+			],
+			"template": "SW48V16B",
+			"units": 1,
+			"description": "48 rj45 ports switch 1U 16 port group",
+			"small_header" : [6,2,2,12,4]
+		},
+		"SW48V12B4U": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 48,
+					"pname": "-g",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				},
+				{
+					"pstart": 1,
+					"pstop": 4,
+					"pname": "-g1-",
+					"indexStart": 49,
+					"ConnectType": "sfp",
+						"modular": 1
+				}
+			],
+			"template": "SW48V12B4U",
+			"units": 1,
+			"description": "48+4 rj45+sfp ports switch 1U 12 port group",
+			"small_header" : [6,2,2,12,4]
+		},
+		"SW48V16B4U": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 48,
+					"pname": "-eth",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				},
+				{
+					"pstart": 1,
+					"pstop": 4,
+					"pname": "-g1-",
+					"indexStart": 49,
+					"ConnectType": "sfp",
+					"modular": 1
+				}
+			],
+			"template": "SW48V16B4U",
+			"units": 1,
+			"description": "48+4 rj45+sfp ports switch 1U 16 port group",
+			"small_header" : [6,4,5,12,5]
+		}
+	}
+}

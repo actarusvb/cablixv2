@@ -1,0 +1,28 @@
+{
+	"eletypes": {
+		"SW24SFPP2U": {
+				"ports": [
+					{
+						"pstart": 1,
+						"pstop": 24,
+						"pname": "-eth",
+						"indexStart": 1,
+						"ConnectType": "SFP",
+						"modular": 1
+					},
+					{
+						"pstart": 1,
+						"pstop": 2,
+						"pname": "-ethUp",
+						"indexStart": 25,
+						"ConnectType": "SFP+",
+						"modular": 1
+					}
+				],
+				"template": "SW24SFPP2U",
+				"units": 1,
+				"description": "24 SFP +2 SFP+ ports device 1U",
+				"small_header" : [6,2,2,12,4]
+			}
+		}
+}

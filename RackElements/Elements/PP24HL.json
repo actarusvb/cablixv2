@@ -1,0 +1,20 @@
+{
+	"eletypes": {		
+		"PP24HL": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 24,
+					"pname": "-pt",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				}
+			],
+			"inversion": false,
+			"template": "PP24HL",
+			"units": 1,
+			"description": "24 rj45 ports one line Patch Pannel 1U",
+			"small_header" : [6,2,2,12,4]
+		}
+	}
+}

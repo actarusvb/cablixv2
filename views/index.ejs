@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+	<% include layouts/head_login.ejs %>
+	<body>
+		<div id="container" class="container">
+			<div id="head1">
+				| <a href="/">Home</a> 
+				| <a class="top_command" id="access_cablix" href="#">Cablix</a> 
+				| <a class="top_command" id="logout_cablix" href="#">Logout</a> 
+				| <a class="top_commandx" id="password_change" href="#" >Password Change</a> 
+				| <a class="top_commandx edit_mode" id="edit_mode" href="#"><span class="ui-icon ui-icon-pencil"></a>
+				<!-- |>> <a class="top_command" id="clearSession" href="#">Clear</a> -->
+				|### <%= config.appname %> <%= config.version %> ###
+			</div>
+		</div>
+			
+		<div id="message" class="MsgSpace"></div>
+			<div id="page" class="MainPage"></div>
+			<% include Form.licenseAdder.ejs %>
+			<% include Form.password.ejs %>
+			<% include Form.Edit.Element.ejs %>
+			<% include Form.AddPatch.ejs %>
+			<% include Form.Login.ejs %>
+			<% include pannel.loggedin.ejs %>
+		
+	</body>
+</html>

@@ -1,0 +1,33 @@
+<div id="head1">>
+|<a href="/">Home (cablix)</a>
+|<a href="/admin/adminPage">Home (admin)</a>
+|<a href="/logout">Logout</a>
+|<a href="#" id="password_change">Password Change</a>
+|</div>
+<div id="message" class="MsgSpace"></div>
+<div id="page">
+<div id="accordion">
+<h3>Users</h3>
+<div>
+<button id="addUser" class="buttonx">add user</button>
+<table id="UsersTable">
+<thead><tr><th></th><th>id</th><th>username</th><th>Infos</th></tr></thead>
+</table>
+</div>
+<h3>Roles</h3>
+<div>
+<table id="RolesTable">
+<thead><tr><th>id</th><th>Role</th></tr></thead>
+</table>
+</div>
+<h3>Dataset</h3>
+<div>
+<button id="addDataset" class="buttonx">add dataset</button>
+<table id="DatasetsTable">
+<thead><tr><th>id</th><th>dataset</th></tr></thead>
+</table>
+</div>
+</div>
+<% INCLUDE Form.password.tt %>
+<% INCLUDE Form.AddDataset.tt %>
+<% INCLUDE Form.AddUser.tt %>

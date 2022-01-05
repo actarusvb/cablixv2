@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="<% settings.charset %>">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title><% title %></title>
+  <link rel="stylesheet" href="/css/jquery-ui.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <!-- https://github.com/mauntrelio/jquery-simpletree/ -->
+  <link rel="stylesheet" href="/css/simpletree.css">
+  
+<!-- Grab jQuery from a CDN, fall back to local if necessary -->
+<script src="/javascripts/jquery.js" type="text/javascript" ></script>
+<script src="/javascripts/jquery-ui.js" type="text/javascript" ></script>
+<script src="/javascripts/jquery.simpletree.js" type="text/javascript" ></script>
+<script src="/javascripts/cablix_1.js" type="text/javascript" ></script>
+</head>
+<body>
+<% content %>
+</body>
+</html>

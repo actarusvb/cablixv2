@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+	<% include layouts/head_printPatch.ejs %>
+	<body>
+		<h3>Patch View</h3>
+		<table id="patchesTable" class="table patch patchView">
+		<thead>
+		<tr>
+			<th>Patch id</th>
+			<th>Rack A</th>
+			<th>ru</th>
+			<th>Element A</th>
+			<th>Port A</th>
+			<th>&nbsp;&nbsp;&nbsp;</th>
+			<th>Port B</th>
+			<th>Element B</th>
+			<th>ru</th>
+			<th>Rack B</th>
+			<th>&nbsp;&nbsp;</th>
+			<th>Media type</th>
+			<th>color</th>
+			<th>Friend Name</th>
+			<th>Label</th>
+		</tr>
+		</thead>
+		</tr>
+		    <% patches.forEach(function (patch) { %>
+			<tr>
+			<td><%= patch.lid %></td>
+			<td><%= patch.arack %></td>
+			<td><%= patch.aru %></td>
+			<td><%= patch.aele %></td>
+			<td><%= patch.aid %></td>
+			<td><-></td>
+			<td><%= patch.bid %></td>
+			<td><%= patch.bele %></td>
+			<td><%= patch.bru %></td>
+			<td><%= patch.brack %></td>
+			<td></td>
+			<td><%= patch.mtype %></td>
+			<td><%= patch.Color %></td>
+			<td><%= patch.FriendName %></td>
+			<td><%= patch.label %></td>	  
+    </tr>
+	<% }) %>
+		</table>
+	</body>
+</html>

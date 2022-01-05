@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<% include layouts/head_admin.ejs %>
+	<body>
+		<% include Form.Login.ejs %>
+		<div id="container" class="container">
+			<div id="head1">
+				| <a href="/">admin</a> 
+				| <a class="top_command" id="access_admin" href="#">admin</a> 
+				| <a class="top_command" id="logout_cablix" href="#">Logout</a> 
+				|### <%= config.appname %> <%= config.version %> ###
+			</div>
+		</div>
+		<div id="message" class="MsgSpace"></div>
+		<div id="pageAdmin"></div>
+		<div id="formUser-form" class="the-users" title="Edit user">
+				<p class="validateTips">All form fields are required.</p>
+				<form>
+					<fieldset>
+						<label for="username">username</label>
+						<input type="text" name="username" id="editUsername" placeholder="Cappero Smith" class="text ui-widget-content ui-corner-all">
+						<!-- <label for="email">Email</label> -->
+						<!-- <input type="text" name="email" id="email" placeholder="Cappero@Smith.com" class="text ui-widget-content ui-corner-all"> -->
+						<input type="text" name="cabId" id="cabId" placeholder="...." class="text ui-widget-content ui-corner-all" READONLY>
+						<input type="text" name="_id" id="_id" placeholder="...." class="text ui-widget-content ui-corner-all" READONLY>
+						<label for=isAdmin">isAdmin</label>
+						<input type="checkbox" id="isAdmin" name="isAdmin">
+						<label for="password">Password</label>
+						<input type="password" name="password" id="editPassword" placeholder="xxxxxxx" class="text ui-widget-content ui-corner-all">
+						<input type="text" name="dataset" id="dataset" placeholder="...." class="text ui-widget-content ui-corner-all">
+						<span id="datasetTable">
+						<table class="tableNoBorder" name="datasetRbac" id="datasetRbac" border>
+						<thead></thead>
+						<tbody></tbody>
+						</table></span>
+						<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+					</fieldset>
+				</form>
+			</div>
+		<div id="formUser-add" class="the-users" title="Add user">
+				<p class="validateTips">All form fields are required.</p>
+				<form>
+					<fieldset>
+						<label for="addUsername">username</label>
+						<input type="text" name="addUsername" id="addUsername" placeholder="Cappero Smith" class="text ui-widget-content ui-corner-all">
+						<input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+					</fieldset>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+{
+	"eletypes": {
+		"PPFLC48HMM": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 48,
+					"pname": "-mmlc",
+					"indexStart": 1,
+					"ConnectType": "fix-lc-mm"
+				}
+			],
+			"template": "PPFLC48H",
+			"units": 1,
+			"description": "48 LC MMF duplex ports fiber Patch Pannel 1U",
+			"small_header" : [6,2,2,12,4]
+		}
+	}
+}

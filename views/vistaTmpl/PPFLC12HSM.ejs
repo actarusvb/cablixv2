@@ -1,0 +1,43 @@
+
+<% if (mode.HeadDisplay){ %>
+<% include 01_standardBigHeader.ejs %>
+<% } %>
+
+<table class="rackDevice sockets" id="Ele-<%= info.lid %>">
+<% if (mode.shortHeadDisplay){ %>
+<% include 00_standardShortHeader.ejs %>
+<% } %>
+
+<tr>
+<td>&nbsp;</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+<td>10</td>
+<td>11</td>
+<td>12</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s1 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s2 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s3 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s4 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s5 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s6 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s7 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s8 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s9 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s10 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s11 %></td>
+<td class="<%= mode.addtionalCSS %>"><%- socket.s12 %></td>
+<td>&nbsp;</td>
+</tr>
+</table>

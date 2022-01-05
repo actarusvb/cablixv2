@@ -1,0 +1,36 @@
+{
+	"eletypes": {
+		"COU1": {
+			"ports": [
+				0
+			],
+			"template": "COU1",
+			"units": 1,
+			"description": "Cable Organaizer 1U"
+		},
+		"BPU1": {
+			"ports": [
+				0
+			],
+			"template": "BPU1",
+			"units": 1,
+			"description": "Blank Pannel 1U"
+		},
+		"WPU1": {
+			"ports": [
+				0
+			],
+			"template": "WPU1",
+			"units": 1,
+			"description": "White Pannel 1U"
+		},
+		"SHELFU1": {
+			"ports": [
+				0
+			],
+			"template": "SHELFU1",
+			"units": 1,
+			"description": "Rack Shelf 1U"
+		}
+	}
+}

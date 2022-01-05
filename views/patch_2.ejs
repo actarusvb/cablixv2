@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<% include layouts/head_printPatch.ejs %>
+	<body>
+		<h3>Patch View 2</h3>
+		<table id="patchTable" class="table patch patchView">
+			<tr><td colspan="1">lid</td>    <td colspan="4"><%= patch.lid %></td></tr>
+			<tr><td colspan="1">FriendName</td><td colspan="4"><%= patch.FriendName %></td></tr>
+			<tr><td colspan="1">label</td>	<td colspan="4"><%= patch.label %></td></tr>
+
+			<tr><td colspan="1">side</td><td colspan="2">A</td></td><td colspan="2">B</td></tr>
+			<tr><td colspan="1">ID</td><td colspan="1"></td><td><%= patch.aid %></td><td></td><td><%= patch.bid %></td></tr>
+<!-- rack -->
+			<tr><td colspan="1">RACK</td><td colspan="1"></td><td><%= patch.arack %></td><td></td><td><%= patch.brack %></td></tr>
+<!-- unit -->
+			<tr><td colspan="1">UNIT</td><td colspan="1"></td><td><%= patch.aru %></td><td></td><td><%= patch.bru %></td></tr>
+<!-- element -->
+			<tr><td colspan="1">ELEMENT</td><td colspan="1"></td><td><%= patch.aele %></td><td></td><td><%= patch.bele %></td></tr>
+<!-- port -->
+			<tr><td colspan="1">PORT</td><td colspan="1"></td><td><%= patch.aid %></td><td></td><td><%= patch.bid %></td></tr>
+
+			<tr><td colspan="1">type</td>	<td><%= patch.rtype %></td><td></td><td>Color</td><td><%= patch.Color %></td></tr>
+			<tr><td colspan="1">mtype</td>	<td colspan="1"><%= patch.mtype %></td><td></td><td>dataset</td><td><%= patch.dataset %></td></tr>
+			<tr><td colspan="1">barcode</td><td colspan="4" id="barcodeval" ><%= patch.barcode %></td></tr>
+			<tr><td colspan="5"><svg id="barcode"></svg></td></tr>
+			<tr><td colspan="5"><span id="qrcode"><%= config.url.patchPrint %><%= patch.dataset %>/<%= patch.barcode %></span></td></tr>
+		</table>
+	</body>
+</html>

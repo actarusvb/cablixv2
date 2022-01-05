@@ -1,0 +1,73 @@
+<div id="dialog-form-patch" class="dialog-form-patch" title="Create new patch">
+	<span class="validateTips">All green form fields are required.</span>
+		<form id="add-Patch-Form">
+			<fieldset>
+				<div class="i-input i-mandatory">
+					<label for="aid">Start Point</label>
+					<table>
+						<tr>
+							<td><input type="text" name="arack" id="arack" value="--" class="text ui-widget-content ui-corner-all readonly" disabled></td>
+						<td><input type="text" name="aru" id="aru" value="--" class="text ui-widget-content ui-corner-all readonly" disabled></td>
+						</tr>
+						<tr>
+							<td><input type="text" name="aele" id="aele" value="--" class="text ui-widget-content ui-corner-all readonly" disabled></td>
+							<td><input type="text" name="aid" id="aid" value="--" class="text ui-widget-content ui-corner-all readonly" disabled></td>
+						</tr>
+					</table>
+				</div>
+				<div class="i-input i-mandatory">
+					<label for="bid">End Point</label>
+					<div id="rack-space"></div>
+					<input type="text" name="bid" id="bid" value="" class="text ui-widget-content ui-corner-all i-mandatory">
+				</div>
+				<table>
+					<tr>
+						<td>
+							<div class="i-input i-mandatory">
+								<label for="Color">Color</label>
+								<select id="Color" name="Color" class="i-mandatory">
+									<option value=""></option>
+									<% config.patchColor.split(",").forEach(function(optionx){ %>
+										<option value="<%= optionx %>"><%= optionx %></option>
+									<% }) %>
+								</select>
+							</div>
+						</td>
+						<td>
+							<div class="i-input i-mandatory">
+								<label for="mtype">type</label>
+								<select id="mtype" name="mtype" class="i-mandatory">
+									<option value=""></option>
+									<% config.rjType.split(",").forEach(function(optionx){ %>
+										<option value="<%= optionx %>"><%= optionx %></option>
+									<% }) %>
+								</select>
+							</div>
+						</td>
+					</tr>
+				</table>				
+				<div class="i-input">
+					<label for="lid">Local ID (unique, auto Id)</label>
+					<input type="text" name="lid" id="lid" value="" class="text ui-widget-content ui-corner-all">
+				</div>
+				<div class="i-input ">
+					<label for="FriendName">FriendName</label>
+					<input type="text" name="FriendName" id="FriendName" value="" class="text ui-widget-content ui-corner-all">
+				</div>
+				<div class="i-input ">
+					<label for="label">label (unique)</label>
+					<input type="text" name="label" id="label" value="" class="text ui-widget-content ui-corner-all">
+				</div>
+				<div class="i-input ">
+					<label for="barcode">barcode ID (unique)</label>
+					<input type="text" name="barcode" id="barcode" value="" class="text ui-widget-content ui-corner-all">
+				</div>
+				<input type="submit" tabindex="-1" style="position:absolute; top:-1000px" id="patchSubmit" >
+				<input type="hidden" name="bru" id="bru">
+		</fieldset>
+	</form>
+</div>
+<div id="dialog-path-delete-confirm" title="Delete Patch?">
+  <p>>>>>>>><span id="patchId"></span><<<<<<<<p>
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Patch from/to this element will be permanently deleted and cannot be recovered. Are you sure?</p>
+</div>

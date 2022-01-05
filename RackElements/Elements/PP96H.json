@@ -1,0 +1,19 @@
+{
+	"eletypes": {
+		"PP96H": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 96,
+					"pname": "-pt",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				}
+			],
+			"template": "PP96H",
+			"units": 2,
+			"description": "96 rj45 Cat5/6/7 ports Patch Pannel 2U",
+			"small_header" : [6,2,2,12,4]
+		}
+	}
+}

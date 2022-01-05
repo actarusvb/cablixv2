@@ -1,0 +1,19 @@
+{
+	"eletypes": {
+		"PPFSC48HSM": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 48,
+					"pname": "-smsc",
+					"indexStart": 1,
+					"ConnectType": "fix-sc-sm"
+				}
+			],
+			"template": "PPFSC48H",
+			"units": 1,
+			"description": "48 SC SMF duplex ports fiber Patch Pannel 1U",
+			"small_header" : [6,2,2,12,4]
+		}
+	}
+}

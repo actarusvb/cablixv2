@@ -1,0 +1,12 @@
+
+
+<% if (mode.shortHeadDisplay){ %>
+ <tr>
+	<td colspan="<%= elementType.small_header[0] %>" id="disp_lid" class="readonly lid"><%= info.lid %></td>
+	<td colspan="<%= elementType.small_header[1] %>" class="editable model" ><%= info.model %></td>
+	<td colspan="<%= elementType.small_header[2] %>" class="editable SN" ><%= info.SN %></td>
+	<td colspan="<%= elementType.small_header[3] %>" class="editable lName" ><%= info.lName %></td>
+	<td colspan="<%= elementType.small_header[4] %>" class="readonly elementType"><%= info.elementType %></td>
+</tr>
+<% } %>
+

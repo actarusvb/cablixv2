@@ -1,0 +1,174 @@
+{
+	"socketTypes":{
+		"fix_rj45":{
+			"port":{
+				"rj45":"rj45"
+			},			
+			"img": {
+				"base": "rj45",
+				"ext": ".png"
+			}
+		},
+		"fix_rj45sfp":{
+			"port":{
+				"rj45sfp":"rj45sfp"
+			},			
+			"img": {
+				"base": "rj45sfp",
+				"ext": ".png"
+			}
+		},
+		"fix_sc_sm":{
+			"port":{
+				"sc_sm":"sc_sm"
+			},			
+			"img": {
+				"base": "sc_sm",
+				"ext": ".png"
+			}
+		},
+		"fix_sc_mm":{
+			"port":{
+				"sc_mm":"sc_mm"
+			},
+			"img": {
+				"base": "sc_mm",
+				"ext": ".png"
+			}
+		},
+		"fix_lc_sm":{
+			"port":{
+				"lc_sm":"lc_sm"
+			},
+			"img": {
+				"base": "lc_sm",
+				"ext": ".png"
+			}
+		},
+		"fix_lc_mm":{
+			"port":{
+				"lc_mm":"lc_mm"
+			},
+			"img": {
+				"base": "lc_mm",
+				"ext": ".png"
+			}
+		},
+		"fix_st_sm":{
+			"port":{
+				"st_sm":"st_sm"
+			},
+			"img": {
+				"base": "st_sm",
+				"ext": ".png"
+			}
+		},
+		"fix_st_mm":{
+			"port":{
+				"st_mm":"st_mm"
+			},
+			"img": {
+				"base": "st_mm",
+				"ext": ".png"
+			}
+		},
+		"sfp":{
+			"port":{
+				"rj45":"rj45",
+				"rj45sfp":"rj45sfp",
+				"sc_sm":"sc_sm",
+				"sc_mm":"sc_mm",
+				"lc_sm":"lc_sm",
+				"lc_mm":"lc_mm",
+				"st_sm":"st_sm",
+				"st_mm":"st_sm"
+			},
+			"img": {
+				"base": "sfp",
+				"ext": ".png"
+			}
+		},
+		"sfp28":{
+			"port":{
+				"lc_sm":"lc_sm",
+				"lc_mm":"lc_mm",
+				"AOC": "AOC",
+				"DAC": "DAC"
+			},
+			"img": {
+				"base": "sfp28",
+				"ext": ".png"
+			}
+		},
+		"sfp+":{
+			"port":{
+				"lc_sm":"lc_sm",
+				"lc_mm":"lc_mm",
+				"AOC": "AOC",
+				"DAC": "DAC"
+			},
+			"img": {
+				"base": "sfp28",
+				"ext": ".png"
+			}
+		},
+		"qsfp":{
+			"port":{
+				"lc_sm":"lc_sm",
+				"lc_mm":"lc_mm",
+				"MPO-12_sm":"MPO-12_sm",
+				"MPO-12_mm":"MPO-12_mm",
+				
+				"AOC": "AOC",
+				"DAC": "DAC"
+			},
+			"img": {
+				"base": "qsfp28",
+				"ext": ".png"
+			}
+		},
+		"qsfp+":{
+			"port":{
+				"lc_sm":"lc_sm",
+				"lc_mm":"lc_mm",
+				"MPO-12_sm":"MPO-12_sm",
+				"MPO-12_mm":"MPO-12_mm",
+				
+				"AOC": "AOC",
+				"DAC": "DAC"
+			},
+			"img": {
+				"base": "qsfp28",
+				"ext": ".png"
+			}
+		},
+		"qsfp28":{
+			"port":{
+				"lc_sm":"lc_sm",
+				"lc_mm":"lc_mm",
+				"MPO-12_sm":"MPO-12_sm",
+				"MPO-12_mm":"MPO-12_mm",
+				"AOC": "AOC",
+				"DAC": "DAC"
+			},
+			"img": {
+				"base": "qsfp28",
+				"ext": ".png"
+			}
+		}
+	},
+	"socketStatus":{
+		"empty" :{
+			"img":"void"
+		},
+		"available" :{
+			"img":"available"
+		},
+		"used" :{
+			"img":"used"
+		},
+		"inconsistent":{
+			"img":"inconsistent"
+		}
+	}
+}

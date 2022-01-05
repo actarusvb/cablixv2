@@ -1,0 +1,19 @@
+{
+	"eletypes": {
+		"PPFSC12HMM": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 12,
+					"pname": "-mmsc",
+					"indexStart": 1,
+					"ConnectType": "fix-sc-mm"
+				}
+			],
+			"template": "PPFSC12H",
+			"units": 1,
+			"description": "12 SC MMF duplex ports fiber Patch Pannel 1U",
+			"small_header" : [2,2,2,4,4]
+		}
+	}
+}

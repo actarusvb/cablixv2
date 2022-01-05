@@ -1,0 +1,71 @@
+{
+	"auth": true,
+	"ServerName" : "cablix.iskranet.net",
+	"serverPort": 8000,
+	"localIp": "localhost",
+	"adminServerPort":8001,
+	"appname": "cablix",
+	"version": "js0.3",
+	"iAPI": "my-api-here",
+	"isHttps" : "false",
+	"certServerKeyFn": "./cert/server.key",
+	"certServerCrtFn": "./cert/server.crt",
+	"certPhassPhrase": "my-ssl-pass-here",
+	
+	"myprivatekey": "My-Super-Secret-PassPhrase",
+	"tokenDuration": 3600,
+	"mongoUser": "my-mongo-user-here",
+	"mongoPass": "my-mongo-pass-here",
+	"mongoHost": "my-mongo-host-and-port-here:27017",
+	"mongoDbName": "my-mongo-db-name-here",
+	"cabUsers": "_cabUsers",
+	"counters": "_counters",
+	"sqliteCabDb": "my-local-db-here",
+	"sqliteLuxDb": "./db/lux.db",
+
+	"url": {
+		"patchPrint" : "https://cablix.iskranet.net/elements/html/patch/"
+	},
+	"passwordMinLength" : 8,
+	"charset": "UTF32",
+	"settings": {
+		"charset": "UTF32"
+	},
+	"cabAuth": [
+		"treeRead",
+		"treeWrite",
+		"rackRead",
+		"rackWrite",
+		"patchRead",
+		"patchWrite"
+	],
+	"title": "Cablix",
+	"patchColor": "Yellow,Red,Blue,Gray,Black,Green,White,Orange,Lavanda,Purple",
+	"patchFieldName": "lid,arack,aru,aele,aid,brack,bru,bele,bid,mtype,FriendName,Color,label,barcode",
+	
+	"imgBase": {
+		"base": "/img",
+		"imgSocket": {
+			"u": "rj45u-gr.png",
+			"y": "rj45u-y.png",
+			"ug": "rj45u-g.png",
+			"ur": "rj45u-r.png",
+			"rj45u-gr": "rj45u-gr.png",
+			"rj45u-g": "rj45u-g.png",
+			"rj45u-r": "rj45u-r.png",
+			"rj45u-y": "rj45u-y.png",
+			"smlc-gr": "lcsm-gr.png",
+			"smlc-g": "lcsm-g.png",
+			"smlc-r": "lcsm-r.png",
+			"smlc-y": "lcsm-y.png",
+			"mmlc-gr": "lcmm-gr.png",
+			"mmlc-g": "lcmm-g.png",
+			"mmlc-r": "lcmm-r.png",
+			"smsc-gr": "scsm-gr.png",
+			"smsc-g": "scsm-g.png",
+			"smsc-r": "scsm-r.png",
+			"mmsc-gr": "scmm-gr.png",
+			"mmsc-g": "scmm-g.png",
+			"mmsc-r": "scmm-r.png"
+		}
+	}}

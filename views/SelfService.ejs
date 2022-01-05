@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+	<% include layouts/head_SelfService.ejs %>
+	<body>
+		<div id="container" class="container">
+			<div id="head1">
+				| <a href="/">Home</a> 
+				|### <%= config.appname %> <%= config.version %> ###
+			</div>
+			&nbsp;
+		</div>
+		
+		<div id="message" class="MsgSpace"></div>
+			<div id="page">
+			<div id="modulo">
+				<form id="selfServiceForm">
+				<h1>create your account</h1>
+				<label for="newusername">New User Name: </label>
+				<input id="newusername" name ="newusername" size="20">
+				
+				<label for="newpass1">password: </label>
+				<input type="password" id="newpass1" name ="newpass1" size="20">
+				
+				<label for="newpass2">repeat password: </label>
+				<input type="password" id="newpass2" name ="newpass2" size="20">
+				
+				<label for="newdataset">Domain: </label>
+				<input id="newdataset" name ="newdataset" size="10">
+				
+				<label for="activationCode">Activation code: </label>
+				<input id="activationCode" name ="activationCode" size="40">
+				
+				
+				
+				<label for="okagree">I have read it: </label>
+				<input id="okagree" name ="okagree" type="checkbox">
+				
+				
+				</form>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

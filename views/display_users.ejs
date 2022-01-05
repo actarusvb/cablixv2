@@ -1,0 +1,15 @@
+
+<div>
+<table class="entries" border=1>
+<tr><td>id</td><td>username</td><td>password</td><td>user_id</td><td>role_id</td><td>id</td><td>role</tr>
+
+<% if (entries.size){ %>
+  <% entries.keys.nsort.foreach(function(zid){%>
+    <tr><td><%= entries.zid.id %></td><td><%= entries.zid.username %></td><td><%= entries.zid.password %></td><td><%= entries.zid.user_id %></td><td><%= entries.zid.role_id %></td><td><%= entries.zid.id %></td><td><%= entries.zid.role %></td></tr>
+  <% }) %>
+<% }else{ %>
+  <li><em>Unbelievable. No entries here so far</em></li>
+<% } %>
+</table>
+</div>
+<a href="/">cablix</a>

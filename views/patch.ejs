@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+	<% include layouts/head_printPatch.ejs %>
+	<body>
+		<h3>Patch View 1</h3>
+		<table id="patchTable" class="table patch patchView">
+			<tr><td colspan="1">lid</td>    <td colspan="3"><%= patch.lid %></td></tr>
+			<tr><td colspan="1">aid</td>	<td><%= patch.aid %></td><td>bid</td>	<td><%= patch.bid %></td></tr>
+			<tr><td colspan="1">FriendName</td><td colspan="3"><%= patch.FriendName %></td></tr>
+			<tr><td colspan="1">label</td>	<td colspan="3"><%= patch.label %></td></tr>
+			<tr><td colspan="1">type</td>	<td><%= patch.rtype %></td><td>Color</td>	<td><%= patch.Color %></td></tr>
+			<tr><td colspan="1">mtype</td>	<td colspan="1"><%= patch.mtype %></td><td>dataset</td><td><%= patch.dataset %></td></tr>
+			<tr><td colspan="1">barcode</td><td colspan="3" id="barcodeval" ><%= patch.barcode %></td></tr>
+			<tr><td colspan="4"><svg id="barcode"></svg></td></tr>
+			<tr><td colspan="4"><span id="qrcode"><%= config.url.patchPrint %><%= patch.dataset %>/<%= patch.barcode %></span></td></tr>
+		</table>
+	</body>
+</html>
