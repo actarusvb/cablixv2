@@ -160,7 +160,7 @@ router.get("/html/element/:dataset/:rackId/:eleId/:sockIdPrf",(r,b,n) => {MA.ckL
 	result.req.url=req.baseUrl;
 	result.req.dataset=req.params.dataset;
 	result.req.rackId=req.params.rackId;
-	result.req.eleId=req.params.eleId;
+	result.req.eleId=req.params.eleId;	
 	
 	var db = mongoUtil.getDb();
 	var mode=new Object();
@@ -169,43 +169,46 @@ router.get("/html/element/:dataset/:rackId/:eleId/:sockIdPrf",(r,b,n) => {MA.ckL
 	mode.additionalCSS='additionalCSS';
 
 	try {
-	db.collection(req.params.dataset).find({'type' : "ELEMENT",'lid': req.params.eleId}).toArray(function(err,qresults){
-		if (err) {
-			console.log("error at 00077 ::%s::",err);
-		}
-		// console.log("z00bz we have %o",qresults);
-		
-		qresults.forEach(function(qresult,idx){
-			result.rack=JSON.parse(JSON.stringify(qresult));
-			result.sockets=new Object();
-			// console.log(qresult);
-			var elemntType=global.cfg.eletypes[qresult.elementType];
-			result.configElement=elemntType;
-			// console.log(elemntType);
-			// STEFANO !!!!!!!
-			for(let gbase=0;gbase<elemntType.ports.length;gbase++){
-					
-				let u=elemntType.ports[gbase].pstart;
-				for(let i=elemntType.ports[gbase].indexStart; i< elemntType.ports[gbase].indexStart+elemntType.ports[gbase].pstop;i++){
-					var f = elemntType.ports[gbase].pname;
-					result.sockets['s'+i]='<span id="'+qresult.lid+f+u+'-'+req.params.sockIdPrf+'" class="socketBLANK"></span>';
-					u++;
-				}
+		db.collection(req.params.dataset).find({'type' : "ELEMENT",'lid': req.params.eleId}).toArray(function(err,qresults){
+			if (err) {
+				console.log("error at 00077 ::%s::",err);
 			}
-			ejs.renderFile(
-				path.join(process.cwd() ,'views','vistaTmpl',result.rack.elementType+'.ejs')
-				,{data: qresults,socket: result.sockets,info: result.rack,mode: mode,elementType : elemntType }
-				,{ delimiter: '%'}
-				,function(err, str){
-					if (err) {
-						console.log("I got an error in rendering file %s!!! error is %s",path.join(process.cwd() ,'views','vistaTmpl',result.rack.elementType+'.ejs'),err);
-						// throw err;
+			// console.log("z00bz we have %o",qresults);
+			
+			qresults.forEach(function(qresult,idx){
+				result.rack=JSON.parse(JSON.stringify(qresult));
+				result.sockets=new Object();
+				result.det=new Object();
+
+				console.log(qresult);
+				var elemntType=global.cfg.eletypes[qresult.elementType];
+				console.log( elemntType.length === 0 ? "!!!!!!!!!!!!!!!!!!!! Elementype Empty" : "Element exist");
+				result.configElement=elemntType;
+				// console.log(elemntType);
+				// STEFANO !!!!!!!
+				for(let gbase=0;gbase<elemntType.ports.length;gbase++){
+					let uindex=elemntType.ports[gbase].pstart;
+					for(let i=elemntType.ports[gbase].indexStart; i< elemntType.ports[gbase].indexStart+elemntType.ports[gbase].pstop;i++){
+						var pname = elemntType.ports[gbase].pname;
+						result.sockets['s'+i]='<span id="'+qresult.lid+pname+uindex+'-'+req.params.sockIdPrf+'" class="socketBLANK"></span>';
+						uindex++;
 					}
-					result.htmlData=str;
-					res.json(result);
-				});
+				}
+				ejs.renderFile(
+					path.join(process.cwd() ,'views','vistaTmpl',elemntType.template+'.ejs')
+					,{data: qresults,socket: result.sockets,info: result.rack,mode: mode,elementType : elemntType }
+					,{ delimiter: '%'}
+					,function(err, str){
+						if (err) {
+							console.log("I got an error in rendering file %s!!! error is %s",path.join(process.cwd() ,'views','vistaTmpl',result.rack.elementType+'.ejs'),err);
+							// throw err;
+						}
+						result.htmlData=str;
+						res.json(result);
+					}
+				);
+			});
 		});
-	});
 	} catch (error){
 		console.log("it was an error ? %o",error);
 	}

@@ -7,7 +7,7 @@
 					"pstop": 12,
 					"pname": "-mmsc",
 					"indexStart": 1,
-					"ConnectType": "fix-sc-mm"
+					"ConnectType": "duplex-sc-mm"
 				}
 			],
 			"template": "PPFSC12H",

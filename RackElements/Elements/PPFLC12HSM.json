@@ -7,10 +7,10 @@
 					"pstop": 12,
 					"pname": "-smlc",
 					"indexStart": 1,
-					"ConnectType": "fix-lc-sm"
+					"ConnectType": "duplex-lc-sm"
 				}
 			],
-			"template": "PPFLC12H",
+			"template": "PPFLC12HSM",
 			"units": 1,
 			"description": "12 LC SMF duplex ports fiber Patch Pannel 1U",
 			"small_header" : [2,2,2,4,4]

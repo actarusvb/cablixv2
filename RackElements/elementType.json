@@ -1,2 +1,83 @@
 {
+	"eletypes": {
+		"PPFLC24H": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 24,
+					"pname": "-mmlc",
+					"indexStart": 1,
+					"ConnectType": "fix-lc-mm"
+				}
+			],
+			"template": "PPFLC24HMM",
+			"units": 1,
+			"description": "24 LC MMF duplex ports fiber Patch Pannel 1U Temp",
+			"small_header" : [6,2,2,12,4]
+		}
+		,
+		"PPFSC24H": {
+				"ports": [
+				{
+					"pstart": 1,
+					"pstop": 24,
+					"pname": "-mmlc",
+					"indexStart": 1,
+					"ConnectType": "fix-lc-mm"
+				}
+			],
+			"template": "PPFLC24HMM",
+			"units": 1,
+			"description": "24 LC MMF duplex ports fiber Patch Pannel 1U",
+			"small_header" : [6,2,2,12,4]
+		}
+		,
+		"PPFSC12H": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 12,
+					"pname": "-mmsc",
+					"indexStart": 1,
+					"ConnectType": "fix-sc-mm"
+				}
+			],
+			"template": "PPFSC12H",
+			"units": 1,
+			"description": "12 SC MMF duplex ports fiber Patch Pannel 1U",
+			"small_header" : [2,2,2,4,4]
+		}
+	,
+	"PPFSC48H": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 48,
+					"pname": "-mmsc",
+					"indexStart": 1,
+					"ConnectType": "fix-sc-mm"
+				}
+			],
+			"template": "PPFSC48H",
+			"units": 1,
+			"description": "48 SC MMF duplex ports fiber Patch Pannel 1U",
+			"small_header" : [6,2,2,12,4]
+		}
+	,
+	"PPFLC48H": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 48,
+					"pname": "-mmlc",
+					"indexStart": 1,
+					"ConnectType": "fix-lc-mm"
+				}
+			],
+			"template": "PPFLC48H",
+			"units": 1,
+			"description": "48 LC MMF duplex ports fiber Patch Pannel 1U",
+			"small_header" : [6,2,2,12,4]
+		}
+	}
 }

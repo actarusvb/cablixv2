@@ -219,7 +219,7 @@ $(function(){
 		$.ajax({url: '/getData/data/js/elements/'+element, async: true, success: function(result){
 			$("#object-view").html(create_rack(result.myself));
 			result.elements.forEach(function(value,index){
-				console.log(index+" e value: "+value.position);
+				console.log("scan list rack inside index "+index+" e position value: "+value.position);
 				$.ajax({url: '/getData/data/html/elementSmall/'+value.lid, async: true, success: function(resultInner){
 					if(value.elementHigh > 1){
 						var maxEle=value.position-value.elementHigh;
@@ -368,12 +368,12 @@ function actionCreateRack(datar){
 	rackData[datar.rack.lid]= new  Object();
 	console.log("rack added %s",datar.rack.lid);
 	datar.elements.forEach(function(value,index){
-		console.log("%o e value: %s",index,value.position);
+		console.log("index %o e position value: %s",index,value.position);
 		createElementHtml(dataset,datar,value,'Nm','Rk','normal');		
 	});
 }
 function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
-	console.log("0x00F0: value: dataset %s lid %s lid2 %s >> pos %s x&y %s & %s mode %s",dataset,datar.rack.lid,value.lid,value.position,jqIdA,jqIdB,mode);
+	console.log("0x00F0: value: dataset %s lid %s lid2 %s >> pos %s x&y %s & %s mode %s <<<",dataset,datar.rack.lid,value.lid,value.position,jqIdA,jqIdB,mode);
 	$.ajax({
 		url: '/elements/html/element/'+dataset+'/'+datar.rack.lid+'/'+value.lid+'/'+mode,
 		async: true,
@@ -400,14 +400,14 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 			headers: {"authorization": authenticateData.token},
 			method : "GET" }
 		).done(function(dataBlock){
-			console.log("=X4545 dataBlock %o",dataBlock);
+			console.log("=X4545 dataBlock Rack %s Ele %s  %o",dataBlock.req.rackId ,dataBlock.req.eleId ,dataBlock);
 			// rackData[dataBlock.req.rackId]= new  Object();
 			rackData[dataBlock.req.rackId][dataBlock.req.eleId]= new  Object();
 			
 			rackData[dataBlock.req.rackId][dataBlock.req.eleId]=dataBlock.socketsData;
 			if(dataBlock.socketsData !== undefined){
 				dataBlock.socketsData.forEach(function(me){
-					// console.log("me -> lid %s  socketData.me %o",me.lid,me);
+					console.log("=X4545 me -> lid %s  socketData.me %o",me.lid,me);
 					var addClass='smallCell ';					
 					var html='';
 					var sockStatus='';
@@ -447,6 +447,8 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 					// console.log("WWWWW me.lid %s mode %s",me.lid,mode);
 					$("#"+me.lid+'-'+mode).replaceWith(html);
 				});
+		}else{
+			console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %s missing socketsData",dataBlock.req.eleId);
 		}
 		$.contextMenu({
 				selector: '.socketViewed.smallCell.freeSocket', 

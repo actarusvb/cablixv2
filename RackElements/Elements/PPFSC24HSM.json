@@ -7,7 +7,7 @@
 					"pstop": 24,
 					"pname": "-smsc",
 					"indexStart": 1,
-					"ConnectType": "fix-sc-sm"
+					"ConnectType": "duplex-sc-sm"
 				}
 			],
 			"template": "PPFSC24H",

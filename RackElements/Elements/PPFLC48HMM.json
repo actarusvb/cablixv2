@@ -7,7 +7,7 @@
 					"pstop": 48,
 					"pname": "-mmlc",
 					"indexStart": 1,
-					"ConnectType": "fix-lc-mm"
+					"ConnectType": "duplex-lc-mm"
 				}
 			],
 			"template": "PPFLC48H",
