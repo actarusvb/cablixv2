@@ -8,8 +8,14 @@ const sqlite3Util = require( './sqlite3Util' );
 const path = require('path');
 const morgan = require('morgan');
 var merge = require('lodash.merge');
+var helmet = require('helmet')
+
 
 var app = express();
+
+app.use(helmet())
+app.disable('x-powered-by')
+
 var router = express.Router();
 app.enable("trust proxy");
 app.use(morgan(':date[iso] :remote-addr :method :url :status :res[content-length] - :response-time ms'));

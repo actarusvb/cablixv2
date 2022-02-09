@@ -260,6 +260,91 @@ div.cable-organizer-u1 {
     vertical-align: middle;
     line-height: 120px;
 }
+
+
+/* easymenu css START */
+#cablixTree {
+  list-style: none;
+  position: relative;
+  background: #e0e0e0;
+  white-space: nowrap;
+}
+
+#cablixTree a {
+  font-size: 12px;
+  display: block;
+  white-space: nowrap;
+  color: #000;
+  padding:10px 0;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+#cablixTree a:hover { text-decoration: underline; }
+
+#cablixTree li.main-item { float: left; }
+
+#cablixTree li.main-item a { color: #000; }
+
+#cablixTree li.main-item a:hover, #cablixTree li.main-item.hover a { color: #fff; }
+
+#cablixTree li.main-item ul li.sub-item a, #cablixTree li.main-item ul li.sub-item a:hover {
+  color: #000;
+  padding: 19px 40px 19px 10px;
+}
+
+#cablixTree li { 
+	padding: 5px 15px; 
+}
+
+#cablixTree li.hover { 
+	background: #316ac5; 
+}
+
+#cablixTree li ul {
+  display: none;
+  position: absolute;
+  background: #f1f1f1;
+  border: 1px solid #999;
+  padding: 2px ;
+}
+
+#cablixTree li ul li {
+  line-height: 22px;
+  margin: 0;
+  padding: 5px;
+  padding-right: 15px;
+  
+  border: 1px solid #f1f1f1;
+}
+
+#cablixTree li ul li.separator {
+  line-height: 0;
+  height: 0;
+  font-size: 0;
+  padding: 0;
+  overflow: hidden;
+  background: none;
+  border-top: 1px solid #e0e0e0;
+  border-bottom: 1px solid #fff;
+}
+
+#cablixTree li ul li.hover {
+  background: #edf2f7;
+  border: 1px solid #aecff7;
+}
+
+#cablixTree li.main-item ul li.sub-item.has-child { background: url(/images/arrow.gif) no-repeat right center #edf2f7; }
+#cablixTree li.main-item ul li.sub-item.rack { background: url(/images/armadio.png) no-repeat right center #edf2f7; }
+
+#cablixTree li ul li.has-child.hover { border: 1px solid #aecff7; }
+/* easymenu css END */
+
+
+.elementTypeItem{
+	display: block;
+}
+	
 img.free {
   border: 1px solid green;
   border-radius: 4px;
@@ -370,6 +455,7 @@ font-size: 14px;
 	border-collapse: collapse;
     border: 1px solid black;
 	text-align: -webkit-center;
+	border-radius:3px;
 }
 div.rack-element {
 	height: 130px;
@@ -385,14 +471,13 @@ table.element {
 	border: 1px solid black;
 }
 table.rackDevice {
-	width: 100%;
-}
-table.sockets{
 	margin-top: 10px;
 	margin-bottom: 10px;
-	/* font-size: 11px; */
-	border-collapse: collapse;
-    border: 1px solid black;
+	width: 100%;
+	/* border-collapse: collapse; */
+	border-collapse:separate;
+    border:solid black 1px;
+    border-radius:4px;
 }
 .sockets td {
 	border: 1px solid black;
@@ -545,7 +630,21 @@ table.flyTable{
 }
 .flyTable > td {
 	border: 1px solid black;
+	padding: 2px;
 }
+.FlyTable.lbl {
+	color: green;
+}
+.FlyTable.val {
+	color: blue;
+}
+.lbl{
+	color: green;
+}
+.val {
+	color: blue;
+}
+
 /* jqueryui modal form */
 label, input { display:block; }
 input.text { margin-bottom:12px; width:95%; padding: .4em; }

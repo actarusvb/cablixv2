@@ -13,7 +13,8 @@
 			"template": "SW24C12B",
 			"units": 1,
 			"description": "24 rj45 ports switch 1U",
-			"small_header" : [6,2,2,12,4]
+			"small_header" : [6,2,2,12,4],
+			"power": 80
 		},
 		"SW24V12B2U": {
 			"ports": [
@@ -36,7 +37,8 @@
 			"template": "SW24V12B2U",
 			"units": 1,
 			"description": "24+2 rj45+sfp ports switch 1U",
-			"small_header" : [6,2,2,12,4]
+			"small_header" : [6,2,2,12,4],
+			"power": 80
 		},
 		"SW48C16B": {
 			"ports": [
@@ -51,7 +53,8 @@
 			"template": "SW48C16B",
 			"units": 1,
 			"description": "48 rj45 ports switch 1U 16 port group",
-			"small_header" : [6,2,2,12,4]
+			"small_header" : [6,2,2,12,4],
+			"power": 150
 		},
 		"SW48V12B4U": {
 			"ports": [
@@ -74,7 +77,8 @@
 			"template": "SW48V12B4U",
 			"units": 1,
 			"description": "48+4 rj45+sfp ports switch 1U 12 port group",
-			"small_header" : [6,2,2,12,4]
+			"small_header" : [6,2,2,12,4],
+			"power": 150
 		},
 		"SW48V16B4U": {
 			"ports": [
@@ -97,7 +101,8 @@
 			"template": "SW48V16B4U",
 			"units": 1,
 			"description": "48+4 rj45+sfp ports switch 1U 16 port group",
-			"small_header" : [6,4,5,12,5]
+			"small_header" : [6,4,5,12,5],
+			"power": 220
 		}
 	}
 }

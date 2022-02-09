@@ -2,6 +2,9 @@ var addPatch;
 var delPatch;
 var patchAction;
 
+const CreatePatch = labels["menus"]["CreatePatch"] ;
+const AlertDeletePatch=labels["menus"]["AlertDeletePatch"];
+
 $(function(){
 	addPatch = $( "#dialog-form-patch" ).dialog({
       autoOpen: false,
@@ -10,13 +13,12 @@ $(function(){
       modal: true,
 	  open: function(eventx,ui){$("#brack").focus()},
       buttons: {
-        "Create patch": addPatchFunc,
+        CreatePatch : addPatchFunc,
         Cancel: function() {
           addPatch.dialog( "close" );
         }
       },
       close: function() {
-        // form[ 0 ].reset();
         allFields.removeClass( "ui-state-error" );
       }
     });
@@ -27,7 +29,7 @@ $(function(){
       width: 400,
       modal: true,
       buttons: {
-        "Delete this patch": deletePatch,
+        AlertDeletePatch: deletePatch,
         Cancel: function() {
           $( this ).dialog( "close" );
         }
@@ -68,6 +70,7 @@ $(function(){
 		valuex={position:"1", elementHigh:"1",lid: $("#bele").val()};
 		createElementHtml(dataset,datar,valuex,'Zm','RK','patchSelect');
 	});
+	
 	$( document ).on("click",".patchSelect", function(e){
 		e.preventDefault();
 		e.stopPropagation();
@@ -92,9 +95,12 @@ $(function(){
 		});
 	});
 });
-function beginAddPatch(start) {
+function beginAddPatch(start,stop) {
 	console.log("start create patch");
 	console.log("click %s for %s",'A9',$(start).attr('id'));
+	if($(stop).length > 0){
+		console.log("2 i have a end %s",$(stop).attr('id'));
+	}
 	
 	$("#rack-space").html('');
 	var rack=$(start).parents('.rack-view-ele-container').attr('id').substring(3);
@@ -123,6 +129,26 @@ function beginAddPatch(start) {
 			data.elements.forEach(function(value,index){
 				$("#brack").append('<option value="'+value.lid+'">'+value.lid+'</option>');
 			});
+			if($(stop).length > 0){
+				// var stopC= $(stop).attr('id').text.replace("-normal","");
+				console.log("3 i have a end %s",$(stop).attr('id').replace("-normal",""));
+				var jqxhrq = $.ajax({
+					type: "GET",
+					url: "/elements/json/element/"+dataset+"/"+$(stop).attr('id').replace("-normal",""),
+					headers: {"authorization": authenticateData.token,}
+				});
+				jqxhrq.done(function(datum){
+					refreshAuth(datum.auth);
+					console.log("0X00C00: ok done retvalue is: "+datum.auth.errno+" retstring is "+datum.auth.msg);
+					if(datum.auth.errno === 0){
+						console.log("0X00C02: %o",datum);
+						// rack datum.element.pid.split('-')[0]
+						// unit datum.element.pid.split('-')[1]
+						
+					  $("#brack").focus();
+					}
+				});
+			}
 		  $("#brack").focus();
 		}
 	});	

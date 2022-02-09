@@ -14,7 +14,7 @@ $(function(){
 		width: formEditElementDetail.base.width,
 		modal: true,
 		buttons: {
-			Save: saveForm,
+			Save: saveFormC2,
 			Close: function() {
 				$("#formElementContainer").empty();
 				formEditElement.dialog( "close" );
@@ -34,7 +34,8 @@ $(function(){
 	$.contextMenu({
 		selector: '.simpleTree-label-editable', 
 		callback: function(key, options) {
-			var myParentId=$(this).parent().attr('id').substring(3,99);
+			// var myParentId=$(this).parent().attr('id').substring(3,99);
+			var myParentId=$(this).attr('id');
 			console.log("clicked: %s option %o id %s",key,options,myParentId); 
 			switch (key){
 				case 'edit':{
@@ -202,8 +203,8 @@ $(function(){
 			}
 		});
 	}
-	function saveForm(){
-		console.log("wich form ? %o",$(this).serialize());
+	function saveFormC2(){
+		console.log("cablix_2 wich form ? %o",$(this).serialize());
 		if( $(this).find('input#lid').val() && $(this).find('input#pid').val() && (! /[\s,;\.]/.test($(this).find('input#lid').val()))){		
 			var jqxhr = $.ajax({
 				type: "POST",
@@ -219,7 +220,9 @@ $(function(){
 					displayMessage("edit done ok retnum: "+data.retvalue+" retstring is: "+data.retstring );
 					$("#formElementContainer").empty();
 					formEditElement.dialog( "close" );
-					createDatasetTree(dataset);
+					// createDatasetTree(dataset);
+					createAndPopulateRack($(".rackIdCell").text(),actionCreateRack);
+
 				}else{
 					displayMessage("Fail to save retnum: "+data.retvalue+" retstring is: "+data.retstring );
 				}
@@ -339,6 +342,8 @@ $(function(){
 			console.log($("#elementTypeSel option:checked").val());
 			$("#elementType").val($("#elementTypeSel option:checked").val());
 			$("#elementHigh").val(elementTypeList[$("#elementTypeSel option:checked").val()].units);
+			console.log(elementTypeList[$("#elementTypeSel option:checked").val()].power);
+			$("#power").val(elementTypeList[$("#elementTypeSel option:checked").val()].power);
 		});
 		
 		$("#formElementContainer").append('<hr>');

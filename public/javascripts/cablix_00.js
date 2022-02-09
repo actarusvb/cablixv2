@@ -5,6 +5,9 @@ var patchtLabelForm=1;
 var passwordChange;
 
 $(function(){
+	$(document).on("error",function(err){
+		console.log(err);
+	});
 	setTimeout(function(){
 		console.log("start clean text");
 		$('#object-view').html('');
@@ -12,12 +15,7 @@ $(function(){
 		deAuth("start");
 		console.log("end clean text");
 	}, 1000);
-	// $('nav>ul').lavazi({
-		// options
-		// background:"#d30043",
-		// transitionTime:'1000',
-		// theme:'arrow'
-	// });
+
 	$("#logout_cablix").hide();
 	$("#password_change").hide();
 	$("#edit_mode").hide();
@@ -182,6 +180,23 @@ function doLogin(action){
 		}
 	},'json').fail(function() {
 			deAuth("doLogin 01");
+	});
+}
+function doGet(url,method,executeFunct,executeFunctName){
+	$.ajax({
+		url: urlt,
+		headers: {"authorization": authenticateData.token},
+		method : method })
+	.done(function(data){
+		if(data.auth.token){
+			console.log("OKK i get token %s asking who am i",data.auth.token);
+			authenticateData.token=data.auth.token;
+		}else{
+			deAuth(executeFunctName);
+		}
+	})
+	.fail(function(err){
+		console.log("i got error ajax here 0000: "+executeFunctName); 
 	});
 }
 function listCurrentUser(){

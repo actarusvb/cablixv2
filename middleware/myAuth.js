@@ -38,6 +38,7 @@ async function myLogin(req,res,next ) {
 			Userblock.token='';
 			var resx = new Object();
 			// resx.auth = Userblock;
+			console.log("Login Failed for %s & pass %s",req.body.username,req.body.password);
 			resx.auth = JSON.parse(JSON.stringify(Userblock));
 
 			res.json(resx);

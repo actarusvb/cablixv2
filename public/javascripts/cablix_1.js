@@ -107,6 +107,8 @@ $(function(){
 		$("#formElementContainer").append('<input type="hidden" id="form_lid" name="lid" value="'+values.lid+'"/>');
 		$("#formElementContainer").append('<input type="hidden" id="form_subaction" name="subaction" value="edit" />');
 		$("#formElementContainer").append('<button id="delete_subaction" name="x_subaction" class="deleteElement" value="delete">Delete Me!</button>');
+		$("#formElementContainer").append('<input type="hidden" id="pid" name="pidx" value="fake" />');
+		$("#formElementContainer").append('<input  id="lid" name="xlid" readonly value="'+values.lid+'"/>');
 		
 		var notList = ["position","pid","lid","pid"];		
 		for( var key of ["model","SN","lName"]){
@@ -407,45 +409,67 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 			rackData[dataBlock.req.rackId][dataBlock.req.eleId]=dataBlock.socketsData;
 			if(dataBlock.socketsData !== undefined){
 				dataBlock.socketsData.forEach(function(me){
-					console.log("=X4545 me -> lid %s  socketData.me %o",me.lid,me);
+					// console.log("=X4545 me -> lid %s  socketData.me %o",me.lid,me);
 					var addClass='smallCell ';					
 					var html='';
 					var sockStatus='';
-									
-					var alt='<table class=\'flyTable Patch\'><tr><td colspan=\'2\'>MAIN</td></tr>'
-						+'<tr><td>lName</td><td class=\'lName\'>'+me.lName+'</td></tr>'
-						+'<tr><td>FriendName</td><td class=\'FriendName\'>'+me.FriendName+'</td></tr>'
-						+'<tr><td>lid</td><td class=\'lid\'>'+me.lid+'</td></tr>'
-						+'<tr><td>pid</td><td class=\'pid\' id=\'pid-'+me.lid+'\'>'+me.pid+'</td></tr>'
-						+'<tr><td>lindex</td><td>'+me.lindex+'</td></tr>'
-						+'<tr><td>mtype</td><td>'+me.mtype+'</td></tr>';
-					///  QUI !!!
+					var ptype=ptype= me.mtype
+					if(me.mtype.toLocaleLowerCase() === "sfp"){
+						ptype= (me.sfptype )? me.sfptype : 'sfp';
+					}else if(me.mtype.toLocaleLowerCase() === "sfp+"){
+						ptype= (me.sfptype )? me.sfptype : 'sfp+';
+					}else if(me.mtype.toLocaleLowerCase() === "sfpp"){
+						ptype= (me.sfptype )? me.sfptype : 'sfpp';
+					}
+					
+					var alt='<table class=\'flyTable Patch\'><tr><th class=\'header\' colspan=\'2\'>'+labels["SOCKET"]["Title1"]+'</th></tr>'
+						+'<tr><td class=\'lbl\'>'+labels["SOCKET"]["lName"]+'</td><td class=\'lName val\'>'+me.lName+'</td></tr>'
+						+'<tr><td class=\'lbl\'>'+labels["SOCKET"]["FriendName"]+'</td><td class=\'FriendName val\'>'+me.FriendName+'</td></tr>'
+						+'<tr><td class=\'lbl\'>'+labels["SOCKET"]["lid"]+'</td><td class=\'lid val\'>'+me.lid+'</td></tr>'
+						+'<tr><td class=\'lbl\'>'+labels["SOCKET"]["pid"]+'</td><td class=\'pid val\' id=\'pid-'+me.lid+'\'>'+me.pid+'</td></tr>'
+						+'<tr><td class=\'lbl\'>'+labels["SOCKET"]["lindex"]+'</td><td class=\'lindex val\'>'+me.lindex+'</td></tr>'
+						+'<tr><td class=\'lbl\'>'+labels["SOCKET"]["mtype"]+'</td><td class=\'mtype val\'>'+ ptype +'</td></tr>';
 					addClass=(me.lindex % 2 < 1)? addClass=addClass.concat(' img-vert '):addClass;
 
 					if(me.patches.length > 0){
-						sockStatus='r';
+						sockStatus=portColor["busy"];
 						addClass=addClass.concat(' busySocket ');
-						alt = alt +'<tr><td colspan=\'2\'><hr></td></tr>'
-							+'<tr><td colspan=\'2\'>Patch data</td></tr>'
-							+'<tr><td>barcode</td><td>'+me.patches[0].barcode+'</td></tr>'
-							+'<tr><td>lid</td><td>'+me.patches[0].lid+'</td></tr>'
-							+'<tr><td>label</td><td>'+me.patches[0].label+'</td></tr>'
-							+'<tr><td>FriendName</td><td>'+me.patches[0].FriendName+'</td></tr>'
-							+'<tr><td>aid</td><td>'+me.patches[0].aid+'</td></tr>'
-							+'<tr><td>bid</td><td>'+me.patches[0].bid+'</td></tr>'
-							+'<tr><td>mtype</td><td>'+me.patches[0].mtype+'</td></tr>'
-							// +'<tr><td>type</td><td>'+me.patches[0].type+'</td></tr>'
-							+'<tr><td>color</td><td>'+me.patches[0].Color+'</td></tr>';
+						alt = alt +'<tr><td class=\'lbl\' colspan=\'2\'><hr></td></tr>'
+							+'<tr><th  class=\'header\' colspan=\'2\'>'+labels["SOCKET"]["Title2"]+'</th></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["barcode"]+'</td><td class=\'barcode val\'>'+me.patches[0].barcode+'</td></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["lid"]+'</td><td class=\'lid val\'>'+me.patches[0].lid+'</td></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["label"]+'</td><td class=\'label val\'>'+me.patches[0].label+'</td></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["FriendName"]+'</td><td class=\'FriendName val\'>'+me.patches[0].FriendName+'</td></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["aid"]+'</td><td class=\'aid val\'>'+me.patches[0].aid+'</td></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["bid"]+'</td><td class=\'bid val\'>'+me.patches[0].bid+'</td></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["mtype"]+'</td><td class=\'mtype val\'>'+me.patches[0].mtype+'</td></tr>'
+							// +'<tr><td> class=\'lbl\'type</td><td class=\'type val\'>'+me.patches[0].type+'</td></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["color"]+'</td><td class=\'Color val\'>'+me.patches[0].Color+'</td></tr>';
 						
 					}else{
-						sockStatus='g';
+						sockStatus=portColor["free"];
 						addClass=addClass.concat(' '+mode+' freeSocket ');
 					}
-					var icon='/img/'+me.mtype+'-'+sockStatus+'.png';
+					var icon='/img/'+ptype+'-'+sockStatus+'.png';
 					alt=alt+'</table>';
-					html='<span id="'+me.lid+'-'+mode+'" class="socketViewed '+addClass+'"><img alt="'+alt+'" class="'+addClass+'" src="'+icon+'" /></span>';
-					// console.log("WWWWW me.lid %s mode %s",me.lid,mode);
-					$("#"+me.lid+'-'+mode).replaceWith(html);
+					html='<span id="'+me.lid+'-'+mode+'" class="socketViewed '+addClass+'"><img alt="'+alt+'" class="'+addClass+' socket" src="'+icon+'" /></span>';
+					$("#"+me.lid+'-'+mode).replaceWith(html);					
+					
+					$(".freeSocket.socket").draggable({
+						revert: true
+					});
+					$(".freeSocket.socket").droppable({
+						accept: ".freeSocket.socket",
+						drop: function( event, ui ) {
+							console.log("dragged helper %s",ui.draggable.parent()[0].id);
+							console.log("dropped helper %s",$(this).parent()[0].id);
+							beginAddPatch(ui.draggable.parent()[0],$(this).parent()[0]);
+						},
+						activate: function( event, ui ) {
+							// console.log("activate on "+ui.helper);
+						}
+						
+					});
 				});
 		}else{
 			console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %s missing socketsData",dataBlock.req.eleId);
@@ -501,7 +525,8 @@ function localEscape(string){
 		return entityMap[s];
 	});
 }
-function formatTable(blockData){
+/* ma??? XA */
+function formatTableXA(blockData){
 	var tableS="<table class='flyTable Patch'><tr><th colspan='2'>MAIN</th></tr>";
 	$.each(labelMain,function(k,v){
 		tableS=tableS.concat('<tr><td>'+v+'</td><td>'+blockData[k]+'</td></tr>');
@@ -517,7 +542,7 @@ function formatTable(blockData){
 function loadDatasetList(container){
 	// console.log("hummm");
 	$("#page").append('<div id="datasetContainer"  class="datasetCont"></div>');
-	$("#datasetContainer").append('<h3>Select Dataset please</h3>');
+	$("#datasetContainer").append('<h3>'+labels["root"]["SelectDataset"]+'</h3>');
 	authenticateData.dataset.forEach(function(datasetx){
 		resolveDataset(datasetx,function(resolDataset){
 			$("#datasetContainer").append('<p><button id="'+datasetx+'" class="datasetele">'+resolDataset+'</button></p>');
@@ -560,6 +585,7 @@ function checkRegexp( o, regexp, n ) {
 	return true;
   }
 }
+/* ma? bahh */
 function addElementFunc(){
 	// noooooo
 	var valid = true;
@@ -605,20 +631,23 @@ function create_rack(rackdesc){
 	return rack.concat('</table>');
 }
 function createDatasetTree(currentDataset){
-	// $("#datasetContainer").remove();
 	$("#page").empty();
-	$("#page").append('<div id="ppage">'+datasetName+':</div>');
-	$("#ppage").append('<div id="licenseStatus" class="licenseStatusClass" />');
-	$("#ppage").append('<div id="licenseAdder" class="licenseAdderClass"><button id="showAdderForm" class="addAdderButton">Add license</button></div>');
-	$("#ppage").append(
-		"<div id='cablixTreeCont' class='datasetCont'>"
-			+"<div id='cablixTree'></div>"
-		+"</div>");
+	
+	// qui si è incoppato
+	$("#page").append(
+	'<div id="ppage">'+datasetName+' : '
+		+'<div id="licenseStatus" class="licenseStatusClass" ></div>'
+		+'<div id="licenseAdder" class="licenseAdderClass"><button id="showAdderForm" class="addAdderButton">'+labels["root"]["AddLicense"]+'</button></div>'
+		+'<div id="cablixTreeCont" class="datasetCont">'
+			+'<div id="cablixTree"></div>'
+		+'</div>'
+	+'</div>');
+	
 	$("#page").append(
 		"<div id='content' class='content'>"
 			+"<div id='box'><div id='box'inner' class='box-inner'>"
 				+"<div id='box-header'>"
-					+"<h1>cablix 1.0</h1>"
+					+"<h1>"+labels["root"]["ProgramName"]+"</h1>"
 				+"</div>"
 				+"<div id='object-view'></div>"
 			+"</div>"
@@ -659,32 +688,71 @@ function createDatasetTree(currentDataset){
 			treeJson=data.tree[0];
 			console.log("tree data available : %o",treeJson);
 			displayMessage("tree data available");
-			// $('#cablixTree').simpleTree({startCollapsed: false},data.tree).on('simpleTree:click', function(eventNode,node){
-			$('#cablixTree').simpleTree({startCollapsed: false},data.tree).on('simpleTree:change', function(eventNode,node){
-				console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
-				if(userMode === 'view'){
-					createAndPopulateRack(node.value,actionCreateRack);
-				}else if (userMode === 'edit'){
-					curNode=node;
-				}
-			});					
+			
+			if(true){
+				/* V1 Start */
+				$('#cablixTree').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
+					console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
+					if(userMode === 'view'){
+						createAndPopulateRack(node.value,actionCreateRack);
+					}else if (userMode === 'edit'){
+						curNode=node;
+					}
+				});
+				/* V1 End */			
+			}else{  /* ---------------------------------------- */
+				/* V2 Start */
+				$('#cablixTree').append('<ul id="sitemenu"></ul>');
+				data.tree.forEach(function(value,index){
+					scanTree(value,"sitemenu");
+				});
+				$('#sitemenu').easymenu({
+					'sub_item_class' :'sub-item', 
+				});
+				$(document).on('click', 'menunode',function(event){
+					console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
+					if(userMode === 'view'){
+						createAndPopulateRack(node.value,actionCreateRack);
+					}else if (userMode === 'edit'){
+						curNode=node;
+					}
+				});
+				/* V2 End */
+			}
 		}else{
 			deAuth("createDatasetTree")
 		}
 	})
 	.fail(function(err){
 		console.log("i got error here 8989: "+err); 
-	}); 
+	});
+	
+	function scanTree(node,level){
+		// (node.type === "RACK") "rack":"";
+		var zrack='';
+		zrack = (node.type === 'RACK') ? ' rack ' : '' ;
+		var t1='<li id="'+node.value+'" class="menunode '+zrack+'">'+node.label+'</li>';
+		$('#'+level).append(t1);
+		if (typeof node.children != "undefined") {
+			if(node.children.length > 0){
+				var t2='<ul id="'+level+'-'+node.value	+'"></ul>';
+				$('#'+node.value).append(t2);
+				node.children.forEach(function (subNode){
+					scanTree(subNode,level+'-'+node.value);
+				});
+			}
+		}
+	}
+		
 	$.ajax({
 		url: "/elements/json/elementTypeList/"+dataset,
 		headers: {"authorization": authenticateData.token,},
 		type: "GET"})
 	.done(function(data){
 		console.log("ok done retvalue is: "+data.retvalue+" retstring is "+data.retstring+" eee data %o",data.data);
-		var elementTypeList = data.data;
-		for (const [key, value] of Object.entries(elementTypeList)) {
-			// console.log(key+" << e value: "+value["description"]);
-			$("#elementTypeList").append('<li><b>'+key+'</b> '+value["description"]+'</li>');								
+		for (const [key, value] of Object.entries(data.data)) {
+			// $("#elementTypeList").append('<li><b>'+key+'</b> '+value["description"]+'</li>');								
+			$("#elementTypeList").append('<span class="elementTypeItem"><b>'+key+'</b> '+value["description"]+'</span>');								
 		}
 	})
 	.fail(function(err){
@@ -704,7 +772,7 @@ function editSocketForm(that){
 	var eleId = $(that).parent().parent().parent().parent().children("tbody").children("tr:first").children("td.readonly.lid").text();
 	var socketId= $(that).attr("id").replace("-normal","");
 	
-	$("#formElementContainer").append('<h3>Detail</h3>');
+	$("#formElementContainer").append('<h3>'+labels["editSocketForm"]["FrmDetail"]+'</h3>');
 	$("#formElementContainer").append('<input type="hidden" id=from_type" name="type" value="SOCKET" />');
 	$("#formElementContainer").append('<input type="hidden" id="form_dataset" name="dataset" value="'+dataset+'" />');
 	$("#formElementContainer").append('<input type="hidden" id="form_subaction" name="subaction" value="edit" />');
@@ -718,9 +786,24 @@ function editSocketForm(that){
 		if(value.lid === socketId){
 			values.lName=value.lName;
 			values.FriendName=value.FriendName;
+			values.mtype=value.mtype.toLocaleLowerCase();
 		}
 	});
 	for( var key of ["lName","FriendName"]){
 		$("#formElementContainer").append('<label for="'+key +'">'+labels["SOCKET"][key]+'</label><input id="'+key+'" name="'+key+'" value="'+values[key]+'"/>');
 	}
+	if(values.mtype === 'sfp'){
+		$("#formElementContainer").append('<select name="sfptype" id="localmType" >');
+		$("#localmType").append('<option value="-----">-----------</option>');
+		for( var val in validValue.sfp){
+			$("#localmType").append('<option value="'+validValue.sfp[val]+'">'+validValue.sfp[val]+'</option>');
+		}
+	}else if(values.mtype === 'sfp+'){
+		$("#formElementContainer").append('<select name="sfptype" id="localmType" >');
+		$("#localmType").append('<option value="-----">-----------</option>');
+		for( var val in validValue.sfpp){
+			$("#localmType").append('<option value="'+validValue.sfpp[val]+'">'+validValue.sfpp[val]+'</option>');
+		}
+	}
+
 }
