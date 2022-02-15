@@ -18,6 +18,7 @@ margin: 0;
 padding: 0;
 background-color: #ddd;
 float: left;
+white-space:nowrap
 }
 /* .normalDiv{ */
 	
@@ -45,6 +46,8 @@ float: left;
 td.rack-view-ele-id{
 	vertical-align: middle;
 }
+
+
 
 h1 {
 font-size: 28px;
@@ -121,6 +124,11 @@ div.licenseAdderClass{
 	/* border-radius: 10px; */
     padding: 6px;
 }
+.bkgRed{
+	background: red;
+}
+
+
 .cd-panel.cd-panel--is-visible {
   visibility: visible;
   transition: visibility 0s 0s;
@@ -211,6 +219,15 @@ div.box-inner{
 	padding-right:2px
 }
 input,select { display:block; }
+
+.MainPage { display:block; }
+
+
+input.top_commandx { 
+	display:inline-block; 
+}
+
+
 .hiddenx {
 	display: none 
 }
@@ -372,8 +389,14 @@ div#users-contain table td, div#users-contain table th { border: 1px solid #eee;
 img.busySocket {
   border: 1px solid red;
   border-radius: 4px;
-  padding: 5px;
+  padding: 4px;
   cursor: crosshair;
+}
+img.freeSocket {
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 4px;
+  /* cursor: crosshair; */
 }
 .img-vert {
         -moz-transform: scaleY(-1);

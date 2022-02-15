@@ -105,6 +105,8 @@ router.post("/editOrSave/element/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'tr
 					populateIn.pstart=v.pstart;
 					populateIn.pstop=v.pstop;
 					populateIn.pname=v.pname;
+					populateIn.pfriend=v.pfriend || "ptAs";
+					
 					populateIn.indexStart=v.indexStart;
 					populateIn.ConnectType=v.ConnectType;
 					populateIn.modular=v.modular;
@@ -125,7 +127,8 @@ router.post("/editOrSave/element/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'tr
 							v.pname,
 							v.indexStart,
 							v.ConnectType,
-							v.modular
+							v.modular,
+							populateIn.pfriend
 							].join('/')
 					console.log("W77 get Url is %s",url);
 					var options = {
@@ -167,7 +170,7 @@ function populatePort(populateData){
 			"H" : "D",
 			"pid" : populateData.lid,
 			"lName" : "pt"+i,
-			"FriendName" : "ptAs"+i,
+			"FriendName" : populateData.pfriend+i,
 			"lindex" : parseInt(populateData.indexStart)+i-1,
 			"mtype" : populateData.ConnectType
 		});

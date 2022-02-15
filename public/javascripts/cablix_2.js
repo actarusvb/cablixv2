@@ -216,7 +216,7 @@ $(function(){
 				console.log("on done retvalue is: "+data.retvalue+" retstring is "+data.retstring);
 				refreshAuth(data.auth);
 				if(data.retvalue == 1){
-					set_userMode($("#edit_mode"),'edit');
+					// set_userMode($("#edit_mode"),'edit');
 					displayMessage("edit done ok retnum: "+data.retvalue+" retstring is: "+data.retstring );
 					$("#formElementContainer").empty();
 					formEditElement.dialog( "close" );

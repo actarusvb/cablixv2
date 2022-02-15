@@ -19,6 +19,7 @@ $(function(){
 	$("#logout_cablix").hide();
 	$("#password_change").hide();
 	$("#edit_mode").hide();
+	$("#job_id").hide();
 	
 	$(".top_command#access_cablix").click(function(event){
 		event.preventDefault();
@@ -71,6 +72,8 @@ $(function(){
 						$("#logout_cablix").show();
 						$("#password_change").show();
 						$("#edit_mode").show();
+						$("#job_id").show();
+						
 						$("#admin_change").show();
 						$("#page").empty();
 						if($("#context").text() === "admin"){
@@ -182,15 +185,16 @@ function doLogin(action){
 			deAuth("doLogin 01");
 	});
 }
-function doGet(url,method,executeFunct,executeFunctName){
+function doGet(method,url,executeFunct,executeFunctName){
 	$.ajax({
-		url: urlt,
+		url: url,
 		headers: {"authorization": authenticateData.token},
 		method : method })
 	.done(function(data){
 		if(data.auth.token){
-			console.log("OKK i get token %s asking who am i",data.auth.token);
+			console.log("OKK i get token asking who am i & data %o",data);
 			authenticateData.token=data.auth.token;
+			executeFunct(data);
 		}else{
 			deAuth(executeFunctName);
 		}

@@ -1,6 +1,6 @@
 {
 	"auth": true,
-	"ServerName" : "cablix.iskranet.net",
+	"ServerName" : "app.cablix.it",
 	"serverPort": 8000,
 	"localIp": "localhost",
 	"adminServerPort":8001,
@@ -24,7 +24,7 @@
 	"sqliteLuxDb": "./db/lux.db",
 
 	"url": {
-		"patchPrint" : "https://cablix.iskranet.net/elements/html/patch/"
+		"patchPrint" : "https://app.cablix.it/elements/html/patch/"
 	},
 	"passwordMinLength" : 8,
 	"charset": "UTF32",
@@ -41,7 +41,7 @@
 	],
 	"title": "Cablix",
 	"patchColor": "Yellow,Red,Blue,Gray,Black,Green,White,Orange,Lavanda,Purple",
-	"patchFieldName": "lid,arack,aru,aele,aid,brack,bru,bele,bid,mtype,FriendName,Color,label,barcode",
+	"patchFieldName": "lid,arack,aru,aele,aid,brack,bru,bele,bid,mtype,FriendName,Color,label,barcode,jobid",
 	
 	"imgBase": {
 		"base": "/img",

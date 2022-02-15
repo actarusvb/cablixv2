@@ -13,7 +13,7 @@ const types=["SITE","BUILD","FLOOR","ZONE","RACK","ELEMENT","SOCKET","interrack"
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 var roles=["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"];
 const labelMainXA={'FriendName' : 'Friend Name', 'lName' : 'Local name','lid' : 'Local ID'};
-const patch={'aid' : 'Side A','bid' : 'Side B','FriendName':'FriendName','mtype':'mtype','Color':'Color','label':'label','barcode':'barcode'};
+const patch={'aid' : 'Side A','bid' : 'Side B','FriendName':'FriendName','mtype':'mtype','Color':'Color','label':'label','barcode':'barcode','jobid':'jobid'};
 const interpatchpannel={'lid' : 'lid','sid' : 'sid','rid' : 'rid','boundle' : 'boundle','mtype':'mtype'};
 const labels={
 	"root": {
@@ -83,7 +83,8 @@ const labels={
 		"aid":"A id",
 		"bid":"B id",
 		"mtype": "media type",
-		"color": "color"
+		"color": "color",
+		"jobid":"jobid"
 	},
 	"interrack": {
 		"lid":"local ID",
@@ -122,19 +123,34 @@ const formEditElementDetail={
 		"height" : 730,
 		"width" : 400 }
 };
+
 const validValue={
+	"port":{
+		"rj45u"		:["rj45u","GLC-T","fix_rj45"],
+		"GLC-T"		:["rj45u","GLC-T","fix_rj45"],
+		"fix_rj45"	:["rj45u","GLC-T","fix_rj45"],
+		"GLC-SX"	:["GLC-SX"],
+		"GLC-LH"	:["GLC-LH"],
+		"GLC-FE-100FX" 	:["GLC-FE-100FX"],
+		"GLC-FE-100LX" 	:["GLC-FE-100LX"],
+		"GLC-BX-x" 	:["GLC-BX-x"],
+		"SFP-10G-SR"	:["SFP-10G-SR"],
+		"SFP-10G-LRM"	:["SFP-10G-LRM"],
+		"SFP-10G-LR"	:["SFP-10G-LR"],
+		"SFP-10G-RR"	:["SFP-10G-RR"],
+		"SFP-10G-ZR"	:["SFP-10G-ZR"],
+		"SFP-10G-BXD-x"	:["SFP-10G-BXD-x"]		
+	},
 	"type": ["SITE","BUILD","FLOOR","ZONE","RACK","ELEMENT","SOCKET","interrack"],
 	"hightUnit": [12,20,24,30,32,38,40,42,44,45,46],
 	"elementHigh":[1,2,3,4,5,6,7,8,9,10],
 	"front_back" : ['F','R'],
 	"elementType": ['missing'],
 	"mtype": ['missing'],
-	"sfp": ["GLC-T", "GLC-FE-100FX"," GLC-FE-100LX", "GLC-BX-x","GLC-SX","GLC-LH","GLC-ZX"],
-	"sfpp":["GLC-T", "GLC-FE-100FX"," GLC-FE-100LX", "GLC-BX-x","GLC-SX","GLC-LH","GLC-ZX","SFP-10G-SR","SFP-10G-LRM","SFP-10G-LR","SFP-10G-RR","SFP-10G-ZR","SFP-10G-BXD-x"],
-	"GLC-T" : {
-		port: "UTP"
-	}
+	"sfp": ["GLC-T", "GLC-FE-100FX","GLC-FE-100LX", "GLC-BX-x","GLC-SX","GLC-LH","GLC-ZX"],
+	"sfpp":["GLC-T", "GLC-FE-100FX","GLC-FE-100LX", "GLC-BX-x","GLC-SX","GLC-LH","GLC-ZX","SFP-10G-SR","SFP-10G-LRM","SFP-10G-LR","SFP-10G-RR","SFP-10G-ZR","SFP-10G-BXD-x"]
 };
+
 const dataModelXA={
 	"City":{
 		"type": "text",

@@ -693,7 +693,7 @@ function createDatasetTree(currentDataset){
 				/* V1 Start */
 				$('#cablixTree').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
 					console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
-					if(userMode === 'view'){
+					if(userMode === 'view' && typeof node != "undefined"){
 						createAndPopulateRack(node.value,actionCreateRack);
 					}else if (userMode === 'edit'){
 						curNode=node;
@@ -750,9 +750,17 @@ function createDatasetTree(currentDataset){
 		type: "GET"})
 	.done(function(data){
 		console.log("ok done retvalue is: "+data.retvalue+" retstring is "+data.retstring+" eee data %o",data.data);
-		for (const [key, value] of Object.entries(data.data)) {
-			// $("#elementTypeList").append('<li><b>'+key+'</b> '+value["description"]+'</li>');								
-			$("#elementTypeList").append('<span class="elementTypeItem"><b>'+key+'</b> '+value["description"]+'</span>');								
+		var keys=[],k;
+		
+		for (k in data.data) {
+			if (data.data.hasOwnProperty(k)) {
+				keys.push(k);
+			}
+		}		
+		keys.sort();
+		
+		for (i = 0; i < keys.length; i++) {						
+			$("#elementTypeList").append('<span class="elementTypeItem"><b>'+keys[i]+'</b> '+data.data[keys[i]].description+'</span>');								
 		}
 	})
 	.fail(function(err){
