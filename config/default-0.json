@@ -20,6 +20,7 @@
 	"mongoDbName": "my-mongo-db-name-here",
 	"cabUsers": "_cabUsers",
 	"counters": "_counters",
+	"logs": "_logs",
 	"sqliteCabDb": "my-local-db-here",
 	"sqliteLuxDb": "./db/lux.db",
 

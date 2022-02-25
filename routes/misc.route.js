@@ -23,7 +23,6 @@ router.post("/json/data/add",async (req,res) => {
 	}
 	res.json(result);			
 });
-
 router.get("/uuid",function(req,res){		
 	var result=new Object();
 	result.retvalue=1;
@@ -31,7 +30,6 @@ router.get("/uuid",function(req,res){
 	result.uuid=uuid4();	
 	res.json(result)
 });
-
 function addValueLux(req){
 	var db = sqlite3Util.getDb();
 	var params = [];

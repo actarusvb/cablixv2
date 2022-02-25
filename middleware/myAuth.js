@@ -59,6 +59,7 @@ async function ckLogin(req,res,next){
 			Userblock.token = jwt.sign({ id: Userblock.id, role: Userblock.role }, privateuuid);
 			Userblock.msg = 'username & password OK!';
 			Userblock.errno=0;
+			
 			next();
 		} catch (ex) {
 			console.log(ex);  
@@ -84,9 +85,10 @@ async function ckLoginNrole(req,res,next,reqRole){
 			
 			const decoded = jwt.verify(token,privateuuid);
 			Userblock.id=decoded.id;
-			console.log("ckLoginNrole userId %s dataset %s :: role",Userblock.id,req.params.dataset,reqRole);
+			// console.log("ckLoginNrole userId %s dataset %s :: role",Userblock.id,req.params.dataset,reqRole);
 			Userblock.isAdmin =decoded.isAdmin;
 			Userblock.role=decoded.role;
+			// console.log("Role %o // required %s",decoded.role,reqRole);
 			
 			if(dataset === 'zozo')
 				decoded.role[dataset]=[];
@@ -95,7 +97,7 @@ async function ckLoginNrole(req,res,next,reqRole){
 			Userblock.msg = 'username & password OK!';
 			Userblock.errno=0;
 			
-			if(decoded.role[dataset].includes(reqRole)){
+			if(typeof decoded.role[dataset] !== "undefined" && decoded.role[dataset].includes(reqRole)){
 				console.log("ckLoginNrole OK!");				
 				next();
 			}else if(Userblock.isAdmin){

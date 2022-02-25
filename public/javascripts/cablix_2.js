@@ -231,15 +231,13 @@ $(function(){
 			displayMessage('pid or lid not defined or invalid lid, stop!');
 		}
 	}
-	function set_userMode(that,OLDmode){
+	function set_userMode__old(that,OLDmode){
 		userMode = (OLDmode === 'view') ?
 			'edit' :
 			'view';
 		that.removeClass("edit_mode");
 		that.removeClass("edit_modered");
 
-		// $(".licenseAdder").html('');
-		
 		$(".rack-element").removeClass("fa-lock")
 		$(".rack-element").removeClass("fa-edit")
 		$(".socketViewed").removeClass("fa-lock")

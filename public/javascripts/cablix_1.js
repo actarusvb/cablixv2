@@ -79,7 +79,6 @@ $(function(){
 		e.preventDefault();
 		dataset=$( this ).attr('id');
 		datasetName=$( this ).text();
-		// console.log("set domain ot: "+dataset);
 		displayMessage("set domain to : "+dataset);
 		createDatasetTree(dataset);
 	});
@@ -393,7 +392,7 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 				.after('<td rowspan="'+value.elementHigh+'" id="'+jqIdB+'-'+datar.rack.lid+'-'+value.position+'" class="rack-view-ele-container">large</td>');
 		}
 		console.log("0x00F2: add content to cell %s - %s %s",jqIdB,datar.rack.lid,value.position)
-		$("#"+jqIdB+"-"+datar.rack.lid+"-"+value.position).removeClass('hideable');
+		$("#"+jqIdB+"-"+datar.rack.lid+"-"+value.position).removeClass('hideable freeElement');
 		$("#"+jqIdB+"-"+datar.rack.lid+"-"+value.position).html(resultInner.htmlData);
 		
 		$.ajax({
@@ -443,7 +442,7 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["aid"]+'</td><td class=\'aid val\'>'+me.patches[0].aid+'</td></tr>'
 							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["bid"]+'</td><td class=\'bid val\'>'+me.patches[0].bid+'</td></tr>'
 							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["mtype"]+'</td><td class=\'mtype val\'>'+me.patches[0].mtype+'</td></tr>'
-							// +'<tr><td> class=\'lbl\'type</td><td class=\'type val\'>'+me.patches[0].type+'</td></tr>'
+							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["jobid"]+'</td><td class=\'type val\'>'+me.patches[0].jobid+'</td></tr>'
 							+'<tr><td class=\'lbl\'>'+labels["PATCH"]["color"]+'</td><td class=\'Color val\'>'+me.patches[0].Color+'</td></tr>';
 						
 					}else{
@@ -626,14 +625,13 @@ function create_rack(rackdesc){
 		'<th colspan="1" class="rack-view-head"><span class="rackIdCell">'+rackdesc.lid+'</span></th><th class="rack-view-head"> '+rackdesc.lName+' <span class="ui-icon ui-icon-lightbulb toogleHideable"></span>||<span class="ui-icon ui-icon-contact displayPatch"></span></th>'+
 		'</tr>';
 	for(var i=rackdesc.hightUnit;i>0;i--){
-		rack=rack.concat('<tr id="tr-'+i+'" class="ruIdCol"><td id="Nm-'+rackdesc.lid+'-'+i+'" class="rack-view-ele-id"><div class="rack-element fas fa-lockx"> '+i+'</div></td><td id="Rk-'+rackdesc.lid+'-'+i+'" class="rack-view-ele-container hideable">Free</td></tr>');
+		rack=rack.concat('<tr id="tr-'+i+'" class="ruIdCol"><td id="Nm-'+rackdesc.lid+'-'+i+'" class="rack-view-ele-id"><div class="rack-element fas fa-lockx"> '+i+'</div></td><td id="Rk-'+rackdesc.lid+'-'+i+'" class="rack-view-ele-container hideable freeElement">Free</td></tr>');
 	}
 	return rack.concat('</table>');
 }
 function createDatasetTree(currentDataset){
 	$("#page").empty();
 	
-	// qui si è incoppato
 	$("#page").append(
 	'<div id="ppage">'+datasetName+' : '
 		+'<div id="licenseStatus" class="licenseStatusClass" ></div>'
@@ -654,11 +652,7 @@ function createDatasetTree(currentDataset){
 		+"</div>");
 	$("#page").append("<div id='rightCont' class='content'><ul id='elementTypeList'></ul></div>");
 
-	$.ajax({
-		url: '/admin/Rd/dataset/'+currentDataset,
-		headers: {"authorization": authenticateData.token},
-		method : "GET" })
-	.done(function(data){
+	doGet("GET",'/admin/Rd/dataset/'+currentDataset,function(data){
 		if(data.auth.token){
 			console.log("OKK i get token %s asking who am i",data.auth.token);
 			authenticateData.token=data.auth.token;
@@ -672,15 +666,8 @@ function createDatasetTree(currentDataset){
 		}else{
 			deAuth("createDatasetTree/license")
 		}	
-	})
-	.fail(function(err){
-		console.log("i got error here 8989: "+err); 
-	}); 
-	$.ajax({
-		url: '/tree/json/tree/'+currentDataset,
-		headers: {"authorization": authenticateData.token},
-		method : "GET" })
-	.done(function(data	) {
+	},"getDataset"); 
+	doGet("GET",'/tree/json/tree/'+currentDataset,function(data	) {
 		if(data.auth.token){
 			console.log("OKK i get token %s asking who am i",data.auth.token);
 			authenticateData.token=data.auth.token;
@@ -722,10 +709,21 @@ function createDatasetTree(currentDataset){
 		}else{
 			deAuth("createDatasetTree")
 		}
-	})
-	.fail(function(err){
-		console.log("i got error here 8989: "+err); 
-	});
+	},"getTree");
+	doGet("GET","/elements/json/elementTypeList/"+dataset,function(data){
+		var keys=[],k;		
+		var data3 = $.extend(data.data, data.data2);
+		for (k in data3) {
+			if (data3.hasOwnProperty(k)) {
+				keys.push(k);
+			}
+		}		
+		keys.sort();
+		
+		for (i = 0; i < keys.length; i++) {						
+			$("#elementTypeList").append('<span class="elementTypeItem" id="'+keys[i]+'"><b>'+keys[i]+'</b> '+data3	[keys[i]].description+'</span>');								
+		}
+	},"elementTypeList");
 	
 	function scanTree(node,level){
 		// (node.type === "RACK") "rack":"";
@@ -743,29 +741,6 @@ function createDatasetTree(currentDataset){
 			}
 		}
 	}
-		
-	$.ajax({
-		url: "/elements/json/elementTypeList/"+dataset,
-		headers: {"authorization": authenticateData.token,},
-		type: "GET"})
-	.done(function(data){
-		console.log("ok done retvalue is: "+data.retvalue+" retstring is "+data.retstring+" eee data %o",data.data);
-		var keys=[],k;
-		
-		for (k in data.data) {
-			if (data.data.hasOwnProperty(k)) {
-				keys.push(k);
-			}
-		}		
-		keys.sort();
-		
-		for (i = 0; i < keys.length; i++) {						
-			$("#elementTypeList").append('<span class="elementTypeItem"><b>'+keys[i]+'</b> '+data.data[keys[i]].description+'</span>');								
-		}
-	})
-	.fail(function(err){
-		console.log("i got error here 9087: "+err); 
-	});
 }
 function editSocketForm(that){
 	formEditElement.dialog( "open" );

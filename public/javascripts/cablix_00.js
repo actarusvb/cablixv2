@@ -12,7 +12,8 @@ $(function(){
 		console.log("start clean text");
 		$('#object-view').html('');
 		$("#page").empty();
-		deAuth("start");
+		// deAuth("start");
+		displayMessage("OK!");
 		console.log("end clean text");
 	}, 1000);
 
@@ -20,6 +21,7 @@ $(function(){
 	$("#password_change").hide();
 	$("#edit_mode").hide();
 	$("#job_id").hide();
+
 	
 	$(".top_command#access_cablix").click(function(event){
 		event.preventDefault();
@@ -34,9 +36,10 @@ $(function(){
 		}else{
 			// let authenticateData_tmp=sessionStorage.getItem("cabjs-admin");
 			console.log("authenticateData not available");
-			if( sessionStorage.getItem("cabjs-admin") !== null) {
+			if( sessionStorage.getItem("cabjs-admin") !== null && 0) {
 				console.log("authenticateData in local storage: %o",sessionStorage.getItem("cabjs-admin"));
 				authenticateData=sessionStorage.getItem("cabjs-admin");
+				okProceed(authenticateData.username);
 			}else{
 				loginDialog.dialog( "open" );
 			}
@@ -64,23 +67,7 @@ $(function(){
 				if($("#username").val() && $("#password").val() ){ 
 					doLogin(function(username){
 						loginDialog.dialog( "close" );
-						$("#logout_cablix").after('|<a class="top_command" id="loggedIn" href="javascript:void(0);">'+username+' Logged In!</a>');
-						$(document).on("click","#loggedIn",function(){
-							console.log("click %s",'A2');
-							listCurrentUser();
-						});
-						$("#logout_cablix").show();
-						$("#password_change").show();
-						$("#edit_mode").show();
-						$("#job_id").show();
-						
-						$("#admin_change").show();
-						$("#page").empty();
-						if($("#context").text() === "admin"){
-							loadAdmin($("#page"));
-						}else{
-							loadDatasetList($("#page"));
-						}
+						okProceed(username);
 					});
 				}else{
 					displayMessage("username or password can't be empty");
@@ -99,6 +86,27 @@ $(function(){
 		}
 		
 	});
+	
+	function okProceed(username){
+		$("#logout_cablix").after('|<a class="top_command" id="loggedIn" href="javascript:void(0);">'+username+' Logged In!</a>');
+		$(document).on("click","#loggedIn",function(){
+			console.log("click %s",'A2');
+			listCurrentUser();
+		});
+		$("#logout_cablix").show();
+		$("#password_change").show();
+		$("#edit_mode").show();
+		$("#job_id").show();
+		
+		$("#admin_change").show();
+		$("#page").empty();
+		if($("#context").text() === "admin"){
+			loadAdmin($("#page"));
+		}else{
+			loadDatasetList($("#page"));
+		}
+	}
+	
 	passwordChange = $( "#dialog-change-password" ).dialog({
 		autoOpen: false,
 		height: 400,
@@ -129,14 +137,13 @@ function set_userMode(that,OLDmode){
 		'view';
 	that.removeClass("edit_mode");
 	that.removeClass("edit_modered");
-
-	// $(".licenseAdder").html('');
 	
-	$(".rack-element").removeClass("fa-lock")
-	$(".rack-element").removeClass("fa-edit")
-	$(".socketViewed").removeClass("fa-lock")
-	$(".socketViewed").removeClass("fa-edit")		
+	$(".rack-element").removeClass("fa-lock");
+	$(".rack-element").removeClass("fa-edit");
+	$(".socketViewed").removeClass("fa-lock");
+	$(".socketViewed").removeClass("fa-edit");
 	$(".simpleTree-label").removeClass("simpleTree-label-editable");
+	$(".elementTypeItem").removeClass("elementTypeItemDrag ui-draggable ui-draggable-handle");
 	
 	that.addClass(
 		(userMode === 'view') ?
@@ -159,11 +166,27 @@ function set_userMode(that,OLDmode){
 			'' :
 			'simpleTree-label-editable'
 	);
-	// $("#licenseAdder").html(
-		// (userMode === 'view') ?
-			// '' :
-			// '<button id="showAdderForm" class="addAdderButton">Add license</button>'
-	// );		
+	$(".elementTypeItem").addClass(
+		(userMode === 'view') ?
+			'' :
+			'elementTypeItemDrag'
+	);
+	
+	$(".elementTypeItemDrag").draggable({
+		revert: true
+	});
+	$(".freeElement").droppable({
+		accept: ".elementTypeItemDrag",
+		drop: function( event, ui ) {
+			console.log("dragged helper A %s",ui.draggable.attr('id'));
+			console.log("dropped helper B %s",$(this).attr('id'));
+			// beginAddPatch(ui.draggable.parent()[0],$(this).parent()[0]);
+		},
+		activate: function( event, ui ) {
+			// console.log("activate on "+ui.helper);
+		}
+	});
+	
 	displayMessage("userMode is: "+userMode);
 }
 function doLogin(action){
@@ -173,7 +196,6 @@ function doLogin(action){
 		console.log("doLogin receive %o",data);
 		if(data.auth.errno >= 0 && data.auth.token){
 			console.log("Login OK %o",data);
-			// authenticateData=data;
 			if(data.auth.patchtLabelForm > 0) patchtLabelForm=data.auth.patchtLabelForm;
 			refreshAuth(data.auth);
 			action(data.auth.username);
@@ -217,7 +239,7 @@ function listCurrentUser(){
 			loggedInDialog.dialog("open");
 			$("#logdedInCont").empty();
 			$("#logdedInCont").append('<span class="loggedindet">username: '+data.auth.username+'</span><br>');
-			$("#logdedInCont").append('<span class="loggedindet">id: '+data.auth.id+'</span><br>');
+			$("#logdedInCont").append('<span class="loggedindet">Check Code: '+data.auth.id+'</span><br>');
 			$("#logdedInCont").append('<span class="loggedindet">dataset: '+data.auth.dataset+'</span><br>');
 			$("#logdedInCont").append('<span class="loggedindet">patchtLabelForm: '+data.auth.patchtLabelForm+'</span><br>');
 			// $("#logdedInCont").append('<p class="loggedindet">'+data.auth.rbac+'</p>');
@@ -267,7 +289,21 @@ function deAuth(where){
 function refreshAuth(_authBlock){
 	console.log("0x00A1 refreshAuth %o",_authBlock);
 	authenticateData=_authBlock;
-	sessionStorage.setItem("cabjs-admin",_authBlock);
+	sessionStorage.setItem("cabjs-admin",JSON.stringify(_authBlock));
+}
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+		console.log(date);
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
 function displayMessage(message){
 	console.log(message);

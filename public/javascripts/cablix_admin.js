@@ -21,7 +21,7 @@ $(function(){
 		}else{
 			// let authenticateData_tmp=sessionStorage.getItem("cabjs-admin");
 			console.log("authenticateData not available");
-			if( sessionStorage.getItem("cabjs-admin") !== null) {
+			if( sessionStorage.getItem("cabjs-admin") !== null && 0) {
 				console.log("authenticateData in local storage: %o",sessionStorage.getItem("cabjs-admin"));
 				authenticateData=sessionStorage.getItem("cabjs-admin");
 			}else{
@@ -56,6 +56,12 @@ $(function(){
 		}else{
 			righeTable.ajax.reload();
 		}
+	});
+	$( document ).on("click","collectionT", function(e){
+		/* 
+		- select collection tabs
+		- select collection
+		*/
 	});
 	$( document ).on("click",".fa-tools", function(e){
 		e.preventDefault();
@@ -166,21 +172,22 @@ function loadAdmin(){
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-userTable">users</a></li>');
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-licenseDash">license dash</a></li>');
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-licenseTable">license table</a></li>');
+	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-collection">Collection</a></li>');
+	
 		
 	$("#tabsAdmin").append('<div id="tabsAdmin-userTable" />');
 	$("#tabsAdmin").append('<div id="tabsAdmin-licenseDash" />');
 	$("#tabsAdmin").append('<div id="tabsAdmin-licenseTable" />');
+	$("#tabsAdmin").append('<div id="tabsAdmin-collection" />');
+	
 	
 	$("#tabsAdmin-userTable").append('<div id="the-userTable" class="normalDiv"><table id="userTable"><thead><tr><th>cabid</th><th>username</th><th>dataset</th></tr></thead><tbody></tbody></table></div>');
 	$("#the-userTable").after('<div class="normalDiv"><i class="fas fa-user-plus"></i></div>');
-	$("#the-userTable").append('<div id="the-collectionsTable" class="normalDiv"><table id="collectionsTable"><thead><tr><th>name</th></tr></thead><tbody></tbody></table></div>');
-	
 	$("#tabsAdmin-licenseDash").append('<div id="the-licenseDash"/>');
-	// $("#tabsAdmin-licenseDash").append('<div id="the-licenseDash"/>');
-
 	$("#tabsAdmin-licenseTable").append('<div id="the-licenseTable" class="normalDiv">'+
 	'<table id="licenseTable"><thead><tr><th>id</th><th>uuid</th><th>type/size</th><th>domain</th><th>creation</th><th>burn</th><th>burner</th></tr></thead><tbody></tbody></table></div>');
-	
+	$("#tabsAdmin-collection").append('<div id="the-collectionsTable" class="normalDiv"><table id="collectionsTable"><thead><tr><th>name</th></tr></thead><tbody></tbody></table></div>');
+
 	
 	$( "#tabsAdmin" ).tabs();
 	// user zone
@@ -206,7 +213,13 @@ function loadAdmin(){
 			"render": function ( data, type, row, meta ) {
 				return '<button ><i class="fas fa-trash" id="rowIdT'+meta.row+'"></i></button> <button ><i class="fas fa-tools" id="rowIdE'+meta.row+'"></i></button> '+data
 			}
-		}]
+			},
+			{
+			"targets": 2,
+			// "data": "cabId",
+			"className" : "collectionT"
+			}
+		]
 	});
 	collectionsTable=$('#collectionsTable').DataTable({
 		"ajax": {
@@ -217,6 +230,7 @@ function loadAdmin(){
 				xhr.setRequestHeader("Authorization",authenticateData.token);
 			}
 		}
+		,  "autoWidth": false
 		,"pageLength": 50
 		,"columns": [
 			 { "data": "name" }
@@ -360,7 +374,7 @@ function addUser() {
 	var valid = true;
 	allFields.removeClass( "ui-state-error" );
 
-	valid = valid && checkLength( $("#addUsername"), "addUsername", 3, 16 );
+	valid = valid && checkLength( $("#addUsername"), "addUsername", 2, 16 );
 	if ( valid ) {
 		console.log("Add %o",userDetails);
 		$.ajax({
@@ -389,7 +403,7 @@ function updateUser() {
 	var valid = true;
 	allFields.removeClass( "ui-state-error" );
 
-	valid = valid && checkLength( $("#editUsername"), "username", 3, 16 );
+	valid = valid && checkLength( $("#editUsername"), "username", 2, 16 );
 	valid = valid && checkLength( $("#editPassword"), "password", 5, 16 );
 
 	valid = valid && checkRegexp( $("#editUsername"), /^[a-z]([0-9a-z_\s])+$/i, "Username may consist of a-z, 0-9, underscores, spaces and must begin with a letter." );

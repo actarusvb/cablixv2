@@ -3,6 +3,8 @@ const SE = require('../middleware/searchUtil');
 const express = require("express");
 const router = express.Router();
 var mongoUtil = require( '../mongoUtil' );
+var merge = require('lodash.merge');
+
 // const config = require('config');
 let ejs=require('ejs');
 var path = require('path');
@@ -180,7 +182,7 @@ router.get("/html/element/:dataset/:rackId/:eleId/:sockIdPrf",(r,b,n) => {MA.ckL
 				result.sockets=new Object();
 				result.det=new Object();
 
-				console.log(qresult);
+				// console.log(qresult);
 				var elemntType=global.cfg.eletypes[qresult.elementType];
 				console.log( elemntType.length === 0 ? "!!!!!!!!!!!!!!!!!!!! Elementype Empty" : "Element exist");
 				result.configElement=elemntType;
@@ -240,40 +242,7 @@ router.get("/json/element/:dataset/:rackId/:eleId/BLOCK",(r,b,n) => {MA.ckLoginN
 		res.json(result);
 	});
 });
-router.get("/html--/element/:dataset/:rackId/:eleId/:socketId",(r,b,n) => {MA.ckLoginNrole(r,b,n,'rackRead');},async (req, res) => {
-	console.log("z09 %s requested id %s for dataset %s rack %s element %s socket %s<",
-		req.baseUrl,MA.Userblock.id,req.params.dataset,req.params.rackId,req.params.eleId,req.params.socketId);
-
-	var result=new Object();
-	result.auth = JSON.parse(JSON.stringify(MA.Userblock));
-
-	result.req=new Object();
-	result.req.url=req.baseUrl;
-	result.req.dataset=req.params.dataset;
-	result.req.rackId=req.params.rackId;
-	result.req.eleId=req.params.eleId;
-	result.req.socketId=req.params.socketId;
-	
-	var db = mongoUtil.getDb();
-	db.collection(req.params.dataset).aggregate([{$match:{type:"SOCKET","lid":req.params.socketId}},{$lookup:{from:req.params.dataset,pipeline:[{
-		$match:{$or:[{"aid":req.params.socketId},{"bid":req.params.socketId}]}}],as: "patchData"}}]).toArray(function(err, qresults){
-		
-		if(qresults.length > 0){
-			if( qresults[0].lid){
-				result.xdata=qresults[0];
-				result.htmlData='<span id="'+qresults[0].lid+'" class="socketViewed"><img src="/img/folder.gif" /></span>';
-				res.json(result);
-			}else{
-				result.htmlData='<span id="'+req.params.socketId+'">NA1</span>';
-				res.json(result);
-			}
-		}else{
-			result.htmlData='<span id="'+req.params.socketId+'">NA2</span>';
-			res.json(result);
-		}
-	});
-});
-router.get("/json/elementTypeList/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'rackRead');},async (req, res) => {
+router.get("/json/elementTypeListOld/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'rackRead');},async (req, res) => {
 	console.log("z10 %s requested id %s for dataset %s <",req.baseUrl,MA.Userblock.id,req.params.dataset);
 
 	var result=new Object();
@@ -289,6 +258,37 @@ router.get("/json/elementTypeList/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'r
 	result.retstring="OK - data";
 	
 	res.json(result);
+});
+router.get("/json/elementTypeList/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'rackRead');},async (req, res) => {
+	console.log("z10 %s requested id %s for dataset %s <",req.baseUrl,MA.Userblock.id,req.params.dataset);
+
+	var result=new Object();
+	result.auth = JSON.parse(JSON.stringify(MA.Userblock));
+
+	result.req=new Object();
+	result.req.url=req.baseUrl;
+	
+	result.req.dataset=req.params.dataset;
+	
+	var db = mongoUtil.getDb();
+	var col=db.collection(req.params.dataset);
+		
+	col.find({'type' : "eleConfig"}).toArray(function(err, qresult){
+		if (err) {
+			throw err;
+		}
+		result.rack=qresult[0];
+		result.data=global.cfg.eletypes;
+		if(typeof qresult[0] !== "undefined"){
+			result.data2=qresult[0].eletypes;
+		}
+		// console.log("i got as config %o",qresult[0]);
+		
+		result.retvalue=1;
+		result.retstring="OK - data";
+		
+		res.json(result);
+	});
 });
 router.get("/html/patch/:dataset/:onesideId",async (req, res) => {
 	console.log("z88 %s requested patch id %s for dataset %s socket %s<",
@@ -335,9 +335,6 @@ router.get("/html/patches/:dataset/:rackId",async (req, res) => {
 	var db = mongoUtil.getDb();
 	var col=db.collection(req.params.dataset);
 	
-	// rtype: 'patch',
-	// db.getCollection('CasaMia').find()
-	// "type" : "patch",
 	col.find({$or : [{"arack": req.params.rackId},{"brack": req.params.rackId}]}).toArray( function(err, qresults) {
 		if (err) {
 			fail(9988,"fail in find");
@@ -440,7 +437,6 @@ router.post("/json/patch/add",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},
 			,fail(1002,'element aid missing')),
 		fail(1002,'element bid missing'))
 	);
-	
 	function addPatch(col,b){
 		var p = {rtype : "patch", type : "PATCH"};
 		global.cfg.patchFieldName.split(",").forEach(function(a,i){
@@ -451,6 +447,7 @@ router.post("/json/patch/add",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},
 			if (err) throw err;
 			
 			console.log("p document inserted %o",p);
+			logAction(req.body.dataset,req.body.dataset+" ADD PATCH "+p.lid);
 			
 			result.retvalue=1;
 			result.retstring="OK - inserted";
@@ -468,7 +465,7 @@ router.post("/json/patch/add",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},
 				fail(9999,"fail in find");
 				return reject(err)
 			}
-			console.log("9999 qresult: %o",qresult);
+			// console.log("9999 qresult: %o",qresult);
 			(qresult.lenght < 1) ?
 				failCallback :
 				okCallback;
@@ -495,6 +492,22 @@ router.post("/json/patch/add",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},
 
 	}
 });
+	function logAction(dataset,msg){	
+		var db = mongoUtil.getDb();
+		console.log("log is %s",global.cfg.log);
+		var collog=db.collection("_log");
+		
+		var p = {
+			type : "log",
+			date: new Date().toISOString(),
+			message: msg
+		};
+		collog.insertOne(p,function(err, rex) {
+			if (err) throw err;
+			console.log("p document inserted %o",p);
+		});
+	}
+
 router.post("/json/patch/delete/:col/:onesideId",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},async (req,res) =>{
 	console.log("z12 %s requested id %s for dataset %s <",req.baseUrl,MA.Userblock.id,req.params.onesideId);
 
@@ -513,6 +526,7 @@ router.post("/json/patch/delete/:col/:onesideId",(r,b,n) => {MA.ckLoginNrole(r,b
 			return reject(err)
 		}
 		console.log("9989 deleteMany qresult: %o",qresult.result);
+		logAction(req.body.dataset,req.body.dataset+" DEL PATCH "+req.params.onesideId);
 		result.retvalue=1;
 		result.delNum=qresult.result.n; 
 		result.retstring="OK - delete: "+result.delNum;
@@ -587,5 +601,4 @@ function getPatch (dbcol,lid) {
     });
   // });
 }
-
 module.exports = router;
