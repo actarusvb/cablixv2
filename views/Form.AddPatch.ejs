@@ -64,12 +64,12 @@
 					<label for="barcode">barcode ID (unique)</label>
 					<input type="text" name="barcode" id="barcode" value="" class="text ui-widget-content ui-corner-all">
 				</div>
-				<input type="submit" tabindex="-1" style="position:absolute; top:-1000px" id="patchSubmit" >
+				<input type="submit" tabindex="-1" class="submit_patch" id="patchSubmit" >
 				<input type="hidden" name="bru" id="bru">
 		</fieldset>
 	</form>
 </div>
 <div id="dialog-path-delete-confirm" title="Delete Patch?">
   <p>>>>>>>><span id="patchId"></span><<<<<<<<p>
-  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:12px 12px 20px 0;"></span>Patch from/to this element will be permanently deleted and cannot be recovered. Are you sure?</p>
+  <p><span class="ui-icon ui-icon-alert patch_alert" ></span>Patch from/to this element will be permanently deleted and cannot be recovered. Are you sure?</p>
 </div>

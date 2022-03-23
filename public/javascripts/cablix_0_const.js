@@ -11,6 +11,8 @@ const entityMap = {
 };
 const types=["SITE","BUILD","FLOOR","ZONE","RACK","ELEMENT","SOCKET","interrack","PATCH"];
 const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+const passwordMinLen=8;
+const datasetNameMinLen=3;
 var roles=["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"];
 const labelMainXA={'FriendName' : 'Friend Name', 'lName' : 'Local name','lid' : 'Local ID'};
 const patch={'aid' : 'Side A','bid' : 'Side B','FriendName':'FriendName','mtype':'mtype','Color':'Color','label':'label','barcode':'barcode','jobid':'jobid'};
@@ -123,7 +125,6 @@ const formEditElementDetail={
 		"height" : 730,
 		"width" : 400 }
 };
-
 const validValue={
 	"port":{
 		"rj45u"		:["rj45u","GLC-T","fix_rj45"],
@@ -150,7 +151,6 @@ const validValue={
 	"sfp": ["GLC-T", "GLC-FE-100FX","GLC-FE-100LX", "GLC-BX-x","GLC-SX","GLC-LH","GLC-ZX"],
 	"sfpp":["GLC-T", "GLC-FE-100FX","GLC-FE-100LX", "GLC-BX-x","GLC-SX","GLC-LH","GLC-ZX","SFP-10G-SR","SFP-10G-LRM","SFP-10G-LR","SFP-10G-RR","SFP-10G-ZR","SFP-10G-BXD-x"]
 };
-
 const dataModelXA={
 	"City":{
 		"type": "text",

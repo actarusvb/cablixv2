@@ -98,18 +98,14 @@ function beginAddPatch(start,stop) {
 	$("#lid").val('');
 	$("#FriendName").val('');
 	$("#label").val('');
-	$("#barcode").val('');
-	
+	$("#barcode").val('');	
 	var amtype,asfptype,bmtype,bsfptype;
-
-	
 	
 	$("#rack-space").html('');
 
 	console.log("click %s for %s",'A9',$(start).attr('id'));
 	if($(stop).length > 0){
 		// drag & drop
-		
 		addPatch.dialog( "open" );
 		$(".maybehide").hide();
 		// A SIDE
@@ -125,7 +121,6 @@ function beginAddPatch(start,stop) {
 				checkPort(amtype,asfptype,bmtype,bsfptype);				
 			},"fetchEleDataRackA");
 		},"fetchEleDataA");
-		
 		// B SIDE
 		doGet("GET","/elements/json/element/"+dataset+"/"+$(stop).attr('id').replace("-normal",""),function(datum){				
 			$("#bid").val(datum.element.lid);
@@ -143,7 +138,8 @@ function beginAddPatch(start,stop) {
 				checkPort(amtype,asfptype,bmtype,bsfptype);
 			},"fetchEleDataRackB");
 		},"fetchEleDataB");
-	} else{	
+	} else{
+		// usual
 		$(".maybehide").show();
 		var rack=$(start).parents('.rack-view-ele-container').attr('id').substring(3);
 		$("#arack").val(rack.substring(0,rack.lastIndexOf("-")));
@@ -183,7 +179,6 @@ function beginAddPatch(start,stop) {
 		} 
 		return ;
 	}
-
 }
 function addPatchFunc() {
 	var valid = true;
@@ -254,12 +249,7 @@ function addPatchFunc() {
 }
 function deletePatch(){
 	displayMessage('delete submited');
-	var jqxhr = $.ajax({
-		type: "POST",
-		url: "/elements/json/patch/delete/"+dataset+"/"+$("#patchId").text(),
-		headers: {"authorization": authenticateData.token,}
-	});	
-	jqxhr.done(function(data){
+	doGet("POST","/elements/json/patch/delete/"+dataset+"/"+$("#patchId").text(),function(data){
 		console.log("on done retvalue is: "+data.retvalue+" retstring is "+data.retstring);
 		if(data.retvalue == 1){
 			refreshAuth(data.auth);			
@@ -268,10 +258,6 @@ function deletePatch(){
 		}else{
 			displayMessage('error 011');
 		}
-	},"json");
-	jqxhr.fail(function(data){
-		console.log("on fail retvalue is: "+data.retvalue+" retstring is "+data.retstring);
-		displayMessage("error 012 retvalue is: "+data.retvalue+" retstring is "+data.retstring);
-	},"json");
+	});
 	delPatch.dialog("close");
 }

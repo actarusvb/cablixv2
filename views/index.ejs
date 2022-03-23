@@ -12,10 +12,11 @@
 				| <input size="8" class="top_commandx job_id" id="job_id" name="job_id" value="" placeholder="job id" >
 				|### <%= config.appname %> <%= config.version %> ###
 				| <a href="https://support.cablix.it/" target="support_cablix_it">Support</a>&nbsp;
-				<!-- |>> <a class="top_command" id="clearSession" href="#">Clear</a> -->
+				| <a id="clasx" href="#">classes</a> 
+				| <span id="message" class="MsgSpace"></span>
 			</div>
 		</div>
-		<div id="message" class="MsgSpace"></div><br>
+		<!-- <br> -->
 		<div id="page" class="MainPage"></div>
 		<% include Form.licenseAdder.ejs %>
 		<% include Form.password.ejs %>

@@ -1,127 +1,4 @@
-var loginDialog;
-var loggedInDialog;
-var authenticateData= new Object();
-var patchtLabelForm=1;
-var passwordChange;
 
-$(function(){
-	$(document).on("error",function(err){
-		console.log(err);
-	});
-	setTimeout(function(){
-		console.log("start clean text");
-		$('#object-view').html('');
-		$("#page").empty();
-		// deAuth("start");
-		displayMessage("OK!");
-		console.log("end clean text");
-	}, 1000);
-
-	$("#logout_cablix").hide();
-	$("#password_change").hide();
-	$("#edit_mode").hide();
-	$("#job_id").hide();
-
-	
-	$(".top_command#access_cablix").click(function(event){
-		event.preventDefault();
-		console.log("click %s",'A1');
-		$("#page").empty();
-		$("#context").text("users");
-
-		if( authenticateData && authenticateData.token){   // already authenticate
-			loginDialog.dialog( "close" );
-			console.log("authenticateData %o",authenticateData);
-			loadDatasetList($("#page"));
-		}else{
-			// let authenticateData_tmp=sessionStorage.getItem("cabjs-admin");
-			console.log("authenticateData not available");
-			if( sessionStorage.getItem("cabjs-admin") !== null && 0) {
-				console.log("authenticateData in local storage: %o",sessionStorage.getItem("cabjs-admin"));
-				authenticateData=sessionStorage.getItem("cabjs-admin");
-				okProceed(authenticateData.username);
-			}else{
-				loginDialog.dialog( "open" );
-			}
-		}
-	});	
-	loggedInDialog=$( "#dialog-loggedin" ).dialog({
-		autoOpen: false,
-		resizable: false,
-		height: "auto",
-		width: 400,
-		modal: true,
-		buttons: {
-			Cancel: function() {
-				$( this ).dialog( "close" );
-			}
-		}
-	});
-	loginDialog=$("#login_block").dialog({
-		autoOpen: false,
-		height: 215,
-		width: 400,
-		modal: true,
-		buttons: {
-			"login" : function() {
-				if($("#username").val() && $("#password").val() ){ 
-					doLogin(function(username){
-						loginDialog.dialog( "close" );
-						okProceed(username);
-					});
-				}else{
-					displayMessage("username or password can't be empty");
-					$("#loginMessage").text("username or password can't be empty");
-					setTimeout(function () {
-						$( "#loginMessage" ).text('');
-					}, 4000);
-				}
-			},
-			"Cancel" : function() {
-				loginDialog.dialog( "close" );
-			}
-		},
-		close: function() {
-			loginDialog.dialog( "close" );
-		}
-		
-	});
-	
-	function okProceed(username){
-		$("#logout_cablix").after('|<a class="top_command" id="loggedIn" href="javascript:void(0);">'+username+' Logged In!</a>');
-		$(document).on("click","#loggedIn",function(){
-			console.log("click %s",'A2');
-			listCurrentUser();
-		});
-		$("#logout_cablix").show();
-		$("#password_change").show();
-		$("#edit_mode").show();
-		$("#job_id").show();
-		
-		$("#admin_change").show();
-		$("#page").empty();
-		if($("#context").text() === "admin"){
-			loadAdmin($("#page"));
-		}else{
-			loadDatasetList($("#page"));
-		}
-	}
-	
-	passwordChange = $( "#dialog-change-password" ).dialog({
-		autoOpen: false,
-		height: 400,
-		width: 580,
-		modal: true,
-		buttons: {
-			"Change password": ChangePass,
-			Cancel: function() {
-				passwordChange.dialog( "close" );
-			}
-		},
-		close: function() {
-		}
-	});
-});
 function patchtLabel(){
 	if(patchtLabelForm == 1){
 		return $("#aid").val()+'::'+$("#bid").val();
@@ -207,7 +84,7 @@ function doLogin(action){
 			deAuth("doLogin 01");
 	});
 }
-function doGet(method,url,executeFunct,executeFunctName){
+function doGet(method,url,executeFunct,executeFunctName,options){
 	$.ajax({
 		url: url,
 		headers: {"authorization": authenticateData.token},
@@ -311,4 +188,97 @@ function displayMessage(message){
 	setTimeout(function () {
 		$( "#message" ).text('');
 	}, 3000);
+}
+function localEscape(string){
+	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
+		return entityMap[s];
+	});
+}
+function updateTips( t ) {
+  tips
+	.text( t )
+	.addClass( "ui-state-highlight" );
+  setTimeout(function() {
+	tips.removeClass( "ui-state-highlight", 1500 );
+  }, 500 );
+}
+function checkLength( o, n, min, max ) {
+  if ( o.val().length > max || o.val().length < min ) {
+	o.addClass( "ui-state-error" );
+	updateTips( "Length of " + n + " must be between " +
+	  min + " and " + max + "." );
+	return false;
+  } else {
+	return true;
+  }
+}
+function checkRegexp( o, regexp, n ) {
+  if ( !( regexp.test( o.val() ) ) ) {
+	o.addClass( "ui-state-error" );
+	updateTips( n );
+	return false;
+  } else {
+	return true;
+  }
+}
+function checkField(field,val,callback){
+	console.log("checkField %s %s",field,val);
+	$("#"+field+"_msg").remove();
+	
+	$.ajax({
+		type: "GET",
+		url: "/SelfService/json/field/"+field+"/"+val,
+	}).done(function(datae){
+		console.log("checkField 0X00C02: ok done retvalue is: %o ",datae);
+		if(datae.errno === 0){
+			$('#'+field).after('<span id="'+field+'_msg" <i class="far fa-thumbs-up"></i>'+datae.message+'</span>');
+		}else{
+			callback(field,datae.message);
+		};
+	}).fail(function(){
+		callback(field,"error");
+	});
+}
+function isStrongPwd(password,minLength) {
+	var uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var lowercase = "abcdefghijklmnopqrstuvwxyz";
+	var digits = "0123456789";
+	var splChars ="!@#$%&*()";
+	var ucaseFlag = contains(password, uppercase);
+	var lcaseFlag = contains(password, lowercase);
+	var digitsFlag = contains(password, digits);
+	var splCharsFlag = contains(password, splChars);
+
+	if(password.length>= minLength && ucaseFlag && lcaseFlag && digitsFlag && splCharsFlag)
+		return true;
+	else
+		return false;
+}
+function isValidDsetName(password,minLength) {
+	var uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	var lowercase = "abcdefghijklmnopqrstuvwxyz";
+	var digits = "0123456789";
+	// var splChars ="!@#$%&*()";
+	var splChars =" \t";
+	var ucaseFlag = contains(password, uppercase);
+	var lcaseFlag = contains(password, lowercase);
+	var digitsFlag = contains(password, digits);
+	var noSplCharsFlag = ! contains(password, splChars);
+
+	if(password.length>= minLength && ( ucaseFlag || lcaseFlag || digitsFlag ) && noSplCharsFlag)
+		return true;
+	else
+		return false;
+}
+function contains(password, allowedChars) {
+	for (i = 0; i < password.length; i++) {
+			var char = password.charAt(i);
+			 if (allowedChars.indexOf(char) >= 0) { return true; }
+		 }
+	 return false;
+}
+function reaction(field,reason){
+	console.log("reaction "+field+' '+reason);		
+	$('#'+field).after('<span id="'+field+'_msg" <i class="far fa-thumbs-down"></i>'+reason+'</span>');
+	$('#'+field).focus();
 }

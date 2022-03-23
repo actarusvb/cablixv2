@@ -2,15 +2,15 @@
 
 $(function(){
 
-dialog = $( "#modulo" ).dialog({
+	newUserDialog = $( "#modulo" ).dialog({
       autoOpen: true,
-      height: 550,
-      width: 350,
+      height: 570,
+      width: 370,
       modal: true,
       buttons: {
         "Create an account": addUser,
         "Cancel": function() {
-          dialog.dialog( "close" );
+          newUserDialog.dialog( "close" );
         }
       },
       close: function() {
@@ -22,14 +22,13 @@ dialog = $( "#modulo" ).dialog({
 		// $(this).dialog('widget').find('button:last').prop('disabled', true);
       },
     });
-    form = dialog.find( "form" ).on( "submit", function( event ) {
+    form = newUserDialog.find( "form" ).on( "submit", function( event ) {
       event.preventDefault();
       addUser();
     }); 
     $( "#create-user" ).button().on( "click", function() {
-      dialog.dialog( "open" );
+      newUserDialog.dialog( "open" );
     });
-
 	function addUser(){
 		console.log("addUser requested");
 		var valid = true;
@@ -46,7 +45,7 @@ dialog = $( "#modulo" ).dialog({
 			console.log("on done errno is: "+data.errno+" message is "+data.message);
 			if(data.errno === 0){
 				displayMessage('done');
-				dialog.dialog('close');
+				newUserDialog.dialog('close');
 			}else{
 				displayMessage("error 9998: "+data.errno );
 				valid=false;
@@ -70,7 +69,7 @@ dialog = $( "#modulo" ).dialog({
 		console.log("new %s %s",field,$('#'+field).val());
 		$('#'+field+'_msg').remove();		
 		
-		if(isStrongPwd($('#'+field).val(),8)){
+		if(isStrongPwd($('#'+field).val(),passwordMinLen)){
 			$('#'+field).after('<span id="'+field+'_msg" <i class="far fa-thumbs-up"></i>'+'</span>');
 		}else{
 			reaction(field,"Password must contain, digit,upper & lower case letter and a symbol like !@#$%&*() and more than 8 char");
@@ -92,7 +91,7 @@ dialog = $( "#modulo" ).dialog({
 		console.log("new %s %s",field,$('#'+field).val());
 		$('#'+field+'_msg').remove();		
 		
-		if(isValidDsetName($('#'+field).val(),3)){
+		if(isValidDsetName($('#'+field).val(),datasetNameMinLen)){
 			$('#'+field).after('<span id="'+field+'_msg" <i class="far fa-thumbs-up"></i>'+'</span>');
 		}else{
 			reaction(field,"Invalid Name! valid name are minumum 3 chars with A-Z,a-z,0-9 <strong>no</strong> spaces or symbol");
@@ -105,65 +104,4 @@ dialog = $( "#modulo" ).dialog({
 		
 		checkField(field,$('#'+field).val(),reaction);
 	});
-	function reaction(field,reason){
-		console.log("reaction "+field+' '+reason);		
-		$('#'+field).after('<span id="'+field+'_msg" <i class="far fa-thumbs-down"></i>'+reason+'</span>');
-		$('#'+field).focus();
-	}
-	function checkField(field,val,callback){
-		console.log("checkField %s %s",field,val);
-		$("#"+field+"_msg").remove();
-		
-		$.ajax({
-			type: "GET",
-			url: "/SelfService/json/field/"+field+"/"+val,
-		}).done(function(datae){
-			console.log("checkField 0X00C02: ok done retvalue is: %o ",datae);
-			if(datae.errno === 0){
-				$('#'+field).after('<span id="'+field+'_msg" <i class="far fa-thumbs-up"></i>'+datae.message+'</span>');
-			}else{
-				callback(field,datae.message);
-			};
-		}).fail(function(){
-			callback(field,"error");
-		});
-	}
-	function isStrongPwd(password,minLength) {
-		var uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		var lowercase = "abcdefghijklmnopqrstuvwxyz";
-		var digits = "0123456789";
-		var splChars ="!@#$%&*()";
-		var ucaseFlag = contains(password, uppercase);
-		var lcaseFlag = contains(password, lowercase);
-		var digitsFlag = contains(password, digits);
-		var splCharsFlag = contains(password, splChars);
-
-		if(password.length>= minLength && ucaseFlag && lcaseFlag && digitsFlag && splCharsFlag)
-			return true;
-		else
-			return false;
-	}
-	function isValidDsetName(password,minLength) {
-		var uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		var lowercase = "abcdefghijklmnopqrstuvwxyz";
-		var digits = "0123456789";
-		// var splChars ="!@#$%&*()";
-		var splChars =" \t";
-		var ucaseFlag = contains(password, uppercase);
-		var lcaseFlag = contains(password, lowercase);
-		var digitsFlag = contains(password, digits);
-		var noSplCharsFlag = ! contains(password, splChars);
-
-		if(password.length>= minLength && ( ucaseFlag || lcaseFlag || digitsFlag ) && noSplCharsFlag)
-			return true;
-		else
-			return false;
-	}
-	function contains(password, allowedChars) {
-		for (i = 0; i < password.length; i++) {
-				var char = password.charAt(i);
-				 if (allowedChars.indexOf(char) >= 0) { return true; }
-			 }
-		 return false;
-	}
 });

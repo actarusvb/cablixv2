@@ -6,9 +6,130 @@ var usedLicenseCounted;
 var licensedRack;
 var rackData = new Object();
 var curNode;
+var loginDialog;
+var loggedInDialog;
+var authenticateData= new Object();
+var patchtLabelForm=1;
+var passwordChange;
+var classes = [];
 
 
 $(function(){
+	
+	/* from 00 */
+	$(document).on("error",function(err){
+		console.log(err);
+	});
+
+	console.log("start clean text");
+	$("#page").empty();
+	deAuth("start");
+	$("#logout_cablix").hide();
+	$("#password_change").hide();
+	$("#edit_mode").hide();
+	$("#job_id").hide();
+	displayMessage("OK!");
+	
+	$(".top_command#access_cablix").click(function(event){
+		event.preventDefault();
+		console.log("click %s",'A1');
+		$("#page").empty();
+		$("#context").text("users");
+
+		if( authenticateData && authenticateData.token){   // already authenticate
+			loginDialog.dialog( "close" );
+			console.log("authenticateData %o",authenticateData);
+			loadDatasetList($("#page"));
+		}else{
+			// let authenticateData_tmp=sessionStorage.getItem("cabjs-admin");
+			console.log("authenticateData not available");
+			if( sessionStorage.getItem("cabjs-admin") !== null && 0) {
+				console.log("authenticateData in local storage: %o",sessionStorage.getItem("cabjs-admin"));
+				authenticateData=sessionStorage.getItem("cabjs-admin");
+				okProceed(authenticateData.username);
+			}else{
+				loginDialog.dialog( "open" );
+			}
+		}
+	});
+	loggedInDialog=$( "#dialog-loggedin" ).dialog({
+		autoOpen: false,
+		resizable: false,
+		height: "auto",
+		width: 400,
+		modal: true,
+		buttons: {
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		}
+	});
+	loginDialog=$("#login_block").dialog({
+		autoOpen: false,
+		height: 215,
+		width: 400,
+		modal: true,
+		buttons: {
+			"login" : function() {
+				if($("#username").val() && $("#password").val() ){ 
+					doLogin(function(username){
+						loginDialog.dialog( "close" );
+						okProceed(username);
+					});
+				}else{
+					displayMessage("username or password can't be empty");
+					$("#loginMessage").text("username or password can't be empty");
+					setTimeout(function () {
+						$( "#loginMessage" ).text('');
+					}, 4000);
+				}
+			},
+			"Cancel" : function() {
+				loginDialog.dialog( "close" );
+			}
+		},
+		close: function() {
+			loginDialog.dialog( "close" );
+		}
+		
+	});	
+	function okProceed(username){
+		$("#logout_cablix").after('|<a class="top_command" id="loggedIn" href="javascript:void(0);">'+username+' Logged In!</a>');
+		$(document).on("click","#loggedIn",function(){
+			console.log("click %s",'A2');
+			listCurrentUser();
+		});
+		$("#logout_cablix").show();
+		$("#password_change").show();
+		$("#edit_mode").show();
+		$("#job_id").show();
+		
+		$("#admin_change").show();
+		$("#page").empty();
+		if($("#context").text() === "admin"){
+			loadAdmin($("#page"));
+		}else{
+			loadDatasetList($("#page"));
+		}
+	}
+	passwordChange = $( "#dialog-change-password" ).dialog({
+		autoOpen: false,
+		height: 400,
+		width: 580,
+		modal: true,
+		buttons: {
+			"Change password": ChangePass,
+			Cancel: function() {
+				passwordChange.dialog( "close" );
+			}
+		},
+		close: function() {
+		}
+	});
+
+/* from 00 end*/
+
+	
 	// VARS
 	$("body").append('<span id="contex"></span>');
 
@@ -74,6 +195,17 @@ $(function(){
         }
       }
 	});
+	$( document ).on("click","a#clasx",function(event){
+		event.preventDefault();
+		$('[class]').each(function(){
+			$($(this).attr('class').split(' ')).each(function() { 
+				if (this.length>0 && $.inArray(this.valueOf(), classes) === -1) {
+					classes.push(this.valueOf());
+				}    
+			});
+		});
+		console.log("LIST START\n\n"+classes.join('\n')+"\n\nLIST END");
+});
 	$( document ).on("click", 'button.datasetele', function(e){
 		console.log("click %s",'A3 click button.datasetele');
 		e.preventDefault();
@@ -216,8 +348,8 @@ $(function(){
 		console.log("BADDDDDDD !!!!  click %s",'A11');
 		var element=$( this ).parent().attr('id');
 		console.log("start ask for rack elements: "+element);
-		$("#object-view").html('');
-		$.ajax({url: '/getData/data/js/elements/'+element, async: true, success: function(result){
+		$("#object-view").html(''); //  , success: 
+		doGet("GET",'/getData/data/js/elements/'+element,function(result){
 			$("#object-view").html(create_rack(result.myself));
 			result.elements.forEach(function(value,index){
 				console.log("scan list rack inside index "+index+" e position value: "+value.position);
@@ -233,7 +365,7 @@ $(function(){
 					$("#Rk-"+element+"-"+value.position).html(resultInner);
 				}});
 			});
-		}});
+		},{async: true});
 	});
 	$( document ).on("click", 'span.ui-icon-lightbulb', function(event) {
 		displayMessage('start ask for rack elements: I got a click func');
@@ -365,13 +497,18 @@ function addAdderFunc (){
 function actionCreateRack(datar){
 	rackData= {};
 	$("#object-view").html('');
-	$("#object-view").html(create_rack(datar.rack));
-	rackData[datar.rack.lid]= new  Object();
-	console.log("rack added %s",datar.rack.lid);
-	datar.elements.forEach(function(value,index){
-		console.log("index %o e position value: %s",index,value.position);
-		createElementHtml(dataset,datar,value,'Nm','Rk','normal');		
-	});
+	doGet("GET",'/elements/json/element/'+dataset+'/'+datar.rack.pid,function(data2){
+		// console.log(data2.rack);
+		datar.rack.piLabel=data2.element.lName;
+		// datar.rack.piLabel='';
+		$("#object-view").html(create_rack(datar.rack));
+		rackData[datar.rack.lid]= new  Object();
+		console.log("rack added %s",datar.rack.lid);
+		datar.elements.forEach(function(value,index){
+			console.log("index %o e position value: %s",index,value.position);
+			createElementHtml(dataset,datar,value,'Nm','Rk','normal');		
+		});
+	},'actionCreateRack');
 }
 function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 	console.log("0x00F0: value: dataset %s lid %s lid2 %s >> pos %s x&y %s & %s mode %s <<<",dataset,datar.rack.lid,value.lid,value.position,jqIdA,jqIdB,mode);
@@ -471,7 +608,7 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 					});
 				});
 		}else{
-			console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! %s missing socketsData",dataBlock.req.eleId);
+			console.log("%s missing socketsData",dataBlock.req.eleId);
 		}
 		$.contextMenu({
 				selector: '.socketViewed.smallCell.freeSocket', 
@@ -519,11 +656,6 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 		});
 	});
 }
-function localEscape(string){
-	return String(string).replace(/[&<>"'`=\/]/g, function (s) {
-		return entityMap[s];
-	});
-}
 /* ma??? XA */
 function formatTableXA(blockData){
 	var tableS="<table class='flyTable Patch'><tr><th colspan='2'>MAIN</th></tr>";
@@ -542,7 +674,7 @@ function loadDatasetList(container){
 	// console.log("hummm");
 	$("#page").append('<div id="datasetContainer"  class="datasetCont"></div>');
 	$("#datasetContainer").append('<h3>'+labels["root"]["SelectDataset"]+'</h3>');
-	authenticateData.dataset.forEach(function(datasetx){
+	authenticateData.dataset.sort().forEach(function(datasetx){
 		resolveDataset(datasetx,function(resolDataset){
 			$("#datasetContainer").append('<p><button id="'+datasetx+'" class="datasetele">'+resolDataset+'</button></p>');
 		});
@@ -556,33 +688,6 @@ function resolveDataset(dataval,callback){
 			callback(result.datasetLabel);
 		}
 	});
-}
-function updateTips( t ) {
-  tips
-	.text( t )
-	.addClass( "ui-state-highlight" );
-  setTimeout(function() {
-	tips.removeClass( "ui-state-highlight", 1500 );
-  }, 500 );
-}
-function checkLength( o, n, min, max ) {
-  if ( o.val().length > max || o.val().length < min ) {
-	o.addClass( "ui-state-error" );
-	updateTips( "Length of " + n + " must be between " +
-	  min + " and " + max + "." );
-	return false;
-  } else {
-	return true;
-  }
-}
-function checkRegexp( o, regexp, n ) {
-  if ( !( regexp.test( o.val() ) ) ) {
-	o.addClass( "ui-state-error" );
-	updateTips( n );
-	return false;
-  } else {
-	return true;
-  }
 }
 /* ma? bahh */
 function addElementFunc(){
@@ -620,12 +725,12 @@ function addElementFunc(){
 function create_rack(rackdesc){
 	var rack=
 		'<table class="rack-view" id="Rck-'+rackdesc.lid+'">'+
-		'<tr><th></th><th><span id="roomId">'+rackdesc.pid+'</span></th></tr>'+
+		'<tr><th></th><th><span id="roomId">'+rackdesc.piLabel+'</span></th></tr>'+
 		'<tr class="rack-view-head">'+
 		'<th colspan="1" class="rack-view-head"><span class="rackIdCell">'+rackdesc.lid+'</span></th><th class="rack-view-head"> '+rackdesc.lName+' <span class="ui-icon ui-icon-lightbulb toogleHideable"></span>||<span class="ui-icon ui-icon-contact displayPatch"></span></th>'+
 		'</tr>';
 	for(var i=rackdesc.hightUnit;i>0;i--){
-		rack=rack.concat('<tr id="tr-'+i+'" class="ruIdCol"><td id="Nm-'+rackdesc.lid+'-'+i+'" class="rack-view-ele-id"><div class="rack-element fas fa-lockx"> '+i+'</div></td><td id="Rk-'+rackdesc.lid+'-'+i+'" class="rack-view-ele-container hideable freeElement">Free</td></tr>');
+		rack=rack.concat('<tr id="tr-'+i+'" class="ruIdCol"><td id="Nm-'+rackdesc.lid+'-'+i+'" class="rack-view-ele-id"><div class="rack-element2 fas fa-lockx"> '+i+'</div><div class="rack-element"></div></td><td id="Rk-'+rackdesc.lid+'-'+i+'" class="rack-view-ele-container hideable freeElement">Free</td></tr>');
 	}
 	return rack.concat('</table>');
 }
@@ -633,11 +738,11 @@ function createDatasetTree(currentDataset){
 	$("#page").empty();
 	
 	$("#page").append(
-	'<div id="ppage">'+datasetName+' : '
+	'<div id="licPage" class="licPage"><div class="labelX">'+datasetName+'</div>&nbsp;&nbsp;'
 		+'<div id="licenseStatus" class="licenseStatusClass" ></div>'
 		+'<div id="licenseAdder" class="licenseAdderClass"><button id="showAdderForm" class="addAdderButton">'+labels["root"]["AddLicense"]+'</button></div>'
 		+'<div id="cablixTreeCont" class="datasetCont">'
-			+'<div id="cablixTree"></div>'
+			// +'<div id="cablixTree"></div>'
 		+'</div>'
 	+'</div>');
 	
@@ -667,7 +772,7 @@ function createDatasetTree(currentDataset){
 			deAuth("createDatasetTree/license")
 		}	
 	},"getDataset"); 
-	doGet("GET",'/tree/json/tree/'+currentDataset,function(data	) {
+	doGet("GET",'/tree/json/treex/'+currentDataset+'/'+datasetName,function(data	) {
 		if(data.auth.token){
 			console.log("OKK i get token %s asking who am i",data.auth.token);
 			authenticateData.token=data.auth.token;
@@ -678,7 +783,8 @@ function createDatasetTree(currentDataset){
 			
 			if(true){
 				/* V1 Start */
-				$('#cablixTree').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
+				// $('#cablixTree').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
+				$('#cablixTreeCont').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
 					console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
 					if(userMode === 'view' && typeof node != "undefined"){
 						createAndPopulateRack(node.value,actionCreateRack);
@@ -689,7 +795,8 @@ function createDatasetTree(currentDataset){
 				/* V1 End */			
 			}else{  /* ---------------------------------------- */
 				/* V2 Start */
-				$('#cablixTree').append('<ul id="sitemenu"></ul>');
+				// $('#cablixTree').append('<ul id="sitemenu"></ul>');
+				$('#cablixTreeCont	').append('<ul id="sitemenu"></ul>');
 				data.tree.forEach(function(value,index){
 					scanTree(value,"sitemenu");
 				});

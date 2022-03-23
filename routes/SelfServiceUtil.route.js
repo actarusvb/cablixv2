@@ -61,6 +61,7 @@ async function addUser(req,check){
 	var db = mongoUtil.getDb();
 	var colUser=db.collection(global.cfg.cabUsers);
 	var colCount=db.collection(global.cfg.counters);
+	const rbac = 'rbac.'+domain;
 
 	var seq;
 	if(check[0] !== req.newusername){
@@ -69,23 +70,17 @@ async function addUser(req,check){
 			{ $inc: { seq : 1 } },
 			{ returnDocument: 'after' });
 			seq=doc.value.seq;
-	
-		// console.log("new id %o username %s password %s domain %s",doc.value,req.newusername,req.newpass1,domain);
-		
 		const query = {'username' : req.newusername };
-		const update = { '$set' : 
+		const update = { 
+			'$set' :  
 			{
 				username: req.newusername,
 				cabId: seq,
 				password: req.newpass1,
-				dataset: [
-					domain
-					],
-				rbac: {
-					[domain] : ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"]
-				},
-				preference: { patchtLabelForm : 2 }
-			}
+				dataset: [ domain ],
+				[rbac] : ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"]
+			},
+			preference: { patchtLabelForm : 2 }
 		};
 		const options = { upsert: true };
 		const result = await colUser.updateOne(query, update, options);
@@ -95,17 +90,12 @@ async function addUser(req,check){
 	}else{
 		seq=req.checkCode;
 		const query = {'username' : req.newusername };
-		const update = { '$push' : 
-			{
-	
-				dataset: domain,
-				rbac: {
-					[domain] : ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"]
-				}
-			}
-		};
+		const update = { '$push' : { dataset: domain }};
+		const rabx   = {'$set'   : { [rbac] : ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"] }};
 		const options = { upsert: true };
+		
 		const result = await colUser.updateOne(query, update, options);
+			  result = await colUser.updateOne(query, rabx, options);
 		
 		console.log("%s document inserted %s modified",result.matchedCount,result.modifiedCount);
 		return result.matchedCount+result.modifiedCount;

@@ -5,8 +5,8 @@ const router = express.Router();
 var https = require('https');
 var mongoUtil = require( '../mongoUtil' );
 
-router.get("/json/tree/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');},async (req, res) => {
-	console.log("/json/tree/:dataset requested id %s for dataset %s",MA.Userblock.id,req.params.dataset);
+router.get("/json/treex/:dataset/:datasetName",(r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');},async (req, res) => {
+	console.log("/json/tree/:dataset requested id %s for dataset %s -> %s",MA.Userblock.id,req.params.dataset,req.params.datasetName);
 
 	var result=new Object();
 	result.auth = JSON.parse(JSON.stringify(MA.Userblock));
@@ -23,7 +23,7 @@ router.get("/json/tree/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');}
 		// var children =recursiveFind(qresult,'root',0);
 		// if(children.label !== 
 		result.tree[0].children =recursiveFind(qresult,'root',0);
-		result.tree[0].label='Base';
+		result.tree[0].label=req.params.datasetName;
 		result.tree[0].value='root';
 		result.tree[0].type='root';
 		result.tree[0].id='TR-root';
@@ -48,7 +48,6 @@ router.get("/json/dataset/resolve/:dataset",async (req,res) => {
 		}else{	
 			result.datasetLabel=qresult[0].lid;	
 		}
-		
 		res.json(result);
 	});
 });

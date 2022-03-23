@@ -40,14 +40,8 @@ $(function(){
 			switch (key){
 				case 'edit':{
 					console.log("wow edit %s",myParentId);
-					var jqxhr = $.ajax({
-							type: "GET",
-							url: "/elements/json/element/"+dataset+'/'+myParentId,
-							headers: {"authorization": authenticateData.token,}
-					});
-					jqxhr.done(function(data){
+					doGet("GET","/elements/json/element/"+dataset+'/'+myParentId,function(data){
 						console.log("ok done retvalue is: "+data.retvalue+" retstring is "+data.retstring);
-						refreshAuth(data.auth);
 						if(data.retvalue == 1){
 							console.log("retrived data from server for element %s -> %o",myParentId,data);
 							$("#form_type").remove();
@@ -78,9 +72,6 @@ $(function(){
 						}else{
 							displayMessage("Fail to retrive retnum: "+data.retvalue+" retstring is: "+data.retstring );
 						}
-						jqxhr.fail(function(data){
-							displayMessage("error 01a retvalue is: "+data.retvalue+" retstring is "+data.retstring);
-						},"json");
 					});
 				}
 				break;
@@ -116,16 +107,9 @@ $(function(){
 					
 					var o=deepSearch(treeJson, 'lid', myParentId);
 					if(o.type === 'RACK'){
-						var jqxhr = $.ajax({
-							type: "GET",
-							url: "/elements/json/elementTypeList/"+dataset,
-							headers: {"authorization": authenticateData.token,}
-						});
-						jqxhr.done(function(data){
+						doGet("GET","/elements/json/elementTypeList/"+dataset,function(data){
 							console.log("ok done retvalue is: "+data.retvalue+" retstring is "+data.retstring+" eee data %o",data.data);
-							// elementTypeList = JSON.parse(data.data);
 							elementTypeList = data.data;
-							
 							createAndPopulateRack(myParentId,actionAddElementForm);
 						});
 						
@@ -362,7 +346,7 @@ $(function(){
 				var value = (key === 'pid') ? 'value="'+currentRackCfg.rack.lid+'"' : '';
 				
 				if(key === "front_back"){
-					$("#formElementContainer").append('<label for="'+key +'">'+labels["ELEMENT"][key]+'</label>'+'<div style="display: flex">'+
+					$("#formElementContainer").append('<label for="'+key +'">'+labels["ELEMENT"][key]+'</label>'+'<div class="display_flex">'+
 					'<input type="radio" id="'+key+'" name="'+key+'" value="F"><label for="F" class="inLinea">Front</label>'+'<br>'+
 					'<input type="radio" id="'+key+'" name="'+key+'" value="R"><label for="R" class="inLinea">Rear</label>'+'</div>'
 					);

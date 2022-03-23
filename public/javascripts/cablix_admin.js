@@ -1,4 +1,4 @@
-var righeTable;
+var usersTable;
 var collectionsTable;
 var licenseTable;
 var userDetails;
@@ -35,7 +35,7 @@ $(function(){
 	$( document ).on("click",".fa-trash", function(e){
 		e.preventDefault();
 		// var i=; // rowIdE1
-		let userDetails=righeTable.data()[$(this).attr('id').substr(6)];
+		let userDetails=usersTable.data()[$(this).attr('id').substr(6)];
 		console.log("mu schicci %s o %o",$(this).attr('id'),userDetails);
 		if(window.confirm("Delete "+userDetails.cabId+' -->'+userDetails.username)){
 			$.ajax({
@@ -46,7 +46,7 @@ $(function(){
 				processData: false,
 				success: function( data, textStatus, jQxhr ){
 					refreshAuth(data.auth);
-					righeTable.ajax.reload();
+					usersTable.ajax.reload();
 					console.log("OK");
 				},
 				error: function( jqXhr, textStatus, errorThrown ){
@@ -54,7 +54,7 @@ $(function(){
 				}
 			});
 		}else{
-			righeTable.ajax.reload();
+			usersTable.ajax.reload();
 		}
 	});
 	$( document ).on("click","collectionT", function(e){
@@ -66,7 +66,7 @@ $(function(){
 	$( document ).on("click",".fa-tools", function(e){
 		e.preventDefault();
 		var i=$(this).attr('id').substr(6); // rowIdE1
-		 userDetails=righeTable.data()[i];
+		 userDetails=usersTable.data()[i];
 		console.log("userDetails block %o",userDetails);
 		var valx;
 		$.each(["-_id","-cabId","editUsername","editPassword","#dataset"],function(index,value){
@@ -151,7 +151,7 @@ $(function(){
 			"Update": updateUser,
 			Cancel: function() {
 				formUser.dialog( "close" );
-				righeTable.ajax.reload();
+				usersTable.ajax.reload();
 			}
 		},
 		close: function() {
@@ -163,7 +163,6 @@ $(function(){
 		event.preventDefault();
 		updateUser();
 	});
-
 });
 function loadAdmin(){
 	console.log("Auth token is :%s",authenticateData.token);
@@ -173,6 +172,7 @@ function loadAdmin(){
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-licenseDash">license dash</a></li>');
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-licenseTable">license table</a></li>');
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-collection">Collection</a></li>');
+	$("#tabsAdmin").append('<span id="tabsAdmin-reload" /><button class="updateAdmin" value="updateAdmin">Reload</button></span>');
 	
 		
 	$("#tabsAdmin").append('<div id="tabsAdmin-userTable" />');
@@ -188,10 +188,9 @@ function loadAdmin(){
 	'<table id="licenseTable"><thead><tr><th>id</th><th>uuid</th><th>type/size</th><th>domain</th><th>creation</th><th>burn</th><th>burner</th></tr></thead><tbody></tbody></table></div>');
 	$("#tabsAdmin-collection").append('<div id="the-collectionsTable" class="normalDiv"><table id="collectionsTable"><thead><tr><th>name</th></tr></thead><tbody></tbody></table></div>');
 
-	
 	$( "#tabsAdmin" ).tabs();
 	// user zone
-	righeTable=$('#userTable').DataTable({
+	usersTable=$('#userTable').DataTable({
 		"ajax": {
 			"url": '/admin/R'
 			,"dataSrc": "data"
@@ -269,6 +268,12 @@ function loadAdmin(){
 		
 	});
 	
+	$( document ).on("click",".updateAdmin", function(e){
+		e.preventDefault();
+		licenseTable.ajax.reload();
+		collectionsTable.ajax.reload();
+		usersTable.ajax.reload();
+	});
 	
 	// license zone
 	$("#the-licenseDash").append('<div class="liBlock" id="license-last" />');
@@ -394,7 +399,7 @@ function addUser() {
 				console.log( errorThrown );
 			}
 		});
-		righeTable.ajax.reload();
+		usersTable.ajax.reload();
 		formUserAdd.dialog( "close" );
 	}
 	return valid;
@@ -434,7 +439,7 @@ function updateUser() {
 				console.log( errorThrown );
 			}
 		});
-		righeTable.ajax.reload();
+		usersTable.ajax.reload();
 		formUser.dialog( "close" );
 	}
 	return valid;

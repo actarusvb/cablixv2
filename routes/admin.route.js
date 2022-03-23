@@ -215,6 +215,7 @@ router.get("/Rd/dataset/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');
 				res.status(400).json({"error":err.message});
 				return;
 			}
+			console.log("RD dataset sql %o",rows);
 			resolve(rows[0]);
 		});
 	});	
@@ -224,6 +225,7 @@ router.get("/Rd/dataset/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');
 				res.status(400).json({"error":err.message});
 				return;
 			}
+			console.log("RD dataset mongo %o",data);
 			resolve(data);
 		});
 	});

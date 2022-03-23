@@ -51,9 +51,9 @@ async function ckLogin(req,res,next){
 	if(global.cfg.auth){
 		if (!token) return res.status(401).send("Access denied. No token provided.");
 		try {
-			// console.log("ckLogin token is %s",token);
+			console.log("ckLogin token is %s",token);
 			const decoded = jwt.verify(token,privateuuid);
-			// console.log("ckLogin : %o",decoded);
+			console.log("ckLogin : %o",decoded);
 			Userblock.id=decoded.id;
 			Userblock.role=decoded.role;
 			Userblock.token = jwt.sign({ id: Userblock.id, role: Userblock.role }, privateuuid);
@@ -122,7 +122,7 @@ async function ckLoginNrole(req,res,next,reqRole){
 }
 async function changePass(req,res,next){
 	var db = mongoUtil.getDb();
-	db.collection( global.cfg.cabUsers).updateOne({username: Userblock.username,password: req.body.OldPassword,},{$set :{ password: req.body.newPassword1}},function (err,result){
+	db.collection( global.cfg.cabUsers).updateOne({username: Userblock.username,password: req.body.current-password,},{$set :{ password: req.body.newPassword1}},function (err,result){
 		if (err) {
 		  throw err;
 		}

@@ -17,11 +17,11 @@ margin: 0;
 /* margin-bottom: 25px; */
 padding: 0;
 background-color: #ddd;
-float: left;
+/* float: left; */
 white-space:nowrap
 }
 /* .normalDiv{ */
-	
+
 /* } */
 .valTogleable{
 	cursor: pointer;
@@ -46,9 +46,6 @@ white-space:nowrap
 td.rack-view-ele-id{
 	vertical-align: middle;
 }
-
-
-
 h1 {
 font-size: 28px;
 color: #000;
@@ -108,6 +105,13 @@ span.coFigures{
 	font-size: 18px;
 	padding: 6px;	
 }
+div.labelX   {
+	font-size: 26px;
+  display: inline-block;
+  /* width: 7em;   */
+  font-size: 1.6em;
+  background-color: #b3ffb3;
+}
 div.licenseStatusClass{
 	font-size: 26px;
 	color: #333;
@@ -127,8 +131,6 @@ div.licenseAdderClass{
 .bkgRed{
 	background: red;
 }
-
-
 .cd-panel.cd-panel--is-visible {
   visibility: visible;
   transition: visibility 0s 0s;
@@ -173,7 +175,6 @@ div.licenseAdderClass{
   transition-delay: 0s;
 }
 /* slinding panel end */
-
 label   {
   display: inline-block;
   /* width: 7em;   */
@@ -193,15 +194,13 @@ label   {
     height: 16px;
     width: 16px;
 }
-#message {
-	display:block;
+#message_old {
+	display:inline-block;
 	height: 16px;
 	width: 100%;
 	background-color: powderblue;
 }
-div.MsgSpace{
-	/* display: inline-block; */
-}
+
 div.box{
 	width:960px;
 	height:775px;
@@ -212,22 +211,32 @@ div.box{
 .toogleHideable{
 	cursor: pointer; 
 }
+.forloggedin{
+	float:left;
+	margin:12px 12px 20px 0;
+}
+.submit_patch{
+	position:absolute; 
+	top:-1000px
+}
+.patch_alert{
+	float:left; 
+	margin:12px 12px 20px 0;
+}
+.display_flex{
+	display: flex;
+}
 div.box-inner{
-	height: 770px;
+	/* height: 770px; */
 	overflow:auto;
     /* margin:25px 24px 0; */
 	padding-right:2px
 }
 input,select { display:block; }
-
 .MainPage { display:block; }
-
-
 input.top_commandx { 
 	display:inline-block; 
 }
-
-
 .hiddenx {
 	display: none 
 }
@@ -277,8 +286,6 @@ div.cable-organizer-u1 {
     vertical-align: middle;
     line-height: 120px;
 }
-
-
 /* easymenu css START */
 #cablixTree {
   list-style: none;
@@ -286,7 +293,6 @@ div.cable-organizer-u1 {
   background: #e0e0e0;
   white-space: nowrap;
 }
-
 #cablixTree a {
   font-size: 12px;
   display: block;
@@ -296,28 +302,24 @@ div.cable-organizer-u1 {
   text-decoration: none;
   white-space: nowrap;
 }
-
 #cablixTree a:hover { text-decoration: underline; }
-
 #cablixTree li.main-item { float: left; }
-
 #cablixTree li.main-item a { color: #000; }
-
 #cablixTree li.main-item a:hover, #cablixTree li.main-item.hover a { color: #fff; }
-
 #cablixTree li.main-item ul li.sub-item a, #cablixTree li.main-item ul li.sub-item a:hover {
   color: #000;
   padding: 19px 40px 19px 10px;
 }
-
 #cablixTree li { 
 	padding: 5px 15px; 
 }
-
+.abs_top {
+	position:absolute; 
+	top:-1000px;
+}
 #cablixTree li.hover { 
 	background: #316ac5; 
 }
-
 #cablixTree li ul {
   display: none;
   position: absolute;
@@ -325,7 +327,6 @@ div.cable-organizer-u1 {
   border: 1px solid #999;
   padding: 2px ;
 }
-
 #cablixTree li ul li {
   line-height: 22px;
   margin: 0;
@@ -334,7 +335,6 @@ div.cable-organizer-u1 {
   
   border: 1px solid #f1f1f1;
 }
-
 #cablixTree li ul li.separator {
   line-height: 0;
   height: 0;
@@ -345,23 +345,17 @@ div.cable-organizer-u1 {
   border-top: 1px solid #e0e0e0;
   border-bottom: 1px solid #fff;
 }
-
 #cablixTree li ul li.hover {
   background: #edf2f7;
   border: 1px solid #aecff7;
 }
-
 #cablixTree li.main-item ul li.sub-item.has-child { background: url(/images/arrow.gif) no-repeat right center #edf2f7; }
 #cablixTree li.main-item ul li.sub-item.rack { background: url(/images/armadio.png) no-repeat right center #edf2f7; }
-
 #cablixTree li ul li.has-child.hover { border: 1px solid #aecff7; }
 /* easymenu css END */
-
-
 .elementTypeItem{
 	display: block;
-}
-	
+}	
 img.free {
   border: 1px solid green;
   border-radius: 4px;
@@ -407,16 +401,16 @@ img.freeSocket {
         -ms-filter: "FlipV";
 }
 #page {
-	background-color: white;
-	/* width: 1200px; */
+	/* background-color: white; */
+	background-color: #b3ffb3
 	margin: auto;
 	margin-left: auto;
 	padding-left: 1px;
 	margin-right: auto;
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr; /* fraction*/
-	height: 74px;
-
+	/* width: 1200px; */
+	/* height: 74px; */
 }
 #pageAdmin {
 	background-color: white;
@@ -431,17 +425,72 @@ img.freeSocket {
 
 }
 
-#content,#rightCont {
-	background-color: white;
+/* Cablix reformed Begin */
+#content {
+	/* background-color: white;	*/
+	/* background-color: #b3ffb3; */
+	background-color: lightcyan;	
 	border: 3px solid #aaa;
 	width: 950px;
     float: left;
 	border-top: none;
 	/* padding: 5px; */
 }
+#rightCont {
+	/* background-color: white; */
+	/* background-color: #b3ffb3;*/
+	background-color: lightcyan;
+	border: 3px solid #aaa;
+	/* width: 950px; */
+    float: left;
+	border-top: none;
+	/* padding: 5px; */
+}
+#object-view {
+	margin-left: auto;
+	margin-right: auto;
+}
+div.datasetCont {
+	/* background-color: white; */
+	/* background-color: #b3ffb3; */
+	background-color: lightcyan;
+	border-top: none;
+	padding-top: 5px;
+	display: block;
+}
+div.licPage{
+	background-color: lightcyan;
+	border-top: none;
+	padding-top: 5px;
+	display: block;	
+}
+span.MsgSpace{
+	display: inline-block;
+	height: 16px;
+	width: 100%;
+	/* background-color: powderblue; */
+}
+.rack-view{
+	margin-left: auto;
+	margin-right: auto;	
+}
+.rack-view table , .rack-view th , .rack-view tr , .rack-view td {
+	border-collapse: collapse;
+    border: 1px solid black;
+	text-align: -webkit-center;
+	border-radius:3px;
+	background: darkgrey;
+}
+td.rack-view-ele-id{
+	vertical-align: middle;
+}
+/* Cablix reformed End */
 #cablixTree {
 	float: left;
-    background-color: white;
+    /* background-color: white; */
+	background-color: #b3ffb3;
+
+    /* width: 450px; */
     width: 450px;
     border-top: none;
     padding: 5px;
@@ -605,12 +654,7 @@ list-style-type: none;
 #sidebar ul.links li {
 margin-bottom: 5px;
 }
-div.datasetCont {
-	background-color: white;
-	border-top: none;
-	padding: 5px;
-	display: block;
-}
+
 h1, h2, h3, h4, h5 {
 font-family: sans-serif;
 margin: 1.2em 0 0.6em 0;
