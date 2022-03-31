@@ -1,0 +1,83 @@
+{
+	"eletypes": {
+		"S1U2Ge2iLO": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 2,
+					"pname": "-Ge",
+					"pfriend": "Ge",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				},{
+					"pstart": 1,
+					"pstop": 2,
+					"pname": "-iLO",
+					"pfriend": "MNG",
+					"indexStart": 3,
+					"ConnectType": "fix_rj45"
+				}
+				
+			],
+			"template": "S1U2Ge2iLO",
+			"active": 1,
+			"class": "server",
+			"units": 1,
+			"description": "Server 2 GEports 2 iLO 1U",
+			"small_header" : [6,2,2,12,4],
+			"power": 180
+		},
+		"S1U4Ge2iLO": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 4,
+					"pname": "-Ge",
+					"pfriend": "Ge",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				},{
+					"pstart": 1,
+					"pstop": 2,
+					"pname": "-iLO",
+					"pfriend": "MNG",
+					"indexStart": 5,
+					"ConnectType": "fix_rj45"
+				}
+				
+			],
+			"template": "S1U4Ge2iLO",
+			"active": 1,
+			"class": "server",
+			"units": 1,
+			"description": "Server 4 GEports 2 iLO 1U",
+			"small_header" : [6,2,2,12,4],
+			"power": 180
+		},
+		"S2U2Ge2iLO": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 2,
+					"pname": "-Ge",
+					"indexStart": 1,
+					"ConnectType": "fix_rj45"
+				},{
+					"pstart": 1,
+					"pstop": 2,
+					"pname": "-iLO",
+					"indexStart": 3,
+					"ConnectType": "fix_rj45"
+				}
+				
+			],
+			"template": "S2U2Ge2iLO",
+			"units": 2,
+			"active": 1,
+			"class": "server",
+			"description": "Server 2 GEports 2 iLO 2U",
+			"small_header" : [6,2,2,12,4],
+			"power": 180
+		}
+	}
+}

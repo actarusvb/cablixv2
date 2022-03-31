@@ -1,0 +1,73 @@
+
+<% if (mode.HeadDisplay){ %>
+<% include 01_standardBigHeader.ejs %>
+<% } %>
+
+<table class="rackDevice sockets" id="Ele-<%= info.lid %>">
+<% if (mode.shortHeadDisplay){ %>
+<% include 00_standardShortHeader.ejs %>
+<% } %>
+
+<tr>
+<tr>
+<td colspan="26">&nbsp;</td>
+</tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>G0</td>
+<td>&nbsp;</td>
+<td>G1</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>iLO 1</td>
+<td>iLO 2</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td class="<%= mode.additionalCSS %>"><%- socket.s1 %></td>
+<td>&nbsp;</td>
+<td class="<%= mode.additionalCSS %>"><%- socket.s2 %></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td class="<%= mode.additionalCSS %>"><%- socket.s3 %></td>
+<td class="<%= mode.additionalCSS %>"><%- socket.s4 %></td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td colspan="26">&nbsp;</td>
+</tr>
+</table>

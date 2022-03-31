@@ -1,0 +1,19 @@
+{
+	"eletypes": {		
+		"PPFLC12H": {
+			"ports": [
+				{
+					"pstart": 1,
+					"pstop": 12,
+					"pname": "-mmlc",
+					"indexStart": 1,
+					"ConnectType": "duplex-lc-mm"
+				}
+			],
+			"template": "PPFLC12HMM",
+			"units": 1,
+			"description": "12 LC MMF duplex ports fiber Patch Pannel 1U dup",
+			"small_header" : [2,2,2,4,4]
+		}
+	}
+}
