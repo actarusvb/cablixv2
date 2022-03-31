@@ -55,8 +55,8 @@ $(function(){
 							$("#formElementContainer").append('<input type="hidden" id="form_subaction" name="subaction" value="edit" />');
 							
 							for( var key in labels[data.element.type]){
-								var readonlyState = (key === 'lid' || key === 'pid' ) ? 'READONLY' : '';
-								console.log(labels[data.element.type][key] + " = " + data.element[key]);
+								var readonlyState = readEditOnlyFields.includes(key) ? 'READONLY' : '';
+								console.log("%s %s %s",labels[data.element.type][key],data.element[key],readonlyState);
 								if(key === "front_back"){
 									$("#formElementContainer").append('<label for="'+key +'">'+labels[data.element.type][key]+'</label>'+
 									'<input type="radio" id="'+key+'" name="'+key+'" value="F"><label for="F">Front</label>'+
@@ -64,7 +64,7 @@ $(function(){
 									);
 								}else{
 									$("#formElementContainer").append('<label for="'+key +'">'+labels[data.element.type][key]+'</label><input id="'+key+'" name="'+key+'" '+readonlyState+' value="'+data.element[key]+'"/>');
-								}
+									}
 							}
 							formEditElement.dialog({height: formEditElementDetail.treeElement.height,
 							width: formEditElementDetail.treeElement.width});
@@ -140,7 +140,8 @@ $(function(){
 							$("#formElementContainer").append('<input type="hidden" id="form_dataset" name="dataset" value="'+dataset+'" />');
 							
 							for( var key in labels[$(this).find(":checked").val()]){
-								var readonly = ( key === 'pid' ) ? 'READONLY' : '';
+								var readOnlyFields = readOnlyFields.includes(key) ? 'READONLY' : '';
+								// var readonlyState = ( key === 'pid' ) ? 'READONLY' : '';
 								
 								var value = (key === 'pid') ? 'value="'+myParentId+'"' : '';
 								if(key === "front_back"){
@@ -149,12 +150,13 @@ $(function(){
 									'<input type="radio" id="'+key+'" name="'+key+'" value="R"><label for="R">Rear</label>'
 									);
 								}else{
-									$("#formElementContainer").append('<label for="'+key +'">'+labels[$(this).find(":checked").val()][key]+'</label><input id="'+key+'" name="'+key+'" '+readonly+' '+value+' "/>');
+									$("#formElementContainer").append('<label for="'+key +'">'+labels[$(this).find(":checked").val()][key]+'</label><input id="'+key+'" name="'+key+'" '+readonlyState+' '+value+' "/>');
 								}
 							}
 						});
 					}
-					formEditElement.dialog({height: formEditElementDetail.rackElement.height,
+					formEditElement.dialog({
+						height: formEditElementDetail.rackElement.height,
 						width: formEditElementDetail.rackElement.width});
 					formEditElement.dialog( "open" );
 				}
@@ -324,8 +326,10 @@ $(function(){
 			console.log($("#elementTypeSel option:checked").val());
 			$("#elementType").val($("#elementTypeSel option:checked").val());
 			$("#elementHigh").val(elementTypeList[$("#elementTypeSel option:checked").val()].units);
-			console.log(elementTypeList[$("#elementTypeSel option:checked").val()].power);
 			$("#power").val(elementTypeList[$("#elementTypeSel option:checked").val()].power);
+			$("#class").val(elementTypeList[$("#elementTypeSel option:checked").val()].class);
+			$("#active").val(elementTypeList[$("#elementTypeSel option:checked").val()].active);
+			
 		});
 		
 		$("#formElementContainer").append('<hr>');
@@ -338,11 +342,11 @@ $(function(){
 			$("#lid").val(currentRackCfg.rack.lid+'-'+$("#position option:checked").val());
 		});
 		var notList = ["position",];
-		var readOnly = ["pid","elementType","elementHigh","lid"];
+		// var readOnly = ["pid","elementType","elementHigh","lid"];
 		
 		for( var key in labels["ELEMENT"]){
 			if ( ! notList.includes(key)){ 
-				var readonly = ( readOnly.includes(key) ) ? 'READONLY' : '';
+				var readonly = ( readOnlyFields.includes(key) ) ? 'READONLY' : '';
 				var value = (key === 'pid') ? 'value="'+currentRackCfg.rack.lid+'"' : '';
 				
 				if(key === "front_back"){

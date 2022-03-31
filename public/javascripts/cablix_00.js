@@ -100,15 +100,11 @@ function doGet(method,url,executeFunct,executeFunctName,options){
 	})
 	.fail(function(err){
 		console.log("i got error ajax here 0000: "+executeFunctName); 
+		deAuth(executeFunctName);
 	});
 }
 function listCurrentUser(){
-	$.ajax({
-		url: '/users/current',
-		headers: {"authorization": authenticateData.token},
-		method : "GET"
-	})
-	.done(function(data	) {
+	doGet("GET",'/users/current',function(data	) {
 		if(data.auth.token){
 			console.log("OKK i get when asking who i am :%o",data);
 			refreshAuth(data.auth);
@@ -123,9 +119,6 @@ function listCurrentUser(){
 		}else{
 			deAuth("lisCurrentUser");
 		}
-	})
-	.fail(function() {
-		deAuth("listCurrentUser 02")
 	});
 }
 function ChangePass(){

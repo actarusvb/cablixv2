@@ -71,7 +71,9 @@ $(function(){
 		modal: true,
 		buttons: {
 			"login" : function() {
-				if($("#username").val() && $("#password").val() ){ 
+				if($("#username").val() && $("#password").val() ){
+					$("#username").val($("#username").val().toLowerCase().trim());
+					$("#password").val($("#password").val().trim());
 					doLogin(function(username){
 						loginDialog.dialog( "close" );
 						okProceed(username);
@@ -205,7 +207,7 @@ $(function(){
 			});
 		});
 		console.log("LIST START\n\n"+classes.join('\n')+"\n\nLIST END");
-});
+	});
 	$( document ).on("click", 'button.datasetele', function(e){
 		console.log("click %s",'A3 click button.datasetele');
 		e.preventDefault();
@@ -658,7 +660,7 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 }
 /* ma??? XA */
 function formatTableXA(blockData){
-	var tableS="<table class='flyTable Patch'><tr><th colspan='2'>MAIN</th></tr>";
+	var tableS="<table class='flyTable Patch'><tr><th colspan='2'>Port</th></tr>";
 	$.each(labelMain,function(k,v){
 		tableS=tableS.concat('<tr><td>'+v+'</td><td>'+blockData[k]+'</td></tr>');
 	});

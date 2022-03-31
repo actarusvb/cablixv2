@@ -25,14 +25,6 @@ router.get("/json/rack/:dataset/:rackId",(r,b,n) => {MA.ckLoginNrole(r,b,n,'rack
 		
 		res.json(result);
 	});
-	// col.find({'lid': req.params.rackId}).toArray(function(err, qresult){
-		// if (err) {
-			// throw err;
-		// }
-		// result.rack=qresult[0];	
-		
-		// res.json(result);
-	// });
 });
 router.get("/json/rack/:dataset/:pid/child",(r,b,n) => {MA.ckLoginNrole(r,b,n,'rackRead');},async (req, res) => {
 	console.log("z02 url %s requested id %s for dataset %s pid %s<",req.baseUrl,MA.Userblock.id,req.params.dataset,req.params.pid);
@@ -46,9 +38,7 @@ router.get("/json/rack/:dataset/:pid/child",(r,b,n) => {MA.ckLoginNrole(r,b,n,'r
 		if (err) {
 			throw err;
 		}
-		// console.log("z02b qresult is %o",qresult);
 		result.elements=qresult;
-		// console.log("z02c result is %o",result);
 
 		res.json(result);
 	});
@@ -499,21 +489,6 @@ router.post("/json/patch/add",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},
 
 	}
 });
-function logAction(dataset,msg){	
-		var db = mongoUtil.getDb();
-		console.log("log is %s",global.cfg.log);
-		var collog=db.collection("_log");
-		
-		var p = {
-			type : "log",
-			date: new Date().toISOString(),
-			message: msg
-		};
-		collog.insertOne(p,function(err, rex) {
-			if (err) throw err;
-			console.log("p document inserted %o",p);
-		});
-	}
 router.post("/json/patch/delete/:col/:onesideId",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},async (req,res) =>{
 	console.log("z12 %s requested id %s for dataset %s <",req.baseUrl,MA.Userblock.id,req.params.onesideId);
 
@@ -606,5 +581,20 @@ function getPatch (dbcol,lid) {
 	  return docs;
     });
   // });
+}
+function logAction(dataset,msg){	
+		var db = mongoUtil.getDb();
+		console.log("log is %s",global.cfg.log);
+		var collog=db.collection("_log");
+		
+		var p = {
+			type : "log",
+			date: new Date().toISOString(),
+			message: msg
+		};
+		collog.insertOne(p,function(err, rex) {
+			if (err) throw err;
+			console.log("p document inserted %o",p);
+		});
 }
 module.exports = router;

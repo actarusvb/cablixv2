@@ -17,6 +17,8 @@ var roles=["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead
 const labelMainXA={'FriendName' : 'Friend Name', 'lName' : 'Local name','lid' : 'Local ID'};
 const patch={'aid' : 'Side A','bid' : 'Side B','FriendName':'FriendName','mtype':'mtype','Color':'Color','label':'label','barcode':'barcode','jobid':'jobid'};
 const interpatchpannel={'lid' : 'lid','sid' : 'sid','rid' : 'rid','boundle' : 'boundle','mtype':'mtype'};
+const readEditOnlyFields=['pid','class','active'];
+const readOnlyFields = ['lid','pid','class','active','elementType','elementHigh'];
 const labels={
 	"root": {
 		"SelectDataset" : "Select Dataset/Domain",
@@ -65,7 +67,9 @@ const labels={
 		"front_back":"front/back",
 		"elementType":"elementType",
 		"elementHigh":"elementHigh",
-		"power":"power"
+		"power": "power",
+		"class" : "Class",
+		"active" : "Active"
 	},
 	"SOCKET": {
 		"Title1": "MAIN",

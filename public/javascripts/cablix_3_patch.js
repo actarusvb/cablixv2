@@ -70,7 +70,7 @@ $(function(){
 		valuex={position:"1", elementHigh:"1",lid: $("#bele").val()};
 		createElementHtml(dataset,datar,valuex,'Zm','RK','patchSelect');
 	});
-	$( document ).on("click",".patchSelect", function(e){
+	$(document ).on("click",".patchSelect", function(e){
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -181,7 +181,6 @@ function beginAddPatch(start,stop) {
 	}
 }
 function addPatchFunc() {
-	var valid = true;
 	displayMessage('submited');
 	
 	if($("#lid").val()        === ''){$("#lid").val($("#aid").val()+'::'+$("#bid").val());}
@@ -195,57 +194,58 @@ function addPatchFunc() {
 	}else{
 		checkAndSubmitPatch();
 	}
-	function checkAndSubmitPatch(){
-		allFields.removeClass( "ui-state-error" );
+}
+function checkAndSubmitPatch(){
+	allFields.removeClass( "ui-state-error" );
+	var valid = true;
 
-		valid = valid && checkLength( $(aid), "aid", 3, 32 );
-		valid = valid && checkLength( $(bid), "bid", 6, 80 );
-		valid = valid && checkLength( $(Color), "Color", 3, 16 );
-		valid = valid && checkLength( $(mtype), "Type", 3, 16 );
-		valid = valid && checkRegexp( $(aid), /^[a-zA-Z]([-0-9a-z_/])+$/ui, "Aid may consist of a-z, 0-9, underscores, spaces and must begin with a letter. You enterd: " +$(aid).val());
-		valid = valid && checkRegexp( $(bid), /^[a-zA-Z]([-0-9a-z_/])+$/ui, "Bid may consist of a-z, 0-9, underscores and must begin with a letter." );
-		
-		if ( valid ) {
-			$("#form_dataset").remove()
-			$("#jobid").remove()
-			$("#add-Patch-Form").append('<input type="hidden" name="dataset" id="form_dataset" value="'+dataset+'"/>');
-			if($("#job_id").val() !== ''){
-				$("#add-Patch-Form").append('<input type="hidden" name="jobid" id="jobid" value="'+$("#job_id").val()+'"/>');
-			}else{
-				$("#add-Patch-Form").append('<input type="hidden" name="jobid" id="jobid" value="'+formatDate(Date.now())+'"/>');
-				
-			}
-			
-			console.log("submit patch request with %s data",$("#add-Patch-Form").serialize());
-			$("input.readonly").prop("disabled",false);
-			$("#patchSubmit").prop('disabled', false);
-			
-			var jqxhr = $.ajax({
-				type: "POST",
-				url: "/elements/json/patch/add",
-				data: $("#add-Patch-Form").serialize(),
-				headers: {"authorization": authenticateData.token,}
-			});
-			jqxhr.done(function(data){
-				console.log("on done retvalue is: "+data.retvalue+" retstring is "+data.retstring);
-				if(data.retvalue == 1){
-					displayMessage('done');
-					refreshAuth(data.auth);
-					createAndPopulateRack($(".rackIdCell").text(),actionCreateRack);
-					addPatch.dialog( "close" );
-
-				}else{
-					displayMessage("error 011: "+data.retstring );
-				}
-			},"json");
-			jqxhr.fail(function(data){
-				displayMessage("error 012 retvalue is: "+data.retvalue+" retstring is "+data.retstring);
-			},"json");
+	valid = valid && checkLength( $(aid), "aid", 3, 32 );
+	valid = valid && checkLength( $(bid), "bid", 6, 80 );
+	valid = valid && checkLength( $(Color), "Color", 3, 16 );
+	valid = valid && checkLength( $(mtype), "Type", 3, 16 );
+	valid = valid && checkRegexp( $(aid), /^[a-zA-Z]([-0-9a-z_/])+$/ui, "Aid may consist of a-z, 0-9, underscores, spaces and must begin with a letter. You enterd: " +$(aid).val());
+	valid = valid && checkRegexp( $(bid), /^[a-zA-Z]([-0-9a-z_/])+$/ui, "Bid may consist of a-z, 0-9, underscores and must begin with a letter." );
+	
+	if ( valid ) {
+		$("#form_dataset").remove()
+		$("#jobid").remove()
+		$("#add-Patch-Form").append('<input type="hidden" name="dataset" id="form_dataset" value="'+dataset+'"/>');
+		if($("#job_id").val() !== ''){
+			$("#add-Patch-Form").append('<input type="hidden" name="jobid" id="jobid" value="'+$("#job_id").val()+'"/>');
 		}else{
-			displayMessage('wrong data in form!');
+			$("#add-Patch-Form").append('<input type="hidden" name="jobid" id="jobid" value="'+formatDate(Date.now())+'"/>');
+			
 		}
-		return valid;
+		
+		console.log("submit patch request with %s data",$("#add-Patch-Form").serialize());
+		$("input.readonly").prop("disabled",false);
+		$("#patchSubmit").prop('disabled', false);
+		
+		var jqxhr = $.ajax({
+			type: "POST",
+			url: "/elements/json/patch/add",
+			data: $("#add-Patch-Form").serialize(),
+			headers: {"authorization": authenticateData.token,}
+		});
+		jqxhr.done(function(data){
+			console.log("on done retvalue is: "+data.retvalue+" retstring is "+data.retstring);
+			if(data.retvalue == 1){
+				displayMessage('done');
+				refreshAuth(data.auth);
+				createAndPopulateRack($(".rackIdCell").text(),actionCreateRack);
+				addPatch.dialog( "close" );
+
+			}else{
+				displayMessage("error 011: "+data.retstring );
+			}
+		},"json");
+		jqxhr.fail(function(data){
+			displayMessage("error 012 retvalue is: "+data.retvalue+" retstring is "+data.retstring);
+		},"json");
+	}else{
+		displayMessage('wrong data in form!');
 	}
+	return valid;
 }
 function deletePatch(){
 	displayMessage('delete submited');
