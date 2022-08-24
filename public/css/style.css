@@ -1,28 +1,29 @@
 body {
-margin: 0;
-margin-bottom: 25px;
-padding: 0;
-/* background-color: #ddd; */
+	margin: 0;
+	margin-bottom: 25px;
+	padding: 0;
+	/* background-color: #ddd; */
 
-background-repeat: no-repeat;
-background-position: top left;
+	background-repeat: no-repeat;
+	background-position: top left;
 
-font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
-font-size: 13px;
-color: #333;
-position: relative;
+	font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+	font-size: 13px;
+	color: #333;
+	position: relative;
+	background-image: url("/images/emre-gencer-364602-unsplash.jpg");
+	background-color: #cccccc;
+	background-size: cover;
 }
+
+
 div#head1{
-margin: 0;
-/* margin-bottom: 25px; */
-padding: 0;
-background-color: #ddd;
-/* float: left; */
-white-space:nowrap
+	margin: 0;
+	padding: 0;
+	background-color: #ddd;
+	white-space:nowrap
 }
-/* .normalDiv{ */
 
-/* } */
 .valTogleable{
 	cursor: pointer;
 }
@@ -33,6 +34,12 @@ white-space:nowrap
 	font-size:small;
 	
 	/* medium|xx-small| */
+}
+.redBgnd{
+	background: red;
+}
+.greenBgnd{
+	background: lightseagreen;
 }
 .redLicense{
 	background: red;

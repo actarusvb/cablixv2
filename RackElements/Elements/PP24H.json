@@ -13,7 +13,7 @@
 			"inversion": true,
 			"template": "PP24HL",
 			"units": 1,
-			"description": "24 rj45 ports two lines Patch Pannel 1U",
+			"description": "Patch Pannel 24 rj45 ports two lines 1U",
 			"small_header" : [2,2,2,4,4]
 		}
 	}

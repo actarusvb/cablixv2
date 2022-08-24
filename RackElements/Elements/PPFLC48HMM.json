@@ -12,7 +12,7 @@
 			],
 			"template": "PPFLC48H",
 			"units": 1,
-			"description": "48 LC MMF duplex ports fiber Patch Pannel 1U",
+			"description": "Fiber Patch Pannel 48 LC MMF duplex ports 1U",
 			"small_header" : [6,2,2,12,4]
 		}
 	}

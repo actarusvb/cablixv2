@@ -207,6 +207,15 @@ $(function(){
 			});
 		});
 		console.log("LIST START\n\n"+classes.join('\n')+"\n\nLIST END");
+		const {cssRules} = Object.values(document.styleSheets)
+			  .find(sheet =>
+				Object.values(sheet.cssRules).find(rule =>
+				  (rule.selectorText || '')
+				  // .match(/^.icon/)
+				)
+			  ) || {cssRules: {}}
+
+		console.log(Object.values(cssRules).map(i => i.selectorText))
 	});
 	$( document ).on("click", 'button.datasetele', function(e){
 		console.log("click %s",'A3 click button.datasetele');
@@ -501,6 +510,7 @@ function actionCreateRack(datar){
 	$("#object-view").html('');
 	doGet("GET",'/elements/json/element/'+dataset+'/'+datar.rack.pid,function(data2){
 		// console.log(data2.rack);
+		datar.pid=datar.rack.pid;
 		datar.rack.piLabel=data2.element.lName;
 		// datar.rack.piLabel='';
 		$("#object-view").html(create_rack(datar.rack));
@@ -513,7 +523,9 @@ function actionCreateRack(datar){
 	},'actionCreateRack');
 }
 function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
+	var where="createElementHtml ";
 	console.log("0x00F0: value: dataset %s lid %s lid2 %s >> pos %s x&y %s & %s mode %s <<<",dataset,datar.rack.lid,value.lid,value.position,jqIdA,jqIdB,mode);
+	
 	$.ajax({
 		url: '/elements/html/element/'+dataset+'/'+datar.rack.lid+'/'+value.lid+'/'+mode,
 		async: true,
@@ -639,7 +651,9 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 					switch (key){
 						case 'printPatch':{
 							console.log("print patch @ %s",$(this).attr('id'));
-							window.open('/elements/html/patch/'+dataset+'/'+$(this).attr('id').replace("-normal",""), 'patch details', 'window settings');
+							const windowFeatures = "left=100,top=100,width=900,height=600";
+							window.open('/elements/html/patch/'+dataset+'/'+$(this).attr('id').replace("-normal",""), 'patch details', windowFeatures);
+							// 'window settings');
 						}
 						break;
 						case 'deletePatch':{
@@ -656,6 +670,8 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 				}
 			});
 		});
+	}).fail(function(){
+		console.log("where: %s |msg: %s ",where+'/elements/html/element/'+dataset+'/'+datar.rack.lid+'/'+value.lid+'/'+mode,"fallito !");
 	});
 }
 /* ma??? XA */
@@ -727,7 +743,7 @@ function addElementFunc(){
 function create_rack(rackdesc){
 	var rack=
 		'<table class="rack-view" id="Rck-'+rackdesc.lid+'">'+
-		'<tr><th></th><th><span id="roomId">'+rackdesc.piLabel+'</span></th></tr>'+
+		'<tr><th><span id="roomId">'+rackdesc.pid+'</span></th><th>'+rackdesc.piLabel+'</th></tr>'+
 		'<tr class="rack-view-head">'+
 		'<th colspan="1" class="rack-view-head"><span class="rackIdCell">'+rackdesc.lid+'</span></th><th class="rack-view-head"> '+rackdesc.lName+' <span class="ui-icon ui-icon-lightbulb toogleHideable"></span>||<span class="ui-icon ui-icon-contact displayPatch"></span></th>'+
 		'</tr>';
@@ -760,63 +776,50 @@ function createDatasetTree(currentDataset){
 	$("#page").append("<div id='rightCont' class='content'><ul id='elementTypeList'></ul></div>");
 
 	doGet("GET",'/admin/Rd/dataset/'+currentDataset,function(data){
-		if(data.auth.token){
-			console.log("OKK i get token %s asking who am i",data.auth.token);
-			authenticateData.token=data.auth.token;
-			usedLicenseCounted=data.usedLicenseCounted;
-			licensedRack=data.licensedRack;
-			displayMessage("get license detail for domain ok: 01: "+data.liceseStat);
-			csstype = (usedLicenseCounted < licensedRack) ?
-				'greenLicense' : 'redLicense';
-			$("#licenseStatus").html('<span class="'+csstype+'">'+usedLicenseCounted+'/'+licensedRack+'</span>');
-			$("#licenseStatus").addClass(csstype);
-		}else{
-			deAuth("createDatasetTree/license")
-		}	
+		usedLicenseCounted=data.usedLicenseCounted;
+		licensedRack=data.licensedRack;
+		displayMessage("get license detail for domain ok: 01: "+data.liceseStat);
+		csstype = (usedLicenseCounted < licensedRack) ?
+			'greenLicense' : 'redLicense';
+		$("#licenseStatus").html('<span class="'+csstype+'">'+usedLicenseCounted+'/'+licensedRack+'</span>');
+		$("#licenseStatus").addClass(csstype);			
 	},"getDataset"); 
-	doGet("GET",'/tree/json/treex/'+currentDataset+'/'+datasetName,function(data	) {
-		if(data.auth.token){
-			console.log("OKK i get token %s asking who am i",data.auth.token);
-			authenticateData.token=data.auth.token;
-			displayMessage("get /user/current ok: 01: "+data.id+" username: "+data.auth.username);
-			treeJson=data.tree[0];
-			console.log("tree data available : %o",treeJson);
-			displayMessage("tree data available");
-			
-			if(true){
-				/* V1 Start */
-				// $('#cablixTree').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
-				$('#cablixTreeCont').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
-					console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
-					if(userMode === 'view' && typeof node != "undefined"){
-						createAndPopulateRack(node.value,actionCreateRack);
-					}else if (userMode === 'edit'){
-						curNode=node;
-					}
-				});
-				/* V1 End */			
-			}else{  /* ---------------------------------------- */
-				/* V2 Start */
-				// $('#cablixTree').append('<ul id="sitemenu"></ul>');
-				$('#cablixTreeCont	').append('<ul id="sitemenu"></ul>');
-				data.tree.forEach(function(value,index){
-					scanTree(value,"sitemenu");
-				});
-				$('#sitemenu').easymenu({
-					'sub_item_class' :'sub-item', 
-				});
-				$(document).on('click', 'menunode',function(event){
-					console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
-					if(userMode === 'view'){
-						createAndPopulateRack(node.value,actionCreateRack);
-					}else if (userMode === 'edit'){
-						curNode=node;
-					}
-				});
-				/* V2 End */
-			}
-		}else{
-			deAuth("createDatasetTree")
+	doGet("GET",'/tree/json/treex/'+currentDataset+'/'+datasetName,function(data	) {	
+		treeJson=data.tree[0];
+		console.log("tree data available : %o",treeJson);
+		displayMessage("tree data available");
+		
+		if(true){
+			/* V1 Start */
+			// $('#cablixTree').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
+			$('#cablixTreeCont').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
+				console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
+				if(userMode === 'view' && typeof node != "undefined"){
+					createAndPopulateRack(node.value,actionCreateRack);
+				}else if (userMode === 'edit'){
+					curNode=node;
+				}
+			});
+			/* V1 End */			
+		}else{  /* ---------------------------------------- */
+			/* V2 Start */
+			// $('#cablixTree').append('<ul id="sitemenu"></ul>');
+			$('#cablixTreeCont	').append('<ul id="sitemenu"></ul>');
+			data.tree.forEach(function(value,index){
+				scanTree(value,"sitemenu");
+			});
+			$('#sitemenu').easymenu({
+				'sub_item_class' :'sub-item', 
+			});
+			$(document).on('click', 'menunode',function(event){
+				console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
+				if(userMode === 'view'){
+					createAndPopulateRack(node.value,actionCreateRack);
+				}else if (userMode === 'edit'){
+					curNode=node;
+				}
+			});
+			/* V2 End */
 		}
 	},"getTree");
 	doGet("GET","/elements/json/elementTypeList/"+dataset,function(data){

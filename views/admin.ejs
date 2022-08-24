@@ -5,10 +5,11 @@
 		<% include Form.Login.ejs %>
 		<div id="container" class="container">
 			<div id="head1">
-				| <a href="/">admin</a> 
+				| <a href="/">App</a> 
 				| <a class="top_command" id="access_admin" href="#">admin</a> 
 				| <a class="top_command" id="logout_cablix" href="#">Logout</a> 
 				|### <%= config.appname %> <%= config.version %> ###
+				| you <%= req.ip %> <--
 			</div>
 		</div>
 		<div id="message" class="MsgSpace"></div>

@@ -89,7 +89,7 @@ mongoUtil.connectToServer( function( err ) {
 			res.render('SelfService',{config: global.cfg});
 		});
 		CablixApp.get('/adm', function (req, res) {
-			res.render('admin',{config: global.cfg});
+			res.render('admin',{config: global.cfg,req});
 		});
 		CablixApp.get('/list', function (req, res) {
 			res.render('list',{config: global.cfg});
@@ -97,7 +97,7 @@ mongoUtil.connectToServer( function( err ) {
 
 
 		CablixApp.get('/', function (req, res) {
-			res.render('index',{config: global.cfg});
+			res.render('index',{config: global.cfg,req});
 		});
 		
 		// start server

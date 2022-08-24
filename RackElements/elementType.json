@@ -12,7 +12,7 @@
 			],
 			"template": "PPFLC24HMM",
 			"units": 1,
-			"description": "24 LC MMF duplex ports fiber Patch Pannel 1U Temp",
+			"description": "Fiber Patch Pannel 24 LC MMF duplex ports 1U Temp",
 			"small_header" : [6,2,2,12,4]
 		}
 		,
@@ -28,7 +28,7 @@
 			],
 			"template": "PPFLC24HMM",
 			"units": 1,
-			"description": "24 LC MMF duplex ports fiber Patch Pannel 1U",
+			"description": "Fiber Patch Pannel 24 LC MMF duplex ports 1U",
 			"small_header" : [6,2,2,12,4]
 		}
 		,
@@ -44,7 +44,7 @@
 			],
 			"template": "PPFSC12H",
 			"units": 1,
-			"description": "12 SC MMF duplex ports fiber Patch Pannel 1U",
+			"description": "Fiber Patch Pannel 12 SC MMF duplex ports 1U",
 			"small_header" : [2,2,2,4,4]
 		}
 	,
@@ -60,7 +60,7 @@
 			],
 			"template": "PPFSC48H",
 			"units": 1,
-			"description": "48 SC MMF duplex ports fiber Patch Pannel 1U",
+			"description": "Fiber Patch Pannel 48 SC MMF duplex 1U",
 			"small_header" : [6,2,2,12,4]
 		}
 	,
@@ -76,7 +76,7 @@
 			],
 			"template": "PPFLC48H",
 			"units": 1,
-			"description": "48 LC MMF duplex ports fiber Patch Pannel 1U",
+			"description": "Fiber Patch Pannel 48 LC MMF duplex ports 1U",
 			"small_header" : [6,2,2,12,4]
 		}
 	}

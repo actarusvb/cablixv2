@@ -63,29 +63,26 @@ $(function(){
 				'<td id="RK-'+$("#brack").val()+'-'+i+'" class="rack-view-ele-container hideable freeElement">Free</td></tr></table>';
 		$("#elementDispCont").append(flrack);
 		var datar= new Object();
-		datar.rack= new Object();
-		datar.rack.lid=$("#brack").val();
-		datar.bru=$("#bele option:selected" ).text().substring(0,3);
 		var valuex=new Object();
-		valuex={position:"1", elementHigh:"1",lid: $("#bele").val()};
+		datar.rack= new Object();
+		datar.rack.lid=$("#brack").val().trim();
+		datar.bru=$("#bele option:selected" ).val().trim();
+		valuex={position:"1", elementHigh:"1",lid: datar.bru}; // elementHigh ???????
 		createElementHtml(dataset,datar,valuex,'Zm','RK','patchSelect');
 	});
 	$(document ).on("click",".patchSelect", function(e){
 		e.preventDefault();
 		e.stopPropagation();
-
-		// console.log("0X00C03: gross target %s ",$(this).parent().attr("id"));
-		// console.log("0X00C04: net target %s",$(this).parent().attr("id").replace('-patchSelect',''));
 		
 		$("#bru").val($("#bele option:selected" ).text().substring(0,3).trim());
 		$("#bid").val($(this).parent().attr("id").replace('-patchSelect',''));
 		
 		$("#lid").val($("#aid").val()+'::'+$("#bid").val());
 		$("#FriendName").val($("#aid").val()+':<->:'+$("#bid").val());
-		// $("#label").val($("#aid").val()+'::'+$("#bid").val());
 		$("#label").val(patchtLabel());
 		
-		doGet("GET","/utils/uuid",function(datao){
+		doGet("GET","/utils/uuid/"+dataset,function(datao){
+			console.log("onClick|barcode generated is %s",datao.uuid);
 			$("#barcode").val(datao.uuid);
 		},"getBarcode");
 	});
@@ -181,13 +178,14 @@ function beginAddPatch(start,stop) {
 	}
 }
 function addPatchFunc() {
-	displayMessage('submited');
+	displayMessage('patch request submited by user');
 	
 	if($("#lid").val()        === ''){$("#lid").val($("#aid").val()+'::'+$("#bid").val());}
 	if($("#label").val()      === ''){$("#label").val(patchtLabel());}
 	if($("#FriendName").val() === '') {$("#FriendName").val($("#aid").val()+':<->:'+$("#bid").val());}
 	if($("#barcode").val()    === ''){
-		doGet("GET","/utils/uuid",function(datao){
+		doGet("GET","/utils/uuid/"+dataset,function(datao){
+			console.log("addPatchFunc|barcode generated is %s",datao.uuid);
 			$("#barcode").val(datao.uuid);
 			checkAndSubmitPatch();
 		},"getBarcode");

@@ -1,6 +1,7 @@
 
 
 $(function(){
+	// $("body").css({'background-image' , 'none'});
 	var patches=$('#patchesTable').DataTable( {
 		dom: 'Bfrtip'
 		// ,scrollY:     300

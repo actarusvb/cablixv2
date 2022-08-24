@@ -12,7 +12,7 @@
 			],
 			"template": "PP96H",
 			"units": 2,
-			"description": "96 rj45 Cat5/6/7 ports Patch Pannel 2U",
+			"description": "Patch Pannel 96 rj45 Cat5/6/7 ports 2U",
 			"small_header" : [6,2,2,12,4]
 		}
 	}

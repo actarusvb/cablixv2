@@ -1,3 +1,4 @@
+var customerTable;
 var usersTable;
 var collectionsTable;
 var licenseTable;
@@ -166,31 +167,73 @@ $(function(){
 });
 function loadAdmin(){
 	console.log("Auth token is :%s",authenticateData.token);
-	$("#pageAdmin").append('<div id="tabsAdmin" />');
-	$("#tabsAdmin").append('<ul id="tabsAdmin-ul" />');
+	$("#pageAdmin")   .append('<div id="tabsAdmin" />');
+	$("#tabsAdmin")   .append('<ul id="tabsAdmin-ul" />');
+	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-customerTable">Customers</a></li>');
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-userTable">users</a></li>');
-	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-licenseDash">license dash</a></li>');
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-licenseTable">license table</a></li>');
 	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-collection">Collection</a></li>');
-	$("#tabsAdmin").append('<span id="tabsAdmin-reload" /><button class="updateAdmin" value="updateAdmin">Reload</button></span>');
+	$("#tabsAdmin-ul").append('<li><a href="#tabsAdmin-licenseDash">license dash</a></li>');
 	
+	$("#tabsAdmin")   .append('<span id="tabsAdmin-reload" /><button class="updateAdmin" value="updateAdmin">Reload</button></span>');
 		
+	$("#tabsAdmin").append('<div id="tabsAdmin-customerTable" />');
 	$("#tabsAdmin").append('<div id="tabsAdmin-userTable" />');
-	$("#tabsAdmin").append('<div id="tabsAdmin-licenseDash" />');
 	$("#tabsAdmin").append('<div id="tabsAdmin-licenseTable" />');
 	$("#tabsAdmin").append('<div id="tabsAdmin-collection" />');
+	$("#tabsAdmin").append('<div id="tabsAdmin-licenseDash" />');
 	
 	
-	$("#tabsAdmin-userTable").append('<div id="the-userTable" class="normalDiv"><table id="userTable"><thead><tr><th>cabid</th><th>username</th><th>dataset</th></tr></thead><tbody></tbody></table></div>');
+	$("#tabsAdmin-customerTable").append('<div id="the-customerTable" class="normalDiv">'+
+		'<table id="customerTable"><thead><tr><th>cabid</th><th>customer</th><th>user</th></tr></thead><tbody></tbody></table></div>');	
+	$("#the-customerTable").after('<div class="normalDiv"><i class="fas fa-user-plus"></i></div>');
+	
+	$("#tabsAdmin-userTable").append('<div id="the-userTable" class="normalDiv">'+
+		'<table id="userTable"><thead><tr><th>cabid</th><th>username</th><th>dataset</th></tr></thead><tbody></tbody></table></div>');	
 	$("#the-userTable").after('<div class="normalDiv"><i class="fas fa-user-plus"></i></div>');
+	
 	$("#tabsAdmin-licenseDash").append('<div id="the-licenseDash"/>');
+
 	$("#tabsAdmin-licenseTable").append('<div id="the-licenseTable" class="normalDiv">'+
-	'<table id="licenseTable"><thead><tr><th>id</th><th>uuid</th><th>type/size</th><th>domain</th><th>creation</th><th>burn</th><th>burner</th></tr></thead><tbody></tbody></table></div>');
-	$("#tabsAdmin-collection").append('<div id="the-collectionsTable" class="normalDiv"><table id="collectionsTable"><thead><tr><th>name</th></tr></thead><tbody></tbody></table></div>');
+		'<table id="licenseTable"><thead><tr><th>id</th><th>uuid</th><th>type/size</th><th>domain</th><th>creation</th><th>burn</th><th>burner</th></tr></thead><tbody></tbody></table></div>');
+
+	$("#tabsAdmin-collection").append('<div id="the-collectionsTable" class="normalDiv">'+
+		'<table id="collectionsTable"><thead><tr><th>name</th></tr></thead><tbody></tbody></table></div>');
 
 	$( "#tabsAdmin" ).tabs();
+
 	// user zone
-	usersTable=$('#userTable').DataTable({
+	customerTable=	 $('#customerTable')	.DataTable({
+		"ajax": {
+			"url": '/admin/RD/customerTable/'
+			,"dataSrc": "data"
+			,"type" : "GET"
+			,"beforeSend": function (xhr) {
+				xhr.setRequestHeader("Authorization",authenticateData.token);
+			}
+		}
+		,"pageLength": 50
+		,"columns": [
+			 { "data": "custId" }
+			,{ "data": "custName" }
+			,{ "data": "dataset" , "defaultContent": ""}
+		]
+		,"order": [[ 0, "desc" ]]
+		,"columnDefs": [ 
+			{
+			"targets": 0,
+			"data": "cabId",
+			"render": function ( data, type, row, meta ) {
+				return '<button ><i class="fas fa-trash" id="rowIdT'+meta.row+'"></i></button> <button ><i class="fas fa-tools" id="rowIdE'+meta.row+'"></i></button> '+data
+				}
+			},
+			{
+			"targets": 2,
+			"className" : "collectionT"
+			}
+		]
+	});
+	usersTable=		 $('#userTable')		.DataTable({
 		"ajax": {
 			"url": '/admin/R'
 			,"dataSrc": "data"
@@ -206,21 +249,58 @@ function loadAdmin(){
 			,{ "data": "dataset" , "defaultContent": ""}
 		]
 		,"order": [[ 0, "desc" ]]
-		,"columnDefs": [ {
+		,"columnDefs": [ 
+			{
 			"targets": 0,
 			"data": "cabId",
 			"render": function ( data, type, row, meta ) {
 				return '<button ><i class="fas fa-trash" id="rowIdT'+meta.row+'"></i></button> <button ><i class="fas fa-tools" id="rowIdE'+meta.row+'"></i></button> '+data
-			}
+				}
 			},
 			{
 			"targets": 2,
-			// "data": "cabId",
 			"className" : "collectionT"
 			}
 		]
 	});
-	collectionsTable=$('#collectionsTable').DataTable({
+	licenseTable=    $("#licenseTable")		.DataTable({
+		"ajax": {
+			"url": '/admin/Rd/license/all'
+			,"dataSrc": "data"
+			,"type" : "GET"
+			,"beforeSend": function (xhr) {
+				xhr.setRequestHeader("Authorization",authenticateData.token);
+			}
+		}
+		,"pageLength": 50
+		,"columns": [
+			 { "data": "id" }
+			,{ "data": "uuid" }
+			,{ "data": "size" }
+			,{ "data": "domain", "defaultContent": ""}
+			,{ "data": "creation" }
+			,{ "data": "burn" , "defaultContent": ""}
+			,{ "data": "burname" , "defaultContent": ""}
+		]
+		,"order": [[ 0, "asc" ]]
+		,"columnDefs": [ 
+			{
+				// "width": "190px",
+				"targets": 3,
+				"data": "domain",
+				"render": function ( data, type, row, meta ) {
+					doGet("GET",'/admin/CK/'+data,function(result){
+						(result.dataset) ?
+							$("#LIC_"+data).addClass("greenBgnd") :
+							$("#LIC_"+data).addClass("redBgnd");
+					});
+					return '<span class="oLic" id="LIC_'+data+'">'+data+'<span>';
+				}
+			},
+		]
+		
+	});
+	collectionsTable=$('#collectionsTable')	.DataTable({
 		"ajax": {
 			"url": '/admin/LC'
 			,"dataSrc": "data"
@@ -245,41 +325,19 @@ function loadAdmin(){
 			// }
 		// }]
 	});
-	licenseTable=$("#licenseTable").DataTable({
-		"ajax": {
-			"url": '/admin/Rd/license/all'
-			,"dataSrc": "data"
-			,"type" : "GET"
-			,"beforeSend": function (xhr) {
-				xhr.setRequestHeader("Authorization",authenticateData.token);
-			}
-		}
-		,"pageLength": 50
-		,"columns": [
-			 { "data": "id" }
-			,{ "data": "uuid" }
-			,{ "data": "size" }
-			,{ "data": "domain", "defaultContent": ""}
-			,{ "data": "creation" }
-			,{ "data": "burn" , "defaultContent": ""}
-			,{ "data": "burnname" , "defaultContent": ""}
-		]
-		,"order": [[ 0, "asc" ]]
-		
-	});
-	
 	$( document ).on("click",".updateAdmin", function(e){
 		e.preventDefault();
 		licenseTable.ajax.reload();
 		collectionsTable.ajax.reload();
 		usersTable.ajax.reload();
+		customerTable.ajax.reload();
 	});
-	
 	// license zone
 	$("#the-licenseDash").append('<div class="liBlock" id="license-last" />');
 	$("#the-licenseDash").append('<div class="liBlock" id="license-g3" />');
 	$("#the-licenseDash").append('<div class="liBlock" id="license-g5" />');
 	$("#the-licenseDash").append('<div class="liBlock" id="license-g10" />');
+	$("#the-licenseDash").append('<div class="liBlock" id="license-g50" />');
 	$("#the-licenseDash").append('<div class="liBlock" id="license-tot" />');
 	$("#the-licenseDash").append('<br>');
 	$("#the-licenseDash").append('<div class="coBlock" id="collections-tot" />');
@@ -311,7 +369,9 @@ function loadAdmin(){
 					success: function( datas, textStatus, jQxhr ){
 						console.log("OK get datas %o",datas);
 						refreshAuth(datas.auth);
-						$("#license-g"+val.sizes).html('<p>License size '+val.sizes+':<br><span class="liFigures">'+datas.listOfLicenseInuse.inuse+'/'+datas.listOfLicenseFree.free+'</span></p>');
+						$("#license-g"+val.sizes).html(
+							'<p>License size '+val.sizes+':<br>'+
+							'<span class="liFigures">(available) '+datas.listOfLicenseFree.free+'/'+datas.listOfLicenseInuse.tutti+' (all)</span></p>');
 					}
 				});
 			});

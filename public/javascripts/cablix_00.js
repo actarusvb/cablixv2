@@ -85,6 +85,8 @@ function doLogin(action){
 	});
 }
 function doGet(method,url,executeFunct,executeFunctName,options){
+	console.log("doGet method: %s, URL: %s, executeFunctName: %s,executeFunct: %s,auth Token %s | options: %o",
+		method,url,executeFunctName,executeFunct,authenticateData.token,options);
 	$.ajax({
 		url: url,
 		headers: {"authorization": authenticateData.token},
@@ -95,11 +97,12 @@ function doGet(method,url,executeFunct,executeFunctName,options){
 			authenticateData.token=data.auth.token;
 			executeFunct(data);
 		}else{
+			console.log("Not autheticate here 0010: %s",executeFunctName);
 			deAuth(executeFunctName);
 		}
 	})
 	.fail(function(err){
-		console.log("i got error ajax here 0000: "+executeFunctName); 
+		console.log("i got error ajax here 0000 | %s",executeFunctName); 
 		deAuth(executeFunctName);
 	});
 }
@@ -275,3 +278,17 @@ function reaction(field,reason){
 	$('#'+field).after('<span id="'+field+'_msg" <i class="far fa-thumbs-down"></i>'+reason+'</span>');
 	$('#'+field).focus();
 }
+$.extend($.ui.dialog.prototype.options, { 
+    create: function() {
+        var $this = $(this);
+
+        // focus first button and bind enter to it
+        $this.parent().find('.ui-dialog-buttonpane button:first').focus();
+        $this.keypress(function(e) {
+            if( e.keyCode == $.ui.keyCode.ENTER ) {
+                $this.parent().find('.ui-dialog-buttonpane button:first').click();
+                return false;
+            }
+        });
+    } 
+});

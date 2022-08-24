@@ -14,7 +14,7 @@
 			"units": 1,
 			"active": 1,
 			"class": "network",
-			"description": "24 rj45 ports switch 1U",
+			"description": "Switch 24 rj45 ports 1U",
 			"small_header" : [6,2,2,12,4],
 			"power": 80
 		},
@@ -40,7 +40,7 @@
 			"units": 1,
 			"active": 1,
 			"class": "network",
-			"description": "24+2 rj45+sfp ports switch 1U",
+			"description": "Switch 24+2 rj45+sfp ports 1U",
 			"small_header" : [6,2,2,12,4],
 			"power": 80
 		},
@@ -58,7 +58,7 @@
 			"units": 1,
 			"active": 1,
 			"class": "network",
-			"description": "48 rj45 ports switch 1U 16 port group",
+			"description": "Switch 48 rj45 ports 1U 16 port group",
 			"small_header" : [6,2,2,12,4],
 			"power": 150
 		},
@@ -84,7 +84,7 @@
 			"units": 1,
 			"active": 1,
 			"class": "network",
-			"description": "48+4 rj45+sfp ports switch 1U 12 port group",
+			"description": "Switch 48+4 rj45+sfp ports 1U 12 port group",
 			"small_header" : [6,2,2,12,4],
 			"power": 150
 		},
@@ -110,7 +110,7 @@
 			"units": 1,
 			"active": 1,
 			"class": "network",
-			"description": "48+4 rj45+sfp ports switch 1U 16 port group",
+			"description": "Switch 48+4 rj45+sfp ports 1U 16 port group",
 			"small_header" : [6,4,5,12,5],
 			"power": 220
 		}

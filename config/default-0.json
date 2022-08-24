@@ -5,7 +5,7 @@
 	"localIp": "localhost",
 	"adminServerPort":8001,
 	"appname": "cablix",
-	"version": "js0.3",
+	"version": "js-t-1.0",
 	"iAPI": "my-api-here",
 	"isHttps" : "false",
 	"certServerKeyFn": "./cert/server.key",
@@ -19,6 +19,8 @@
 	"mongoHost": "my-mongo-host-and-port-here:27017",
 	"mongoDbName": "my-mongo-db-name-here",
 	"cabUsers": "_cabUsers",
+	"cabCustomers": "_cabCustomers",
+	
 	"counters": "_counters",
 	"logs": "_logs",
 	"sqliteCabDb": "my-local-db-here",

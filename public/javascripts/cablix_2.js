@@ -140,8 +140,8 @@ $(function(){
 							$("#formElementContainer").append('<input type="hidden" id="form_dataset" name="dataset" value="'+dataset+'" />');
 							
 							for( var key in labels[$(this).find(":checked").val()]){
-								var readOnlyFields = readOnlyFields.includes(key) ? 'READONLY' : '';
-								// var readonlyState = ( key === 'pid' ) ? 'READONLY' : '';
+								// var readonlyState = readOnlyFields.includes(key) ? 'READONLY' : '';
+								var readonlyState = ( key === 'pid' ) ? 'READONLY' : '';
 								
 								var value = (key === 'pid') ? 'value="'+myParentId+'"' : '';
 								if(key === "front_back"){

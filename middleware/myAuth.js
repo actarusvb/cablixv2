@@ -81,21 +81,25 @@ async function ckLoginNrole(req,res,next,reqRole){
 	if(global.cfg.auth){
 		if (!token) return res.status(401).send("Access denied. No token provided.");
 		try {
-			var dataset = req.params.dataset || 'zozo';
+			// var dataset = req.params.dataset || 'zozo';
 			
 			const decoded = jwt.verify(token,privateuuid);
 			Userblock.id=decoded.id;
-			// console.log("ckLoginNrole userId %s dataset %s :: role",Userblock.id,req.params.dataset,reqRole);
+			
+			var dataset= req.params.dataset || req.body.dataset;
+			console.log("ckLoginNrole userId %s dataset %s %s -> %s:: role %s",Userblock.id,req.params.dataset,req.body.dataset,dataset,reqRole);
+			
 			Userblock.isAdmin =decoded.isAdmin;
 			Userblock.role=decoded.role;
-			// console.log("Role %o // required %s",decoded.role,reqRole);
 			
-			if(dataset === 'zozo')
-				decoded.role[dataset]=[];
+			console.log("Role %o // required %s",decoded.role,reqRole);
 			
-			Userblock.token = jwt.sign({ id: Userblock.id, role: Userblock.role, isAdmin: Userblock.isAdmin }, privateuuid);
-			Userblock.msg = 'username & password OK!';
-			Userblock.errno=0;
+			// if(dataset === 'zozo')
+				// decoded.role[dataset]=[];
+			
+			// Userblock.token = jwt.sign({ id: Userblock.id, role: Userblock.role, isAdmin: Userblock.isAdmin }, privateuuid);
+			// Userblock.msg = 'username & password OK!';
+			// Userblock.errno=0;
 			
 			if(typeof decoded.role[dataset] !== "undefined" && decoded.role[dataset].includes(reqRole)){
 				console.log("ckLoginNrole OK!");				
@@ -104,7 +108,8 @@ async function ckLoginNrole(req,res,next,reqRole){
 				console.log("ckLoginNrole isAdmin OK!");				
 				next();				
 			}else{
-				res.status(400).send("Invalid/insufficient/missing Role");
+				console.log("ckLoginNrole KO! insufficient or missing role");	
+				res.status(400).send("Invalid/insufficient/missing Role Ds %s|%s",dataset,decoded.role[dataset]);
 			};	
 		} catch (ex) {
 			console.log(ex);  

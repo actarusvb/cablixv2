@@ -15,14 +15,14 @@ router.post("/json/user/add",async (req,res) => {
 		if(resultF[0] && resultF[1] && resultF[3] >= 0){ 
 			if(resultF[3] === 0)
 				createPopulateCollection(req.body,resultF);
-			addUser(req.body,resultF);
-			result.errno=0;
-			result.message='created : '+resultF[3];
+			addUser(req.body,res,resultF);
+			// result.errno=0;
+			// result.message='created : '+resultF[3];
 		}else{
 			result.errno=-4;
 			result.message='refused';
+			res.json(result);			
 		}
-		res.json(result);			
 	}).catch(function(err) {
 		console.log(err);
 		result.errno=-1;
@@ -34,7 +34,7 @@ function createPopulateCollection(req,check){
 	var db = mongoUtil.getDb();
 	db.createCollection(check[2], function(err, res) {
 		if (err) throw err;
-		console.log("Collection %s created!",check[2]);
+		console.log("createPopulateCollection Collection %s created!",check[2]);
 		var db = mongoUtil.getDb();
 		var col=db.collection(check[2]);
 		col.insertOne({type: 'dataset',pid: 'self',lid: req.newdataset},function(err, resk) {
@@ -46,7 +46,7 @@ function createPopulateCollection(req,check){
 		var params = [];
 		var sql="update adder set domain = '"+check[2]+"',burn = datetime('now'), burname='"+req.newusername+"' where uuid='"+req.activationCode+"' and domain is NULL and burn is NULL";
 		
-		console.log("FUNCT %s",sql);
+		console.log("createPopulateCollection FUNCT %s",sql);
 		db.run(sql, params, function(err) {
 			if (err) {
 				console.error(err.message);
@@ -55,13 +55,15 @@ function createPopulateCollection(req,check){
 		sqlite3Util.closeDb();	
 	});
 }
-async function addUser(req,check){
-	console.log("check is %o",check);
+async function addUser(req,res,check){
+	console.log("addUser check is %o",check);
 	var domain = check[2];
 	var db = mongoUtil.getDb();
 	var colUser=db.collection(global.cfg.cabUsers);
 	var colCount=db.collection(global.cfg.counters);
 	const rbac = 'rbac.'+domain;
+	var result=new Object();
+
 
 	var seq;
 	if(check[0] !== req.newusername){
@@ -69,33 +71,46 @@ async function addUser(req,check){
 			{_id: 'userid'},
 			{ $inc: { seq : 1 } },
 			{ returnDocument: 'after' });
-			seq=doc.value.seq;
-		const query = {'username' : req.newusername };
-		const update = { 
-			'$set' :  
-			{
-				username: req.newusername,
-				cabId: seq,
-				password: req.newpass1,
-				dataset: [ domain ],
-				[rbac] : ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"]
-			},
-			preference: { patchtLabelForm : 2 }
-		};
-		const options = { upsert: true };
-		const result = await colUser.updateOne(query, update, options);
+		seq=doc.value.seq;
+		console.log("addUser sequence val is %s",seq);
+		// var dname=domain;
+		var dblock=new Object();
+		var dname={};
+		dname[domain] = ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"];
+		dblock={
+					"username": req.newusername,
+					"cabId": seq,
+					"password": req.newpass1,
+					"dataset": [ domain ],
+					"rbac" : dname,
+					// { domain : ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"]},
+					"preference": { patchtLabelForm : 2 }
+				};
+		var resultq = await colUser.insertOne(
+			dblock
+				// {
+					// username: req.newusername,
+					// cabId: seq,
+					// password: req.newpass1,
+					// dataset: [ domain ],
+					// rbac : { dname : ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"]},
+					// preference: { patchtLabelForm : 2 }
+				// }
+			);
 		
-		console.log("%s document inserted %s modified",result.matchedCount,result.modifiedCount);
-		return result.matchedCount+result.modifiedCount;
+		console.log("addUser document inserted ");
+		
+		result.errno=0;
+		result.message='created : '+check[3];
+		res.json(result);
 	}else{
 		seq=req.checkCode;
 		const query = {'username' : req.newusername };
 		const update = { '$push' : { dataset: domain }};
 		const rabx   = {'$set'   : { [rbac] : ["treeWrite","treeRead","rackWrite","rackRead","patchWrite","patchRead"] }};
-		const options = { upsert: true };
 		
-		const result = await colUser.updateOne(query, update, options);
-			  result = await colUser.updateOne(query, rabx, options);
+		const result = await colUser.updateOne(query, update, { upsert: true });
+			  result = await colUser.updateOne(query, rabx, { upsert: true });
 		
 		console.log("%s document inserted %s modified",result.matchedCount,result.modifiedCount);
 		return result.matchedCount+result.modifiedCount;
@@ -129,6 +144,7 @@ function p1(bodyIn){
 					resolve(false);
 				}
 			}else{
+				console.log("p1 ok %s not exist",bodyIn.newusername);
 				resolve( true );
 			}
 		});
@@ -164,19 +180,19 @@ function p4(bodyIn){
 			});
 		});
 		Promise.all([pr]).then(rows => {	
-			console.log("promise 22 ret %o",rows);
+			console.log("P4 promise 22 ret %o",rows);
 			if(typeof rows === 'undefined' || rows == ''){
 				resolve(-1);
 			}else{
 				if(rows[0].size > 0 && rows[0].domain ){
 					// result.message="Warm already used";
-					console.log("%s %s",rows[0].size,rows[0].domain);
+					console.log("P4 %s %s",rows[0].size,rows[0].domain);
 					resolve(1);
 				}else if(rows[0].size >0 ){ 
-					console.log("not exist");
+					console.log("P4 not exist");
 					resolve(0);
 				} else {
-					console.log("%s %s",rows[0].size,rows[0].domain);
+					console.log("P4 %s %s",rows[0].size,rows[0].domain);
 					resolve(-2);
 				}
 			}

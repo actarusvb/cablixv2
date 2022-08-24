@@ -96,7 +96,7 @@ router.post("/U/:username"	,(r,b,n) => {MA.ckLoginNrole(r,b,n,'isAdmin');},async
 	mongoUtil.closeDb();
 });
 router.post("/D/:id"		,(r,b,n) => {MA.ckLoginNrole(r,b,n,'isAdmin');},async (req, res) => {
-	console.log("/admin/D/:%s ",req.params.id);
+	console.log("/admin/D/:%s",req.params.id);
 	var result=new Object();
 	result.auth = JSON.parse(JSON.stringify(MA.Userblock));
 
@@ -110,6 +110,25 @@ router.post("/D/:id"		,(r,b,n) => {MA.ckLoginNrole(r,b,n,'isAdmin');},async (req
 		res.json(result);
 	});
 	mongoUtil.closeDb();
+});
+router.get("/RD/customerTable",(r,b,n) => {MA.ckLoginNrole(r,b,n,'isAdmin');},async (req, res) => {
+	console.log("/RD/customerTable",req.params.id);
+	
+	var result=new Object();
+	result.auth = JSON.parse(JSON.stringify(MA.Userblock));
+	var db = mongoUtil.getDb();
+	var col=db.collection(global.cfg.cabCustomers);
+		
+	col.find({}).toArray(function(err, qresult){
+		if (err) {
+			throw err;
+		}
+		result={"retcode": 1,retomsg: "ok-data"};
+		result.data=qresult;
+		res.json(result);
+	});
+	mongoUtil.closeDb();
+
 });
 router.get("/Rd/license/summary/lastid",async (req, res) => {
 	// MA.ckLogin,
@@ -161,7 +180,8 @@ router.get("/Rd/license/summary/statLicense/:tlic"
 			result.listOfLicenseFree=rows[0];
 			// console.log("out %o",rows[0])
 		});
-		db.all("SELECT count(id) AS inuse FROM adder where burn is not NULL and size="+req.params.tlic, params, (err, rows) => {
+		// db.all("SELECT count(id) AS inuse FROM adder where burn is not NULL and size="+req.params.tlic, params, (err, rows) => {
+		db.all("SELECT count(id) AS tutti FROM adder where size="+req.params.tlic, params, (err, rows) => {
 			if (err) {
 				res.status(400).json({"error":err.message});
 				return;
@@ -238,7 +258,6 @@ router.get("/Rd/dataset/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');
 		res.json(result);
 	});
 	mongoUtil.closeDb();
-
 });
 router.get("/Rd/license/all",(r,b,n) => {MA.ckLoginNrole(r,b,n,'isAdmin');},async (req, res) => {
 	console.log("/Rd/license/all");
@@ -302,5 +321,24 @@ router.get("/LC"			,(r,b,n) => {MA.ckLoginNrole(r,b,n,'isAdmin');},async (req, r
 		res.json(result);
 	});
 });
-
+router.get("/CK/:dataset"			,(r,b,n) => {MA.ckLoginNrole(r,b,n,'isAdmin');},async (req, res) => {
+	console.log("/admin/CK/:dataset ck if %s exist",req.params.dataset);
+	var result=new Object();
+	result.auth = JSON.parse(JSON.stringify(MA.Userblock));
+	var db = mongoUtil.getDb();
+	db.listCollections({name: req.params.dataset})
+    .next(function(err, collinfo) {
+        if (collinfo) {
+			result.retcode=1;
+			result.retomsg="ok-data";
+			result.dataset=req.params.dataset;
+			res.json(result);
+        }else{
+			result.retcode=1;
+			result.retomsg="ok-data";
+			result.dataset='';
+			res.json(result);
+		}
+    });
+});
 module.exports = router;

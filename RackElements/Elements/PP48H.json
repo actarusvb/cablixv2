@@ -12,7 +12,7 @@
 			],
 			"template": "PP48H",
 			"units": 1,
-			"description": "48 rj45 ports Patch Pannel 1U",
+			"description": "Patch Pannel 48 rj45 ports 1U",
 			"small_header" : [6,2,2,12,4]
 		}
 	}

@@ -173,7 +173,7 @@ router.get("/html/element/:dataset/:rackId/:eleId/:sockIdPrf",(r,b,n) => {MA.ckL
 			if (err) {
 				console.log("error at 00077 ::%s::",err);
 			}
-			// console.log("z00bz we have %o",qresults);
+			console.log("z00bz we have %o",qresults);
 			
 			qresults.forEach(function(qresult,idx){
 				result.rack=JSON.parse(JSON.stringify(qresult));
@@ -489,14 +489,14 @@ router.post("/json/patch/add",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},
 
 	}
 });
-router.post("/json/patch/delete/:col/:onesideId",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},async (req,res) =>{
+router.post("/json/patch/delete/:dataset/:onesideId",(r,b,n) => {MA.ckLoginNrole(r,b,n,'patchWrite');},async (req,res) =>{
 	console.log("z12 %s requested id %s for dataset %s <",req.baseUrl,MA.Userblock.id,req.params.onesideId);
 
 	var result=new Object();
 	result.auth = JSON.parse(JSON.stringify(MA.Userblock));
 
 	var db = mongoUtil.getDb();
-	var col=db.collection(req.params.col);
+	var col=db.collection(req.params.dataset);
 
 	result.req=new Object();
 	result.req.url=req.baseUrl;
