@@ -5,7 +5,7 @@
 	"localIp": "localhost",
 	"adminServerPort":8001,
 	"appname": "cablix",
-	"version": "js-t-1.0",
+	"version": "js-t-2.0",
 	"iAPI": "my-api-here",
 	"isHttps" : "false",
 	"certServerKeyFn": "./cert/server.key",

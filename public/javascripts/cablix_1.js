@@ -96,7 +96,7 @@ $(function(){
 		
 	});	
 	function okProceed(username){
-		$("#logout_cablix").after('|<a class="top_command" id="loggedIn" href="javascript:void(0);">'+username+' Logged In!</a>');
+		$("#logout_cablix").after('|<a class="top_command" id="loggedIn" href="javascript:void(0);">'+username+'</a> Logged In!');
 		$(document).on("click","#loggedIn",function(){
 			console.log("click %s",'A2');
 			listCurrentUser();
@@ -353,7 +353,7 @@ $(function(){
 				alert('You have a strange Mouse!');
 		}
 	});
-	$( document ).on("click", 'a.rack', function(event) {
+/*	$( document ).on("click", 'a.rack', function(event) {
 		/// nooooooo
 		event.preventDefault();
 		console.log("BADDDDDDD !!!!  click %s",'A11');
@@ -376,8 +376,8 @@ $(function(){
 					$("#Rk-"+element+"-"+value.position).html(resultInner);
 				}});
 			});
-		},{async: true});
-	});
+		},"click.a.rack",{},{async: true});
+	}); */
 	$( document ).on("click", 'span.ui-icon-lightbulb', function(event) {
 		displayMessage('start ask for rack elements: I got a click func');
 		console.log("click %s",'A12');
@@ -400,6 +400,7 @@ $(function(){
 		event.preventDefault();
 		console.log("click %s",'A14');
 		displayMessage('ask for password change: I got a click func');
+		$("#username").val($("#loggedIn").text());
 		passwordChange.dialog( "open" );
 	});
 	$( document ).on("click", 'div#licenseAdder',function(e){
@@ -783,20 +784,21 @@ function createDatasetTree(currentDataset){
 			'greenLicense' : 'redLicense';
 		$("#licenseStatus").html('<span class="'+csstype+'">'+usedLicenseCounted+'/'+licensedRack+'</span>');
 		$("#licenseStatus").addClass(csstype);			
-	},"getDataset"); 
-	doGet("GET",'/tree/json/treex/'+currentDataset+'/'+datasetName,function(data	) {	
+	},"getDataset");
+	doGet("GET",'/tree/json/treex/'+currentDataset+'/'+datasetName,function(data){
 		treeJson=data.tree[0];
 		console.log("tree data available : %o",treeJson);
 		displayMessage("tree data available");
 		
 		if(true){
 			/* V1 Start */
-			// $('#cablixTree').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
 			$('#cablixTreeCont').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
 				console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
 				if(userMode === 'view' && typeof node != "undefined"){
 					createAndPopulateRack(node.value,actionCreateRack);
 				}else if (userMode === 'edit'){
+					// SB SB SB 
+					createAndPopulateRack(node.value,actionCreateRack);
 					curNode=node;
 				}
 			});
@@ -856,8 +858,10 @@ function createDatasetTree(currentDataset){
 }
 function editSocketForm(that){
 	formEditElement.dialog( "open" );
-	formEditElement.dialog({height: formEditElementDetail.editSocketForm.height,
-		width: formEditElementDetail.editSocketForm.width});
+	formEditElement.dialog({
+		height: formEditElementDetail.editSocketForm.height,
+		width: formEditElementDetail.editSocketForm.width}
+	);
 	console.log("click %s .socketViewed mi %s AKA %s","ooooo",$(that).attr("id"),$(that).attr("id").replace("-normal",""));		
 	
 	$("#preFormEditElement").empty();

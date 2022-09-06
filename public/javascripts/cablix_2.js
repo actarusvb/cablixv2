@@ -33,6 +33,7 @@ $(function(){
 	});	
 	$.contextMenu({
 		selector: '.simpleTree-label-editable', 
+		trigger: 'right',
 		callback: function(key, options) {
 			// var myParentId=$(this).parent().attr('id').substring(3,99);
 			var myParentId=$(this).attr('id');
@@ -135,7 +136,7 @@ $(function(){
 						$( "#localType" ).change(function() {
 							$("#formElementContainer").empty();
 							$("#formElementContainer").append('<h3>Type: '+$(this).find(":checked").val()+'</h3>');
-							$("#formElementContainer").append('<input type="hidden" name="type" value="'+$(this).find(":checked").val()+'" />');
+							$("#formElementContainer").append('<input type="hidden" name="type" id="type" value="'+$(this).find(":checked").val()+'" />');
 							$("#formElementContainer").append('<input type="hidden" name="subaction" value="add_children" />');
 							$("#formElementContainer").append('<input type="hidden" id="form_dataset" name="dataset" value="'+dataset+'" />');
 							
@@ -190,9 +191,31 @@ $(function(){
 		});
 	}
 	function saveFormC2(){
-		console.log("cablix_2 wich form ? %o",$(this).serialize());
-		if( $(this).find('input#lid').val() && $(this).find('input#pid').val() && (! /[\s,;\.]/.test($(this).find('input#lid').val()))){		
-			var jqxhr = $.ajax({
+		console.log("cablix_2 saveFormC2 wich form ? %o",$(this).serialize());
+		var targetType=$(this).find('input#type').val();
+		if( $(this).find('input#lid').val() && $(this).find('input#pid').val() && (! /[\s,;\.]/.test($(this).find('input#lid').val()))){
+			doGet("POST","/tree/editOrSave/element/"+$(this).find('input#form_dataset').val(),function(data){
+				console.log("saveFormC2 on done retvalue is: "+data.retvalue+" retstring is "+data.retstring);
+				refreshAuth(data.auth);
+				if(data.retvalue == 1){
+					set_userMode($("#edit_mode"),'edit');
+					displayMessage("edit done ok retnum: "+data.retvalue+" retstring is: "+data.retstring );
+					$("#formElementContainer").empty();
+					formEditElement.dialog( "close" );
+					if(targetType === "RACK"){
+						createAndPopulateRack($(".rackIdCell").text(),actionCreateRack);
+						createDatasetTree(dataset);
+						set_userMode($("#edit_mode"),'view');
+					}else{
+						createDatasetTree(dataset);
+						set_userMode($("#edit_mode"),'view');
+					}
+				}else{
+					displayMessage("Fail to save retnum: "+data.retvalue+" retstring is: "+data.retstring );
+				}
+			},"saveFormC2",$(this).serializeArray());
+
+/*			var jqxhr = $.ajax({
 				type: "POST",
 				url: "/tree/editOrSave/element/"+$(this).find('input#form_dataset').val() ,
 				data: $(this).serializeArray(),
@@ -202,61 +225,27 @@ $(function(){
 				console.log("on done retvalue is: "+data.retvalue+" retstring is "+data.retstring);
 				refreshAuth(data.auth);
 				if(data.retvalue == 1){
-					// set_userMode($("#edit_mode"),'edit');
+					set_userMode($("#edit_mode"),'edit');
+					// set_userMode($("#edit_mode"),'view');
 					displayMessage("edit done ok retnum: "+data.retvalue+" retstring is: "+data.retstring );
 					$("#formElementContainer").empty();
 					formEditElement.dialog( "close" );
-					// createDatasetTree(dataset);
-					createAndPopulateRack($(".rackIdCell").text(),actionCreateRack);
+					if(targetType === "RACK"){
+						createAndPopulateRack($(".rackIdCell").text(),actionCreateRack);
+						createDatasetTree(dataset);
+						set_userMode($("#edit_mode"),'view');
+					}else{
+						createDatasetTree(dataset);
+						set_userMode($("#edit_mode"),'view');
+					}
 
 				}else{
 					displayMessage("Fail to save retnum: "+data.retvalue+" retstring is: "+data.retstring );
 				}
-			});
+			}); */
 		}else{
 			displayMessage('pid or lid not defined or invalid lid, stop!');
 		}
-	}
-	function set_userMode__old(that,OLDmode){
-		userMode = (OLDmode === 'view') ?
-			'edit' :
-			'view';
-		that.removeClass("edit_mode");
-		that.removeClass("edit_modered");
-
-		$(".rack-element").removeClass("fa-lock")
-		$(".rack-element").removeClass("fa-edit")
-		$(".socketViewed").removeClass("fa-lock")
-		$(".socketViewed").removeClass("fa-edit")		
-		$(".simpleTree-label").removeClass("simpleTree-label-editable");
-		
-		that.addClass(
-			(userMode === 'view') ?
-				'edit_mode' :
-				'edit_modered'
-		);
-		
-		$(".rack-element").addClass(
-			(userMode === 'view') ?
-				'fa-lockx' :
-				'fa-edit '
-		);
-		$(".socketViewed").addClass(
-			(userMode === 'view') ?
-				'fas ' :
-				'fas fa-edit'
-		);
-		$(".simpleTree-label").addClass(
-			(userMode === 'view') ?
-				'' :
-				'simpleTree-label-editable'
-		);
-		// $("#licenseAdder").html(
-			// (userMode === 'view') ?
-				// '' :
-				// '<button id="showAdderForm" class="addAdderButton">Add license</button>'
-		// );		
-		displayMessage("userMode is: "+userMode);
 	}
 	function deepSearch (object, key, value) {
 		if(Array.isArray(object)){

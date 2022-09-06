@@ -12,7 +12,7 @@ router.post("/authenticate", MA.myLogin,function(req,res,next){
 
 	res.json(result);
 });
-router.get("/current", (r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');},async (req, res) => {
+router.get("/current", (r,b,n) => {MA.ckLoginNrole(r,b,n,'readCurrent');},async (req, res) => {
 	console.log("/current requested res id %s",MA.Userblock.id);
 	try {
 		var result = new Object();
@@ -25,7 +25,7 @@ router.get("/current", (r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');},async (re
 	}
 	// return;
 });
-router.post("/password", (r,b,n) => {MA.ckLoginNrole(r,b,n,'treeRead');},async (req, res) => {
+router.post("/password", (r,b,n) => {MA.ckLoginNrole(r,b,n,'changePassword');},async (req, res) => {
 	console.log("/current requested res id %s",MA.Userblock.id);
 	var result=new Object();
 	result.auth = JSON.parse(JSON.stringify(MA.Userblock));

@@ -114,7 +114,7 @@ function beginAddPatch(start,stop) {
 			doGet("GET","/elements/json/element/"+dataset+"/"+datum.element.pid,function(datas){
 				$("#arack").val(datas.element.pid);
 				$("#aru").val(datas.element.position);
-				$("#aele").val(datas.element.pid);
+				$("#aele").val(datas.element.lid);
 				checkPort(amtype,asfptype,bmtype,bsfptype);				
 			},"fetchEleDataRackA");
 		},"fetchEleDataA");
@@ -128,10 +128,13 @@ function beginAddPatch(start,stop) {
 				$("#rack-space").append('<span id="selRackCont"><span class="fTitle1">RACK</span><select id="brack" name="brack"></select></span>');
 				$("#brack").append('<option value="'+datas.element.pid+'">'+datas.element.pid+'</option>');
 				$("#brack").val(datas.element.pid);
+				
 				$("#bru").val(datas.element.position);
 				$("#rack-space").append('<span class="fTitle2">Element</span><select id="bele" name="bele"></select>');
-				$("#bele").append('<option value="'+datas.element.pid+'">'+datas.element.pid+'</option>');
-				$("#bele").val(datas.element.pid);
+				
+				$("#bele").append('<option value="'+datas.element.lid+'">'+datas.element.lid+'</option>');
+				$("#bele").val(datas.element.lid);
+				
 				checkPort(amtype,asfptype,bmtype,bsfptype);
 			},"fetchEleDataRackB");
 		},"fetchEleDataB");
@@ -170,7 +173,7 @@ function beginAddPatch(start,stop) {
 			if(bmtype === 'sfp' ) { bmtype = bsfptype;}
 			if(amtype === 'sfpp' ) { amtype = asfptype;}
 			if(bmtype === 'sfpp' ) { bmtype = bsfptype;}
-			// console.log("amtype %s - %s bmtype",amtype,bmtype);
+			console.log("amtype %s - %s bmtype",amtype,bmtype);
 			if(validValue.port[amtype].includes(bmtype)){return ;}
 			$("#bid").addClass("bkgRed");
 		} 

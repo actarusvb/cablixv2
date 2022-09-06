@@ -87,28 +87,24 @@ async function ckLoginNrole(req,res,next,reqRole){
 			Userblock.id=decoded.id;
 			
 			var dataset= req.params.dataset || req.body.dataset;
-			console.log("ckLoginNrole userId %s dataset %s %s -> %s:: role %s",Userblock.id,req.params.dataset,req.body.dataset,dataset,reqRole);
+			console.log("ckLoginNrole01 userId %s r.q.p_dataset %s r.q.b_dataset %s -> %s:: role %s",Userblock.id,req.params.dataset,req.body.dataset,dataset,reqRole);
 			
 			Userblock.isAdmin =decoded.isAdmin;
 			Userblock.role=decoded.role;
 			
-			console.log("Role %o // required %s",decoded.role,reqRole);
-			
-			// if(dataset === 'zozo')
-				// decoded.role[dataset]=[];
-			
-			// Userblock.token = jwt.sign({ id: Userblock.id, role: Userblock.role, isAdmin: Userblock.isAdmin }, privateuuid);
-			// Userblock.msg = 'username & password OK!';
-			// Userblock.errno=0;
-			
-			if(typeof decoded.role[dataset] !== "undefined" && decoded.role[dataset].includes(reqRole)){
-				console.log("ckLoginNrole OK!");				
+			console.log("ckLoginNrole02 Role %o // required %s",decoded.role,reqRole);
+						
+			if(reqRole === 'readCurrent' || reqRole === 'changePassword'){
+				console.log("ckLoginNrole03A OK %s!",reqRole);				
+				next();
+			}else if( typeof decoded.role[dataset] !== "undefined" && decoded.role[dataset].includes(reqRole)){
+				console.log("ckLoginNrole03B OK!");				
 				next();
 			}else if(Userblock.isAdmin){
-				console.log("ckLoginNrole isAdmin OK!");				
+				console.log("ckLoginNrole04 isAdmin OK!");				
 				next();				
 			}else{
-				console.log("ckLoginNrole KO! insufficient or missing role");	
+				console.log("ckLoginNrole05 KO! insufficient or missing role|%s|%s|%s",reqRole,dataset,decoded.role[dataset]);	
 				res.status(400).send("Invalid/insufficient/missing Role Ds %s|%s",dataset,decoded.role[dataset]);
 			};	
 		} catch (ex) {
@@ -116,7 +112,7 @@ async function ckLoginNrole(req,res,next,reqRole){
 			res.status(400).send("Invalid token.");
 		}
 	}else{
-		console.log("superseed ckLogin");
+		console.log("ckLoginNrole06 superseed ckLogin");
 		Userblock.id=7234;
 		Userblock.role='admin';
 		Userblock.token = jwt.sign({ id: Userblock.id, role: Userblock.role }, privateuuid);
@@ -127,7 +123,9 @@ async function ckLoginNrole(req,res,next,reqRole){
 }
 async function changePass(req,res,next){
 	var db = mongoUtil.getDb();
-	db.collection( global.cfg.cabUsers).updateOne({username: Userblock.username,password: req.body.current-password,},{$set :{ password: req.body.newPassword1}},function (err,result){
+	var oldPass=req.body.currentPassword;
+	var newPass=req.body.newPassword1;
+	db.collection( global.cfg.cabUsers).updateOne({username: Userblock.username,'password': oldPass},{$set :{ 'password': newPass}},function (err,result){
 		if (err) {
 		  throw err;
 		}

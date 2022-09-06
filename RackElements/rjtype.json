@@ -1,5 +1,4 @@
 {
-	"OLDRjType": "utp-cat5,utp-cat5e,utp-cat6,utp-cat6a,sftp-cat6,sftp-cat6a,sftp-cat7,sftp-cat8,smlc,mmlc,smsc,mmsc,auto",
 	"rjType": "utp-cat5,utp-cat6a,sftp-cat6a,sftp-cat7,smlc,mmlc,smsc,mmsc,auto",
 	"portType": ["UTP","SFP","SFP+","SFPP","SFP28","QSFP"],
 	"sockType" : {

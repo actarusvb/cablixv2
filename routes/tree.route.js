@@ -72,13 +72,14 @@ router.post("/delete/element",(r,b,n) => {MA.ckLoginNrole(r,b,n,'treeWrite');},a
       }
 });
 router.post("/editOrSave/element/:dataset",(r,b,n) => {MA.ckLoginNrole(r,b,n,'treeWrite');},async (req, res) => {
-	console.log("W77 POST /edit/element requested id %s for dataset %s > ",MA.Userblock.id,req.body.dataset,req.params.dataset);
+	console.log("W77 POST /editOrSave/element requested id %s for dataset %s > ",MA.Userblock.id,req.body.dataset,req.params.dataset);
 
+	var dataset = req.body.dataset || req.params.dataset;
 	var result=new Object();;
 	result.auth = JSON.parse(JSON.stringify(MA.Userblock));
 
 	var db = mongoUtil.getDb();
-	var col=db.collection(req.body.dataset);
+	var col=db.collection(dataset);
 	
 	var datapack=JSON.parse(JSON.stringify(req.body));
 	delete datapack.dataset;

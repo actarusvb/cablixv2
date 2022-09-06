@@ -26,11 +26,10 @@ function set_userMode(that,OLDmode){
 		(userMode === 'view') ?
 			'edit_mode' :
 			'edit_modered'
-	);
-	
+	);	
 	$(".rack-element").addClass(
 		(userMode === 'view') ?
-			'fa-lockx' :
+			'fa-lock' :
 			'fa-edit '
 	);
 	$(".socketViewed").addClass(
@@ -48,7 +47,6 @@ function set_userMode(that,OLDmode){
 			'' :
 			'elementTypeItemDrag'
 	);
-	
 	$(".elementTypeItemDrag").draggable({
 		revert: true
 	});
@@ -63,7 +61,7 @@ function set_userMode(that,OLDmode){
 			// console.log("activate on "+ui.helper);
 		}
 	});
-	
+	// $.contextMenu('update') ;
 	displayMessage("userMode is: "+userMode);
 }
 function doLogin(action){
@@ -84,12 +82,14 @@ function doLogin(action){
 			deAuth("doLogin 01");
 	});
 }
-function doGet(method,url,executeFunct,executeFunctName,options){
-	console.log("doGet method: %s, URL: %s, executeFunctName: %s,executeFunct: %s,auth Token %s | options: %o",
-		method,url,executeFunctName,executeFunct,authenticateData.token,options);
+function doGet(method,url,executeFunct,executeFunctName,dataIn,options){
+	console.log("doGet method: %s, URL: %s, executeFunctName: %s,executeFunct: %s,auth Token %s | dataIn: %o |options: %o",
+		method,url,executeFunctName,executeFunct,authenticateData.token,dataIn,options);
+	var dataIn0=dataIn || {};
 	$.ajax({
 		url: url,
 		headers: {"authorization": authenticateData.token},
+		data: dataIn0,
 		method : method })
 	.done(function(data){
 		if(data.auth.token){
@@ -107,11 +107,11 @@ function doGet(method,url,executeFunct,executeFunctName,options){
 	});
 }
 function listCurrentUser(){
-	doGet("GET",'/users/current',function(data	) {
+	doGet("GET",'/users/current',function(data){
 		if(data.auth.token){
 			console.log("OKK i get when asking who i am :%o",data);
 			refreshAuth(data.auth);
-			displayMessage("get /user/current ok: 01: "+data.auth.id+" username: "+data.auth.username);
+			displayMessage("get /users/current ok: 01: "+data.auth.id+" username: "+data.auth.username);
 			loggedInDialog.dialog("open");
 			$("#logdedInCont").empty();
 			$("#logdedInCont").append('<span class="loggedindet">username: '+data.auth.username+'</span><br>');
@@ -125,7 +125,8 @@ function listCurrentUser(){
 	});
 }
 function ChangePass(){
-	if($("#newPassword1").text() === $("#newPassword1").text()){
+	if($("#newPassword1").text() === $("#newPassword2").text()){
+		
 		var jqxhr = $.ajax(
 		{
 			type: "POST",
@@ -151,6 +152,8 @@ function ChangePass(){
 		jqxhr.fail(function(data){
 			displayMessage("error 013 retvalue is: "+data.retvalue+" retstring is "+data.retstring);
 		},"json");
+	}else{
+		displayMessage("New password don't match");
 	}
 }
 function deAuth(where){
