@@ -32,6 +32,7 @@ $(function(){
 		set_userMode($(this),userMode);
 	});	
 	$.contextMenu({
+		// selector: '.simpleTree-label-editable', 
 		selector: '.simpleTree-label-editable', 
 		trigger: 'right',
 		callback: function(key, options) {

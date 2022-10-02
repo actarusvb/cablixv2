@@ -20,6 +20,8 @@ function set_userMode(that,OLDmode){
 	$(".socketViewed").removeClass("fa-lock");
 	$(".socketViewed").removeClass("fa-edit");
 	$(".simpleTree-label").removeClass("simpleTree-label-editable");
+	$(".menunode").removeClass("simpleTree-label-editable fas fa-edit");
+
 	$(".elementTypeItem").removeClass("elementTypeItemDrag ui-draggable ui-draggable-handle");
 	
 	that.addClass(
@@ -42,6 +44,12 @@ function set_userMode(that,OLDmode){
 			'' :
 			'simpleTree-label-editable'
 	);
+	$(".menunode").addClass(
+		(userMode === 'view') ?
+			'' :
+			'simpleTree-label-editable fas fa-edit'
+	);
+	
 	$(".elementTypeItem").addClass(
 		(userMode === 'view') ?
 			'' :
@@ -280,6 +288,34 @@ function reaction(field,reason){
 	console.log("reaction "+field+' '+reason);		
 	$('#'+field).after('<span id="'+field+'_msg" <i class="far fa-thumbs-down"></i>'+reason+'</span>');
 	$('#'+field).focus();
+}
+function xleftMenu(node){
+	$(node).click(function(evt) {
+		evt.stopPropagation();
+		var link = $(this);
+		if(link.hasClass('rack')){
+			if(userMode === 'view'){
+				createAndPopulateRack(link.attr('ID'),actionCreateRack);
+			}else if (userMode === 'edit'){
+				curNode=node;
+			}
+		}
+		console.log("click on "+link.attr("id"));
+		var closest_ul = link.closest("ul");
+		var parallel_active_links = closest_ul.find(".active")
+		var closest_li = link.closest("li");
+		var link_status = closest_li.hasClass("active");
+		var count = 0;
+
+		closest_ul.find("ul").slideUp(function() {
+			if (++count == closest_ul.find("ul").length)
+				parallel_active_links.removeClass("active");
+		});
+		if (!link_status) {
+			closest_li.children("ul").slideDown();
+			closest_li.addClass("active");
+		}
+	});
 }
 $.extend($.ui.dialog.prototype.options, { 
     create: function() {

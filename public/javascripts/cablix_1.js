@@ -626,50 +626,50 @@ function createElementHtml(dataset,datar,value,jqIdA,jqIdB,mode){
 			console.log("%s missing socketsData",dataBlock.req.eleId);
 		}
 		$.contextMenu({
-				selector: '.socketViewed.smallCell.freeSocket', 
-				callback: function(key, options) {
-					switch (key){
-						case 'addpatch':{
-							console.log("add patch @ %s",$(this).attr('id'));
-							beginAddPatch(this);
-						}
-						break;
-						case 'editinfo':{
-							console.log("Edit info @ %s",$(this).attr('id'));
-							editSocketForm(this);
-						}
-						break;
+			selector: '.socketViewed.smallCell.freeSocket', 
+			callback: function(key, options) {
+				switch (key){
+					case 'addpatch':{
+						console.log("add patch @ %s",$(this).attr('id'));
+						beginAddPatch(this);
 					}
-				},
-				items: {
-					"addpatch": {name: "Add Patch", icon: "fas far fa-plus-circle"},
-					"editinfo": {name: "Edit Info", icon: "far fa-edit"},
-				}
-			});
-			$.contextMenu({
-				selector: '.socketViewed.smallCell.busySocket', 
-				callback: function(key, options) {
-					switch (key){
-						case 'printPatch':{
-							console.log("print patch @ %s",$(this).attr('id'));
-							const windowFeatures = "left=100,top=100,width=900,height=600";
-							window.open('/elements/html/patch/'+dataset+'/'+$(this).attr('id').replace("-normal",""), 'patch details', windowFeatures);
-							// 'window settings');
-						}
-						break;
-						case 'deletePatch':{
-							console.log("delete patch @ %s",$(this).attr('id').replace("-normal",""));
-							$("#patchId").text($(this).attr('id').replace("-normal",""));
-							delPatch.dialog("open");
-						}
-						break;
+					break;
+					case 'editinfo':{
+						console.log("Edit info @ %s",$(this).attr('id'));
+						editSocketForm(this);
 					}
-				},
-				items: {
-					"deletePatch": {name: "Delete Patch", icon: "fas far fa-trash-alt fa-sm"},
-					"printPatch": {name: "Print Patch", icon: "fas far fa-print fa-sm"}
+					break;
 				}
-			});
+			},
+			items: {
+				"addpatch": {name: "Add Patch", icon: "fas far fa-plus-circle"},
+				"editinfo": {name: "Edit Info", icon: "far fa-edit"},
+			}
+		});
+		$.contextMenu({
+			selector: '.socketViewed.smallCell.busySocket', 
+			callback: function(key, options) {
+				switch (key){
+					case 'printPatch':{
+						console.log("print patch @ %s",$(this).attr('id'));
+						const windowFeatures = "left=100,top=100,width=900,height=600";
+						window.open('/elements/html/patch/'+dataset+'/'+$(this).attr('id').replace("-normal",""), 'patch details', windowFeatures);
+						// 'window settings');
+					}
+					break;
+					case 'deletePatch':{
+						console.log("delete patch @ %s",$(this).attr('id').replace("-normal",""));
+						$("#patchId").text($(this).attr('id').replace("-normal",""));
+						delPatch.dialog("open");
+					}
+					break;
+				}
+			},
+			items: {
+				"deletePatch": {name: "Delete Patch", icon: "fas far fa-trash-alt fa-sm"},
+				"printPatch": {name: "Print Patch", icon: "fas far fa-print fa-sm"}
+			}
+		});
 		});
 	}).fail(function(){
 		console.log("where: %s |msg: %s ",where+'/elements/html/element/'+dataset+'/'+datar.rack.lid+'/'+value.lid+'/'+mode,"fallito !");
@@ -760,9 +760,9 @@ function createDatasetTree(currentDataset){
 	'<div id="licPage" class="licPage"><div class="labelX">'+datasetName+'</div>&nbsp;&nbsp;'
 		+'<div id="licenseStatus" class="licenseStatusClass" ></div>'
 		+'<div id="licenseAdder" class="licenseAdderClass"><button id="showAdderForm" class="addAdderButton">'+labels["root"]["AddLicense"]+'</button></div>'
-		+'<div id="cablixTreeCont" class="datasetCont">'
-			// +'<div id="cablixTree"></div>'
-		+'</div>'
+		// +'<div id="cablixTreeCont" class="datasetCont">'
+			+'<div id="accordian"></div>'
+		// +'</div>'
 	+'</div>');
 	
 	$("#page").append(
@@ -790,7 +790,7 @@ function createDatasetTree(currentDataset){
 		console.log("tree data available : %o",treeJson);
 		displayMessage("tree data available");
 		
-		if(true){
+		if(true && false){
 			/* V1 Start */
 			$('#cablixTreeCont').simpleTree({startCollapsed : false},data.tree).on('simpleTree:change', function(eventNode,node){
 				console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
@@ -806,21 +806,11 @@ function createDatasetTree(currentDataset){
 		}else{  /* ---------------------------------------- */
 			/* V2 Start */
 			// $('#cablixTree').append('<ul id="sitemenu"></ul>');
-			$('#cablixTreeCont	').append('<ul id="sitemenu"></ul>');
+			$('#accordian').append('<ul id="sitemenu"></ul>');
 			data.tree.forEach(function(value,index){
-				scanTree(value,"sitemenu");
+				scanTree(value,"sitemenu","h3");
 			});
-			$('#sitemenu').easymenu({
-				'sub_item_class' :'sub-item', 
-			});
-			$(document).on('click', 'menunode',function(event){
-				console.log("click %s  \neventNode : %o \nnode: %o",'A4',eventNode,node);
-				if(userMode === 'view'){
-					createAndPopulateRack(node.value,actionCreateRack);
-				}else if (userMode === 'edit'){
-					curNode=node;
-				}
-			});
+			xleftMenu('.menunode');
 			/* V2 End */
 		}
 	},"getTree");
@@ -839,12 +829,25 @@ function createDatasetTree(currentDataset){
 		}
 	},"elementTypeList");
 	
-	function scanTree(node,level){
-		// (node.type === "RACK") "rack":"";
+	function scanTree(node,level,marker){
 		var zrack='';
+		var mstart='';
+		var mstop='';
 		zrack = (node.type === 'RACK') ? ' rack ' : '' ;
-		var t1='<li id="'+node.value+'" class="menunode '+zrack+'">'+node.label+'</li>';
+		if(marker){
+			mstart="<"+marker+">";
+			mstop="</"+marker+">";
+		}
+		
+		var t1='<li id="'+node.value+'" class="menunode '+zrack+'">'+mstart+node.label+mstop+'</li>';
+		
+		var t1 = (typeof node.children != "undefined") ?
+			'<li id="'+node.value+'" class="menunode '+zrack+'">'+mstart+node.label+mstop+'</li>'
+			:
+			'<li id="'+node.value+'" class="menunode '+zrack+'"><i href="#" >'+mstart+node.label+mstop+'</i></li>';
 		$('#'+level).append(t1);
+		// .simpleTree-label
+		
 		if (typeof node.children != "undefined") {
 			if(node.children.length > 0){
 				var t2='<ul id="'+level+'-'+node.value	+'"></ul>';
